@@ -1,37 +1,33 @@
 #include <iostream>
 using namespace std;
 
-int memo[40][2]; //memorize subproblem's information
-int memo2[40];
+int memo[50][50][50]; //memorize subproblem's information
 
-// n을 n-1, n-2로 나눈다 
-// n-1이 구한적이 없으면 피보나치 아니면 패스
-
-int fibonacci(int n) {
-	if (n == 0) {
-		memo2[0] = 0;
-		memo[0][0] = 1;
-		memo[0][1] = 0;
-		return 0;
-	}
-	else if (n == 1) {
-		memo2[1] = 1;
-		memo[1][0] = 0;
-		memo[1][1] = 1;
+int w(int a, int b, int c) {
+	if (a <= 0 || b <= 0 || c <= 0)
 		return 1;
-	}
+	if (a > 20 || b > 20 || c > 20) 
+		return w(20, 20, 20);
 
+	if (a < b && b < c) {
+		if (memo[a][b][c - 1] < 0)
+			memo[a][b][c - 1] = w(a, b, c - 1);
+		if (memo[a][b - 1][c - 1] < 0)
+			memo[a][b - 1][c - 1] = w(a, b - 1, c - 1);
+		if (memo[a][b - 1][c] < 0)
+			memo[a][b - 1][c] = w(a, b - 1, c);
+		return memo[a][b][c - 1] + memo[a][b - 1][c - 1] - memo[a][b - 1][c];
+	}
 	else {
-		if (memo2[n - 1] < 0) {
-			memo2[n - 1] = fibonacci(n - 1);
-			
-		}
-		if (memo2[n - 2] < 0)
-			memo2[n - 2] = fibonacci(n - 2);
-	
-		memo[n][0] = memo[n - 1][0] + memo[n - 2][0];
-		memo[n][1] = memo[n - 1][1] + memo[n - 2][1];
-		return memo2[n - 1] + memo2[n - 2];
+		if (memo[a - 1][b][c] < 0)
+			memo[a - 1][b][c] = w(a - 1, b, c);
+		if (memo[a - 1][b - 1][c] < 0)
+			memo[a - 1][b - 1][c] = w(a - 1, b - 1, c);
+		if (memo[a - 1][b][c - 1] < 0)
+			memo[a - 1][b][c - 1] = w(a - 1, b, c - 1);
+		if (memo[a - 1][b - 1][c - 1] < 0)
+			memo[a - 1][b - 1][c - 1] = w(a - 1, b - 1, c - 1);
+		return memo[a - 1][b][c] + memo[a - 1][b - 1][c] + memo[a - 1][b][c - 1] - memo[a - 1][b - 1][c - 1];
 	}
 }
 
@@ -46,22 +42,20 @@ int main() {
 	// because of Optimal Substructure same Subproblems have same answer
 	// Therefore, once you have found the answer, you memorize it in the cache
 	// and this is called 'Memoization'
-
-	int test_case;
-	cin >> test_case;
-	int *num = new int[test_case];
-	for (int i = 0; i < test_case; i++) {
-		cin >> num[i];
+	for (int i = 0; i < 50; i++) {
+		for (int j = 0; j < 50; j++) {
+			for (int k = 0; k < 50; k++) {
+				memo[i][j][k] = -1;
+			}
+		}
 	}
 
-	for (int i = 0; i < test_case; i++) {
-		for (int i = 0; i < 40; i++) {
-			memo[i][0] = 0;
-			memo[i][1] = 0;
-			memo2[i] = -1;
-		}
-		fibonacci(num[i]);
-		cout << memo[num[i]][0]<< " " <<memo[num[i]][1]<< endl;
+	int a, b, c;
+	while (1) {
+		cin >> a >> b >> c;
+		if (a == -1 && b == -1 && c == -1)
+			break;
+		cout << "w("<<a<<", "<<b<<", "<< c << ") = " << w(a, b, c) << endl;		
 	}
 
 	return 0;
