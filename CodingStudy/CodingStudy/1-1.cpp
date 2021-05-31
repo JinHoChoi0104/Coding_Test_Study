@@ -1,34 +1,41 @@
 #include <iostream>
 using namespace std;
 
-int memo[50][50][50]; //memorize subproblem's information
+long int memo[1500001]; //memorize subproblem's information
+// 1 <= N <= 1,000,000
+// 1 <= x <= 500,000
+// 1 <= y <= 1,000,000
+// 1 <= x + y <= 1,500,000
 
-int w(int a, int b, int c) {
-	if (a <= 0 || b <= 0 || c <= 0)
-		return 1;
-	if (a > 20 || b > 20 || c > 20) 
-		return w(20, 20, 20);
+long int factorial(int n) {
+	if (n == 0 || n == 1)
+		n = 1;
+	else 
+		for (int i = n - 1; i > 0; i--) {
+			//n %= 15746;
+			n *= i;
+//			n %= 15746;
+		}
+	return n;
+}
 
-	if (a < b && b < c) {
-		if (memo[a][b][c - 1] < 0)
-			memo[a][b][c - 1] = w(a, b, c - 1);
-		if (memo[a][b - 1][c - 1] < 0)
-			memo[a][b - 1][c - 1] = w(a, b - 1, c - 1);
-		if (memo[a][b - 1][c] < 0)
-			memo[a][b - 1][c] = w(a, b - 1, c);
-		return memo[a][b][c - 1] + memo[a][b - 1][c - 1] - memo[a][b - 1][c];
+int tile(int x, int y) {
+	if (memo[x + y] < 0) {
+		memo[x + y] = factorial(x + y);
+		cout << "x+y: " << memo[x + y] << endl;
 	}
-	else {
-		if (memo[a - 1][b][c] < 0)
-			memo[a - 1][b][c] = w(a - 1, b, c);
-		if (memo[a - 1][b - 1][c] < 0)
-			memo[a - 1][b - 1][c] = w(a - 1, b - 1, c);
-		if (memo[a - 1][b][c - 1] < 0)
-			memo[a - 1][b][c - 1] = w(a - 1, b, c - 1);
-		if (memo[a - 1][b - 1][c - 1] < 0)
-			memo[a - 1][b - 1][c - 1] = w(a - 1, b - 1, c - 1);
-		return memo[a - 1][b][c] + memo[a - 1][b - 1][c] + memo[a - 1][b][c - 1] - memo[a - 1][b - 1][c - 1];
+		//memo[(x + y) % 15746] = factorial((x + y) % 15746);
+	if (memo[x] < 0) {
+		memo[x] = factorial(x);
+		cout << memo[x] << endl;
 	}
+	if (memo[y] < 0) {
+		memo[y] = factorial(y);
+		cout << memo[y] << endl;
+	}
+	//cout << x << " " << y << " " << x + y << endl;
+	//cout << memo[x] << " " << memo[y] << " " << memo [x + y] << endl;
+	return memo[x + y] / memo[x] / memo[y];
 }
 
 int main() {
@@ -42,21 +49,25 @@ int main() {
 	// because of Optimal Substructure same Subproblems have same answer
 	// Therefore, once you have found the answer, you memorize it in the cache
 	// and this is called 'Memoization'
-	for (int i = 0; i < 50; i++) {
-		for (int j = 0; j < 50; j++) {
-			for (int k = 0; k < 50; k++) {
-				memo[i][j][k] = -1;
-			}
-		}
-	}
 
-	int a, b, c;
-	while (1) {
-		cin >> a >> b >> c;
-		if (a == -1 && b == -1 && c == -1)
-			break;
-		cout << "w("<<a<<", "<<b<<", "<< c << ") = " << w(a, b, c) << endl;		
-	}
+	
+	int N;
+	//cout << factorial(21);
+	cin >> N;
 
+	for (int i = 0; i < 1500001; i++) 
+		memo[i] = -1;
+
+	int sum = 0;
+	// 1. get combination with repetition of give number N by '00' and '1'
+	for (int i = 0; i < N / 2 + 1; i++) { // if) N = 4, 5 then N/2 = 2
+		//sum %= 15746;
+		sum += tile(i, N - 2 * i); // 2. get permutation of N's combination of '00' and '1', and then sum them all
+		cout << i << " " << N - 2 * i << " => " << sum << endl;
+	//	cout << sum << endl;
+	
+	}
+	cout << sum % 15746;
+	
 	return 0;
 }
