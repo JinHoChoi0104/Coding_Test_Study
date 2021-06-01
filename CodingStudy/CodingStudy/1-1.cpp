@@ -12,7 +12,7 @@ long int factorial(int n) {
 		n = 1;
 	else 
 		for (int i = n - 1; i > 0; i--) {
-			//n %= 15746;
+			n %= 15746;
 			n *= i;
 //			n %= 15746;
 		}
@@ -22,16 +22,17 @@ long int factorial(int n) {
 int tile(int x, int y) {
 	if (memo[x + y] < 0) {
 		memo[x + y] = factorial(x + y);
-		cout << "x+y: " << memo[x + y] << endl;
+		cout << x << " + "<< y << " : " << memo[x + y] << endl;
 	}
 		//memo[(x + y) % 15746] = factorial((x + y) % 15746);
 	if (memo[x] < 0) {
 		memo[x] = factorial(x);
-		cout << memo[x] << endl;
+		cout << x  << " : " << memo[x] << endl;
 	}
 	if (memo[y] < 0) {
 		memo[y] = factorial(y);
-		cout << memo[y] << endl;
+	//	cout << memo[y] << endl;
+		cout << y << " : " << memo[y] << endl;
 	}
 	//cout << x << " " << y << " " << x + y << endl;
 	//cout << memo[x] << " " << memo[y] << " " << memo [x + y] << endl;
