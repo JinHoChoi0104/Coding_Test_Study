@@ -1,7 +1,7 @@
 #include <iostream>
 using namespace std;
 
-unsigned long memo[101];
+unsigned long memo[3];
 // P[n] = P[n-1] + P[n-5] (n>=6)
 // P[1~5] = {1, 1, 1, 2 ,2}
 
@@ -24,31 +24,54 @@ int main() {
 	int N;
 	cin >> N;
 
-	int** arr = (int**)malloc(sizeof(int*) * N);
+	
+	unsigned long* arr = new unsigned long[N];
+
 	for (int i = 0; i < N; i++) {
-		arr[i] = (int*)malloc(sizeof(int) * N);
-		for (int j = 0; j < i+1; j++) {
-			cin >> arr[i][j];
-		}
+		cin >> arr[i];
 	}
 
-	for (int i = 1; i < N; i++) { //세로 층 수
-		for (int j = 1; j < i; j++) { //가로
-			if (arr[i - 1][j - 1] > arr[i - 1][j])
-				arr[i][j] += arr[i - 1][j-1];
-			else
-				arr[i][j] += arr[i - 1][j];
-		}
-		arr[i][0] += arr[i - 1][0];
-		arr[i][i] += arr[i - 1][i - 1];
-		
+	if (N >= 4) {
+		memo[0] = arr[N - 1] + arr[N - 3] + arr[N - 4]; // oxoo
+		memo[1] = arr[N - 1] + arr[N - 3]; //oxox
+		memo[2] = arr[N - 1] + arr[N - 2] + arr[N - 4]; //ooxo
+	}
+	else if (N == 3) {
+		memo[0] = 0;
+		memo[1] = arr[N - 1] + arr[N - 2];
+		memo[2] = arr[N - 1] + arr[N - 3];
+	}
+	else if (N == 2) {
+		memo[0] = arr[N - 1] + arr[N - 2];
+		memo[1] = arr[N - 1];
+		memo[2] = 0;
+	}
+	else {
+		memo[0] = arr[N - 1];
+		memo[1] = arr[N - 1];
+		memo[2] = arr[N - 1];
 	}
 
-	int max = arr[N - 1][0];
-	for (int i = 1; i < N; i++) {
-		if (max < arr[N - 1][i])
-			max = arr[N - 1][i];
+	unsigned long a, b, c;
+	for (int i = N - 5; i > -1; i--) {
+		a = memo[0];
+		b = memo[1];
+		c = memo[2];
+
+		memo[2] = b + arr[i];
+		memo[0] = c + arr[i];
+		if (a > c)
+			memo[1] = a;
+		else
+			memo[1] = c;
 	}
+	
+	unsigned long max = memo[0];
+
+	for (int i = 1; i < 3; i++) 
+		if (max < memo[i])
+			max = memo[i];
+
 	cout << max;
 	
 	return 0;
