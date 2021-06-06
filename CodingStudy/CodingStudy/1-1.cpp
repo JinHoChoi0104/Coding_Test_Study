@@ -6,37 +6,29 @@ using namespace std;
 int mini = 100000;
 unsigned long memo[100000];
 
-// BAEKJOON 1436
+// BAEKJOON 10844
 // solving in a Top-down way
-void make_one(int n, int level) {
-	if (n == 1) {
-		if (mini > level)
-			mini = level;
-	}
-	else if (n % 3 == 0 && n % 2 == 0) {
-		if (mini > level)
-			make_one(n / 3, level + 1);
-		if (mini > level)
-			make_one(n / 2, level + 1);
-	}
-	else if (n % 3 == 0) {
-		if (mini > level)
-			make_one(n / 3, level + 1);
-		if (mini > level)
-			make_one(n - 1, level + 1);
-	}
-	else if (n % 2 == 0) {
-		if (mini > level)
-			make_one(n / 2, level + 1);
-		if (mini > level)
-			make_one(n - 1, level + 1);
-	}
-	else {
-		if (mini > level)
-			make_one(n - 1, level + 1);
-	}
 
-}
+
+// if) N = 1
+// 1~9
+// if) N = 2
+// 10, 12
+// 21, 23
+// 32. 34
+// ...
+// 87, 89
+// 98
+// 2 * 8 + 1 = 17
+
+// if) N = 3
+// 101, 121, 123
+// 210, 213, 232, 234
+// 321, 323, 343, 345
+// ...
+//
+
+
 int main() {
 	// Dynamic Programming (µ¿Àû °èÈ¹¹ý)
 	// solving problem by breaking big problem into smaller problems
@@ -57,8 +49,8 @@ int main() {
 	cin >> N;
 
 	// divide in to 4 cases depending on whether it is divided by 2 and 3
-	make_one(N, 0);
 	
-	cout << mini;
+	
+	
 	return 0;
 }
