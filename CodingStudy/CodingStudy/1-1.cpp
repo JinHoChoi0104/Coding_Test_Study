@@ -1,10 +1,9 @@
 #include <iostream>
-#define MAXVALUE 2
 
 using namespace std;
 
-int mini = 100000;
-unsigned long memo[100000];
+long long arr[101][10];
+# define mod 1000000000;
 
 // BAEKJOON 10844
 // solving in a Top-down way
@@ -13,6 +12,7 @@ unsigned long memo[100000];
 // if) N = 1
 // 1~9
 // if) N = 2
+// 01
 // 10, 12
 // 21, 23
 // 32. 34
@@ -22,12 +22,23 @@ unsigned long memo[100000];
 // 2 * 8 + 1 = 17
 
 // if) N = 3
+// 010, 012
 // 101, 121, 123
 // 210, 213, 232, 234
 // 321, 323, 343, 345
 // ...
-//
+// 987, 989
 
+// if) N = 4
+// 0
+// 1010, 1012, 12
+
+
+// arr[n][i] = arr[n-1][i-1] + arr[n-1][i+1]
+
+void easy_star(int n, int i) {
+
+}
 
 int main() {
 	// Dynamic Programming (µ¿Àû °èÈ¹¹ý)
@@ -48,9 +59,23 @@ int main() {
 	int N;
 	cin >> N;
 
-	// divide in to 4 cases depending on whether it is divided by 2 and 3
+	for (int i = 0; i < 10; i++) 
+		arr[1][i] = 1;
+
+
+	for (int n = 2; n <= N; n++) {
+		for (int i = 1; i < 9; i++) {
+			arr[n][i] = (arr[n - 1][i - 1] + arr[n - 1][i + 1]) % mod;
+		}
+		arr[n][0] = arr[n - 1][1] % mod;
+		arr[n][9] = arr[n - 1][8] % mod;
+	}
+
+	long long stair = 0;
+	for (int i = 1; i < 10; i++) 
+		stair += arr[N][i];
 	
-	
+	cout << stair % mod;
 	
 	return 0;
 }
