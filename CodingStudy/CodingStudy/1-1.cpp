@@ -2,80 +2,104 @@
 
 using namespace std;
 
-long long arr[101][10];
-# define mod 1000000000;
 
-// BAEKJOON 10844
-// solving in a Top-down way
+// BAEKJOON 1107
+// 3 case
+// 
+// 1_1. dial number correct (if M != 10;  else if case 1_1;  else 1_2) 
+// 1_2. dial number -> + or -
+// 1_2_1 up dial, 1_2_2 down dial
+// 2. + or - (must get)
 
+int dial[10]; // 1: usable, 2: broken
 
-// if) N = 1
-// 1~9
-// if) N = 2
-// 01
-// 10, 12
-// 21, 23
-// 32. 34
-// ...
-// 87, 89
-// 98
-// 2 * 8 + 1 = 17
-
-// if) N = 3
-// 010, 012
-// 101, 121, 123
-// 210, 213, 232, 234
-// 321, 323, 343, 345
-// ...
-// 987, 989
-
-// if) N = 4
-// 0
-// 1010, 1012, 12
-
-
-// arr[n][i] = arr[n-1][i-1] + arr[n-1][i+1]
-
-void easy_star(int n, int i) {
-
+int check_digits(int N) { //check how many digits
+	int digit = 1;
+	while (N > 9) {
+		digit++;
+		N /= 10;
+	}
+	return digit;
 }
 
+bool check_dialdisable(int num, int digit) {
+	do {
+		if (dial[num % 10] == 0)
+			return true;
+		num /= 10;
+	} while (num > 0);
+	return false;
+}
+
+
+
+
 int main() {
-	// Dynamic Programming (µ¿Àû °èÈ¹¹ý)
-	// solving problem by breaking big problem into smaller problems
-
-	// to solve problem by Dynamic Programming, two properties must be satisfied
-	// 1. Overlapping Subproblem    2. Optimal Substructure
-
-	// in Dynamic Programming, you should solve each Subproblems only once
-	// because of Optimal Substructure same Subproblems have same answer
-	// Therefore, once you have found the answer, you memorize it in the cache
-	// and this is called 'Memoization'
-
-	// two ways of solving
-	// 1. Top-down : breaking into smaller problems, using recursion calling
-	// 2. Bottom-up : strating from smaller problems to bigger problems, mostly using loop
-
-	int N;
-	cin >> N;
-
 	for (int i = 0; i < 10; i++) 
-		arr[1][i] = 1;
+		dial[i] = 1;
+	
+	int N, M;
+	cin >> N >> M;
 
+	int broken_dial_num;
+	for (int i = 0; i < M; i++) {
+		cin >> broken_dial_num;
+		dial[broken_dial_num] = 0;
+	}
+	int digit = check_digits(N);
 
-	for (int n = 2; n <= N; n++) {
-		for (int i = 1; i < 9; i++) {
-			arr[n][i] = (arr[n - 1][i - 1] + arr[n - 1][i + 1]) % mod;
+	
+	int cnt = 0, num = N;; //check whether case 1_1
+	int dial1 = 500000; // case 1
+	if (M != 10) {
+		// get dialog
+		for (int i = 0; i < digit; i++) {
+			if (dial[num % 10] == 1)
+				cnt++;
+			num /= 10;
 		}
-		arr[n][0] = arr[n - 1][1] % mod;
-		arr[n][9] = arr[n - 1][8] % mod;
+		if (cnt == digit) // case 1_1
+			dial1 = digit;
+		
+		else { // case 1_2
+			num = N;
+			while (check_dialdisable(num, digit)) {
+				if (num > 500000)
+					break;
+				num++;
+			}
+			int up;
+			if (num > 500000)
+				up = 500000;
+			else
+				up = num - N + check_digits(num); // (+)dial + number dial
+
+			num = N;
+			while (check_dialdisable(num, digit)) {
+				if (num < 0) 
+					break;
+				num--;
+			}
+			int down;
+			if (num < 0)
+				down = 500000;
+			else
+				down = N - num + check_digits(num); // (-)dial + number dial
+
+			up > down ?	dial1 = down : dial1 = up;
+
+		}
 	}
 
-	long long stair = 0;
-	for (int i = 1; i < 10; i++) 
-		stair += arr[N][i];
-	
-	cout << stair % mod;
-	
+	int dial2 = 0; // case 2
+	(N - 100) >= 0 ? dial2 = N - 100 : dial2 = 100 - N;
+
+
+
+	// comparing case1 and case2
+	if (dial1 > dial2)
+		cout << dial2;
+	else
+		cout << dial1;
 	return 0;
 }
