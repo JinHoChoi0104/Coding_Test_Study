@@ -23,21 +23,14 @@ int check_digits(int N) { //check how many digits
 	return digit;
 }
 
-bool check_dialdisable(int num, int digit) {
-	do {
-		if (dial[num % 10] == 0)
-			return true;
-		num /= 10;
-	} while (num > 0);
-	return false;
-}
+
 
 int pow(int n, int digit)
 {
 	int num = 1;
-	for (int i = 0; i < digit; i++) {
+	for (int i = 0; i < digit; i++) 
 		num *= n;
-	}
+	
 	return num;
 }
 
@@ -82,7 +75,7 @@ int down_dial(int num, int digit) { // ... 3 2 1 0
 			if (digit != 0)
 				num = down_dial(num, digit - 1);
 		}
-		else {//if (n == 0 || n == min_dialog || min_dialog2) { //disdialbe and has to round up
+		else {//if (n == 0 || n == min_dialog || min_dialog2) { //disdialbe
 			num /= pow(10, digit);
 			num *= pow(10, digit);
 			num -= 1;
@@ -164,12 +157,6 @@ int main() {
 
 			// case 1_2_2
 			num = N;
-			/*
-			while (check_dialdisable(num, digit)) {
-				if (num < 0)
-					break;
-				num--;
-			}*/
 			num = down_dial(N, digit - 1);
 			//cout << num << endl;
 			int down;
@@ -180,7 +167,6 @@ int main() {
 		//	cout << "down: " << down << endl;
 
 			up > down ? dial1 = down : dial1 = up;
-
 		}
 	}
 
