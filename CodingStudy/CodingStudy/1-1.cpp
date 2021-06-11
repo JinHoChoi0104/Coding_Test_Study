@@ -12,12 +12,12 @@ using namespace std;
 // 2. + or - (must get)
 
 int dial[10]; // 1: usable, 2: broken
+
 int pow(int n, int digit)
 {
 	int num = 1;
-	for (int i = 0; i < digit; i++) {
+	for (int i = 0; i < digit; i++) 
 		num *= n;
-	}
 	return num;
 }
 
@@ -42,9 +42,6 @@ int check_dialdisable(int num, int digit) { //return where is dialdisalbe , -1 i
 	return n;
 }
 
-
-
-
 int main() {
 	for (int i = 0; i < 10; i++)
 		dial[i] = 1;
@@ -58,8 +55,7 @@ int main() {
 		dial[broken_dial_num] = 0;
 	}
 	int digit = check_digits(N);
-	//cout << N << "   " << digit << endl;
-	//cout << check_dialdisable(N, digit) <<endl;
+
 	int cnt = 0, num = N, n = 0; //check whether case 1_1
 	int dial1 = 500000; // case 1
 	if (M != 10) {
@@ -74,6 +70,7 @@ int main() {
 
 		else { // case 1_2
 			// case 1_2_1
+			int up;
 			num = N;
 			n = check_dialdisable(num, digit);
 			while (n > -1) {
@@ -81,38 +78,37 @@ int main() {
 				num /= pow(10, n);
 				num *= pow(10, n);
 				num += pow(10, n);
-				n = check_dialdisable(num, digit);
-				//cout << num << " n: "<<n << endl;
-			}
-			int up;
-			//cout << num << " n: " << n << endl;
-			up = num - N + check_digits(num); // (+)dial + number dial
-			//cout << "up: " << up << endl;
-			// case 1_2_2
-			num = N;
-			while (check_dialdisable(num, digit) > -1) {
-				if (num < 0)
+				n = check_dialdisable(num, check_digits(num));
+				if (num > dial1 * 2)
 					break;
-				num--;
 			}
+			up = num - N + check_digits(num); // (+)dial + number dial
+
+
+			// case 1_2_2
 			int down;
-			//cout << "num: " << num << endl;
-			if (num < 0)
-				down = 10000000;
-			else
+			num = N;
+			n = check_dialdisable(num, digit);
+			while (n > -1 ) {
+				num /= pow(10, n);
+				num *= pow(10, n);
+				num--;
+				n = check_dialdisable(num, check_digits(num));
+				if (num < 0) {
+					down = 10000000;
+					break;
+				}
+			}
+			if (num >=0)
 				down = N - num + check_digits(num); // (-)dial + number dial
-			// cout << "down: " << down << endl;
 
-
-
+			// compare higher number and lower number
 			up > down ? dial1 = down : dial1 = up;
-
 		}
 	}
 
 	int dial2 = 0; // case 2
 	(N - 100) >= 0 ? dial2 = N - 100 : dial2 = 100 - N;
-
 
 
 	// comparing case1 and case2
