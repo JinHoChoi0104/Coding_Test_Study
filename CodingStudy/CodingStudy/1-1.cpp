@@ -1,25 +1,40 @@
+// BAEKJOON 1342
+// Permutation(순열) algorithm
+// Reference: https://ansohxxn.github.io/algorithm/combination/
+
 #include <iostream>
+#include <vector>
 
 using namespace std;
 
-
-// BAEKJOON 1342
-// Permutation(순열) algorithm
-
-
-
-int factorial(int num)
+void Combination(vector<char> arr, vector<char> comb, int index, int depth)
 {
-	if (num == 0)
-		num = 1;
-	for (int i = num-1; i > 0; i--)
-		num *= i;
-	return num;
+	if (depth == comb.size())
+	{
+		for (int i = 0; i < comb.size(); i++)
+			cout << comb[i] << " ";
+		cout << endl;
+
+		return;
+	}
+	else
+	{
+		for (int i = index; i < arr.size(); i++)
+		{
+			comb[depth] = arr[i];
+			Combination(arr, comb, i + 1, depth + 1);
+		}
+	}
 }
 
+int main()
+{
+	vector<char> vec = { 'a', 'b', 'c', 'd', 'e' };  // n = 5
 
+	int r = 3;
+	vector<char> comb(r);
 
-int main() {
-	cout << factorial(10);
+	Combination(vec, comb, 0, 0);  // {'a', 'b', 'c', 'd', 'e'}의 '5C3' 구하기 
+
 	return 0;
 }
