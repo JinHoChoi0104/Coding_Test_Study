@@ -4,37 +4,47 @@
 
 #include <iostream>
 #include <vector>
+#include <algorithm>
 
 using namespace std;
 
-void Combination(vector<char> arr, vector<char> comb, int index, int depth)
+
+
+/* 순열 알고리즘 */
+void Permutation(vector<int>& Array, int Start, int End)
 {
-	if (depth == comb.size())
+	if (Start == End)
 	{
-		for (int i = 0; i < comb.size(); i++)
-			cout << comb[i] << " ";
+		for (const auto it : Array)
+		{
+			cout << it << " ";
+		}
 		cout << endl;
 
-		return;
+
 	}
 	else
 	{
-		for (int i = index; i < arr.size(); i++)
+		for (int i = Start; i <= End; ++i)
 		{
-			comb[depth] = arr[i];
-			Combination(arr, comb, i + 1, depth + 1);
+			swap(Array[Start], Array[i]);
+			Permutation(Array, Start + 1, End);
+			swap(Array[Start], Array[i]);
 		}
 	}
 }
 
 int main()
 {
-	vector<char> vec = { 'a', 'b', 'c', 'd', 'e' };  // n = 5
+	vector<int> arr;
+	arr.push_back(5);
+	arr.push_back(7);
+	arr.push_back(1);
+	arr.push_back(2);
 
-	int r = 3;
-	vector<char> comb(r);
+	for (int i = 0; i < arr.size(); i++) {
+		cout << arr.at(i) << " ";
+	}
 
-	Combination(vec, comb, 0, 0);  // {'a', 'b', 'c', 'd', 'e'}의 '5C3' 구하기 
-
-	return 0;
+	Permutation(arr, 0, arr.size()-1);
 }
