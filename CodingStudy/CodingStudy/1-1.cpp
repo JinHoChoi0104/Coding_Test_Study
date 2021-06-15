@@ -1,34 +1,38 @@
 // BAEKJOON 1342
 // Permutation(순열) algorithm
-// Reference: https://ansohxxn.github.io/algorithm/combination/
-
 #include <iostream>
 #include <vector>
 #include <algorithm>
 
 using namespace std;
 
-
-
-/* 순열 알고리즘 */
-void Permutation(vector<int>& Array, int Start, int End)
+void Permutation(vector<char>& Array, vector<string>& Array2, int Start, int End)
 {
-	if (Start == End)
+	if (Start == End) // has been swapped
 	{
-		for (const auto it : Array)
+		char a = 0, b = 0;
+		int cnt = 0;
+		for (const auto it : Array) //check whether it is Lucky String
 		{
-			cout << it << " ";
+			b = it;
+			if (a != b)
+				cnt++;
+			else
+				break;
+			a = b;
 		}
-		cout << endl;
 
-
+		if (cnt == Array.size()) { //add all Lucky Strings to Array2
+			string output(Array.begin(), Array.end()); //char vector to string
+			Array2.push_back(output); //add new data at end of vector
+		}
 	}
 	else
 	{
 		for (int i = Start; i <= End; ++i)
 		{
 			swap(Array[Start], Array[i]);
-			Permutation(Array, Start + 1, End);
+			Permutation(Array, Array2, Start + 1, End);
 			swap(Array[Start], Array[i]);
 		}
 	}
@@ -36,15 +40,33 @@ void Permutation(vector<int>& Array, int Start, int End)
 
 int main()
 {
-	vector<int> arr;
-	arr.push_back(5);
-	arr.push_back(7);
-	arr.push_back(1);
-	arr.push_back(2);
+	// convert a string to a vector of chars
+	string S;
+	cin >> S;
+	vector<char> arr(S.begin(), S.end()); //vector list of input (char)
+	vector<string> arr2; //Lucky Strings in ouput will be stroed in here(string)
 
-	for (int i = 0; i < arr.size(); i++) {
+	
+	/* 2 ways of print vector
+	1.
+	for (int i = 0; i < arr.size(); i++) 
 		cout << arr.at(i) << " ";
-	}
+	
+	2.
+	for (const char& c : arr) 
+		cout << c;
+		
+	3.
+	for (const auto it : Array)
+		cout << it;
+		
+	*/
 
-	Permutation(arr, 0, arr.size()-1);
+	Permutation(arr, arr2, 0, arr.size() - 1);
+
+	// remove duplicated elements from Array2
+	sort(arr2.begin(), arr2.end());
+	arr2.erase(unique(arr2.begin(), arr2.end()), arr2.end());
+
+	cout << arr2.size();
 }
