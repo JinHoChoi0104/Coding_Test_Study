@@ -1,72 +1,45 @@
-// BAEKJOON 1342
-// Permutation(¼ø¿­) algorithm
+// BAEKJOON 11000
 #include <iostream>
 #include <vector>
-#include <algorithm>
-
 using namespace std;
 
-void Permutation(vector<char>& Array, vector<string>& Array2, int Start, int End)
-{
-	if (Start == End) // has been swapped
-	{
-		char a = 0, b = 0;
-		int cnt = 0;
-		for (const auto it : Array) //check whether it is Lucky String
-		{
-			b = it;
-			if (a != b)
-				cnt++;
-			else
-				break;
-			a = b;
-		}
+class lecture {
+private:
+	int S;
+	int T;
+public:
+	lecture(int S, int T) {
+		this->S = S;
+		this->T = T;
+	}
+	void SetInfo(int _S, int _T);
+	void GetInfo(); 
+};
 
-		if (cnt == Array.size()) { //add all Lucky Strings to Array2
-			string output(Array.begin(), Array.end()); //char vector to string
-			Array2.push_back(output); //add new data at end of vector
-		}
-	}
-	else
-	{
-		for (int i = Start; i <= End; ++i)
-		{
-			swap(Array[Start], Array[i]);
-			Permutation(Array, Array2, Start + 1, End);
-			swap(Array[Start], Array[i]);
-		}
-	}
+void lecture::SetInfo(int _S, int _T) {
+	S = _S;
+	T = _T;
 }
+void lecture::GetInfo() {
+	cout << S << " " << T << endl;
+};
 
 int main()
 {
-	// convert a string to a vector of chars
-	string S;
-	cin >> S;
-	vector<char> arr(S.begin(), S.end()); //vector list of input (char)
-	vector<string> arr2; //Lucky Strings in ouput will be stroed in here(string)
+	int N; // 1 <= N <= 200,000
+	cin >> N; 
 
-	
-	/* 2 ways of print vector
-	1.
-	for (int i = 0; i < arr.size(); i++) 
-		cout << arr.at(i) << " ";
-	
-	2.
-	for (const char& c : arr) 
-		cout << c;
-		
-	3.
-	for (const auto it : Array)
-		cout << it;
-		
-	*/
+	vector <lecture> arr;
 
-	Permutation(arr, arr2, 0, arr.size() - 1);
 
-	// remove duplicated elements from Array2
-	sort(arr2.begin(), arr2.end());
-	arr2.erase(unique(arr2.begin(), arr2.end()), arr2.end());
+	int S, T;
+	for (int i = 0; i < N; i++) {
+		cin >> S >> T;
+		lecture in(S, T);
+		arr.push_back(in);
+	}
 
-	cout << arr2.size();
+	for (int i = 0; i < arr.size(); i++) {
+		arr[i].GetInfo();
+	}
 }
