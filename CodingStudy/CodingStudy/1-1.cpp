@@ -19,7 +19,7 @@ public:
 void lecture::GetInfo() {
 	cout << S << " " << T << endl;
 };
-//vector<lecture> tmp;
+
 
 void merge(vector<lecture>& arr, int left, int right) {
 	vector<lecture> tmp (arr);
@@ -53,6 +53,14 @@ void mergeSort(vector<lecture>& arr, int left, int right) {
 	}
 	
 }
+
+void bubbleSort(vector<lecture>& arr) {
+	for(int i = 1; i < arr.size() ; i++)
+		for (int j = 0; j < arr.size() - i; j++) {
+			if (arr[j].GetS() > arr[j + 1].GetS())
+				swap(arr[j], arr[j + 1]);
+		}
+}
 int main()
 {
 	int N; // 1 <= N <= 200,000
@@ -64,56 +72,38 @@ int main()
 		cin >> S >> T;
 		lecture in(S, T);
 		arr.push_back(in);
-	//	tmp.push_back(in);
 	}
 
 	// before assigning lecture to class room, sort list of lecture by it's 'S' (start time)
 	// using MergeSort
-	//for (int i = 0; i < arr.size(); i++) 	arr[i].GetInfo();
 
 	mergeSort(arr, 0, arr.size() - 1 );
+//	bubbleSort(arr);
+	//for (int i = 0; i < arr.size(); i++) 	arr[i].GetInfo();
 
 	int result = 1;
 	int min = 1000000001; 
 	int check = 1; // when the previous class is over
-	while (1) {
-		//min = arr.front().GetS();
-		int index = 0;
-		int cnt = 0;
-		for (int i = 0; i < arr.size(); i++) {
-			if (arr[i].GetS() == check) {
-				min = 1000000001;
+	int index = 0;
+	while (arr.size() > 0) {
+		int cnt = index;
+		for (int i = index; i < arr.size(); i++) {
+			if (arr[i].GetS() >= check) {
 				index = i;
-				//check = arr[i].GetT(); 
+				check = arr[index].GetT();
 				break;
-			}
-
-			else if (min > arr[i].GetS() && check <= arr[i].GetS()) {
-				min = arr[i].GetS();
-				index = i;
-				//check = arr[i].GetT();
-
 			}
 			else
 				cnt++;
 		}
-		check = arr[index].GetT();
-		if (cnt != arr.size()) {
-		//	cout << "erase! :";
-		//	arr[index].GetInfo();
-			arr.erase(arr.begin() + index);
-	//		cout << "a: " << arr.size() << endl;
-		}
-		else {
-		//	cout << "b: " << cnt << endl;
-			min = 1000000001; 
+		
+		if (cnt != arr.size()) 
+			arr.erase(arr.begin() + index);	
+		else { 
 			check = 0;
+			index = 0;
 			result++;
 		}
-	//	cout << "==== lab =====" << endl;
-	
-		if (arr.size() == 0)
-			break;
 	}
 	cout << result;
 }
