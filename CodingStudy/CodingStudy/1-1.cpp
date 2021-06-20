@@ -1,35 +1,40 @@
 #include <iostream>
-int low = 100000;
+#include <cmath>
+// BAEKJOOON 4948 *Prime Number Algorithm
+// get Prime Number between given number N and 2N
+// 1 <= N <= 123456
 
-int HideAndSick(int pos, int K, int depth) { // pos: position where SooBin is placed now
-	if (depth <= low - 1) {
-		if (K == pos)
-			low = depth;
-		else if (K < pos)
-			depth += pos - K;
-		else {
-			if (K == pos * 2) {
-				depth = HideAndSick(pos * 2, K, depth + 1);;
-			}
-			else {
-				int a = HideAndSick(pos * 2, K, depth + 1);
-				int b = HideAndSick(pos + 1, K, depth + 1);
-				int c = HideAndSick(pos - 1, K, depth + 1);
-				int min = a > b ? b : a;
-				min = min > c ? c : min;
-				depth = min;
-			}
+int isPrime(int n) {
+	if (n <= 1)
+		return 0; //1 is not prime number
+	else if (n == 2)
+		return 1; //2 is prime number
+	else if (n % 2 == 0)
+		return 0; //even number is not prime number
+	else{
+		for (int i = 3; i <= sqrt(n); i ++) {
+			if (n % i == 0)
+				return 0;
 		}
+		return 1;
 	}
-	return depth;
 }
-
 
 int main()
 {
-	int N, K; 
-	scanf("%d %d", &N, &K); 
-
-	printf("%d", HideAndSick(N, K, 0));
-
+	int N = 1;
+	int cnt = 0;
+	int arr[123457 * 2];
+	for (int i = 0; i < 123457 * 2; i++) {
+		arr[i] = isPrime(i);
+		//printf("%d is  %d\n", i, arr[i]);
+	}
+	while (N != 0) {
+		scanf("%d", &N);
+		cnt = 0;
+		for (int i = N + 1; i <= 2 * N; i++) {
+			cnt += arr[i];
+		}
+		printf("%d\n", cnt);
+	}
 }
