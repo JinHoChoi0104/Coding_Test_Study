@@ -1,61 +1,35 @@
+// BAEKJOON 1157
+
 #include <iostream>
-#include <queue>
-#include <set>
+#include <cstring>
+
 using namespace std;
 
-//BAEKJOON 1697
+int main() {
 
-int HideAndSick(int pos, int K) { // pos: position where SooBin is placed now
-	set<int> visited; //don't visit places you've alrady been
-	visited.insert(pos);
+	string word;
+	cin >> word;
+	char* arr = new char[word.length() + 1]; // string to char array
+	memmove(arr, word.c_str(), word.length());
 
-	int depth = 0;
-	queue<pair<int, int>>arr;
-	arr.push({ pos ,depth });
-	
-
-	while (K != pos) {
-		pos = arr.front().first;
-		depth = arr.front().second;
-		arr.pop();
-		if (pos >= K) {
-			if (visited.find(pos - 1) == visited.end()) { //set.find return index (iterator), if there is no element then return set.end()	
-				arr.push({ pos - 1,depth + 1 });
-				visited.insert(pos - 1);
-			}
-		}
-		else {
-			if (K == pos * 2) {
-				if (visited.find(pos * 2) == visited.end()) {
-					arr.push({ pos * 2,depth + 1 });
-					visited.insert(pos * 2);
-				}
-			}
-			else {
-				if (visited.find(pos * 2) == visited.end()) { 	
-					arr.push({ pos * 2,depth + 1 });
-					visited.insert(pos * 2);
-				}
-				if (visited.find(pos - 1) == visited.end()) {
-					arr.push({ pos - 1,depth + 1 });
-					visited.insert(pos - 1);
-				}
-				if (visited.find(pos + 1) == visited.end()) {
-					arr.push({ pos + 1,depth + 1 });
-					visited.insert(pos + 1);
-				}
-			}
-		}
+	int alpha[26] = {0};
+	for (int i = 0; i < word.length(); i++) {
+		if ((int)arr[i] > 96) // if small , a = 97
+			alpha[(int)arr[i] - 97]++;
+		else // if capital a = 65
+			alpha[(int)arr[i] - 65]++;
 	}
 
-	return depth;
-}
+	int max = 0, max_cnt = 0;
+	for (int i = 0; i < 26; i++) {
+		if (max_cnt < alpha[i]) {
+			max_cnt = alpha[i];
+			max = i;
+		}
+		else if (max_cnt == alpha[i]) 
+			max = -2;
+		
+	}
 
-
-int main()
-{
-	int N, K;
-	cin >> N >> K;
-
-	cout << HideAndSick(N, K);
+	cout << char(max + 65);
 }
