@@ -1,65 +1,61 @@
-// BAEKJOON 1260
-
+// BAEKJOON 2667
 #include <iostream>
+#include <algorithm>
 using namespace std;
 
-#include <queue>
+#include <vector>
 
-void dfs(int from, int *arr[], bool *visited, int N) { //used recursion to implement dfs
-	visited[from] = true;
-	cout << from << " ";
-	for (int i = 1; i < N + 1; i++) {
-		if (arr[from][i] != 0 && visited[i] == false)
-			dfs(i, arr, visited, N);
-	}
+bool isVisitable(int toX, int toY, bool* visited[], int N) {
+	if(toX > -1 && toX < N)
+		if (toY > -1 && toY < N)
+			if(!visited[toX][toY]) //if not visited
+				return true;
+	return false;
 }
 
-queue <int> map;
-void bfs(int from, int* arr[], bool* visited, int N) {
-	cout << from << " ";
-	visited[from] = true;
+void dfs(int fromY, int fromX, bool *visited[], int N, int *cnt) { //used recursion to implement dfs
+	visited[fromY][fromX] = true;
+	(*cnt)++;
 	
-	for (int i = 1; i < N + 1; i++) {
-		if (arr[from][i] != 0 && visited[i] == false) {
-			map.push(i);
-			visited[i] = true;
-		}
-	}
-	
-	if (!map.empty()) { //check if there is no places to visit
-		int next = map.front();
-		map.pop();
-		bfs(next, arr, visited, N);
-	}
+	//RIGHT DOWN LEFT UP
+	if (isVisitable(fromY, fromX+1, visited, N))
+		dfs(fromY, fromX+1, visited, N, cnt);
+	if (isVisitable(fromY+1, fromX, visited, N))
+		dfs(fromY+1, fromX, visited, N, cnt);
+	if (isVisitable(fromY, fromX-1, visited, N))
+		dfs(fromY, fromX-1, visited, N, cnt);
+	if (isVisitable(fromY-1, fromX, visited, N))
+		dfs(fromY-1, fromX, visited, N, cnt);
 }
 
 int main() {
-	int N, M, V; //nod, line, starting nod
-	cin >> N >> M >> V;
-
-	bool *visited = new bool[N+1];
-	int** arr = (int**)malloc(sizeof(int*) * (N + 1));
-
-
-	for (int i = 0; i < N + 1; i++) {
-		arr[i] = (int*)malloc(sizeof(int) * (N + 1));
-		visited[i+1] = false;
-		for (int j = 0; j < N + 1; j++)
-			arr[i][j] = 0;
-	}
-
-	int a, b;
-	for (int i = 0; i < M; i++) {
-		cin >> a >> b;
-		arr[a][b] = 1;
-		arr[b][a] = 1;
-	}
-
-	dfs(V, arr, visited, N);
-	cout << endl;
-
-	for (int i = 0; i < N + 1; i++) 
-		visited[i + 1] = false;
+	int N; //map's size
+	cin >> N;
+		
+	int input = 0;
+	bool **visited = (bool**)malloc(sizeof(bool*) * (N));
 	
-	bfs(V, arr, visited, N);
+	for (int i = 0; i < N; i++) {
+		visited[i] = (bool*)malloc(sizeof(bool) * (N));
+		for (int j = 0; j < N ; j++){
+			scanf("%1d", &input); // get each number once, not using input such as \n
+			visited[i][j] = input == 1 ? false : true;
+		}
+	}
+
+	vector<int> house_set;
+	int cnt;
+	for (int i = 0; i < N; i++)
+		for (int j = 0; j < N; j++) {
+			cnt = 0;
+			if (visited[i][j] == false) {
+				dfs(i, j, visited, N, &cnt);
+				house_set.push_back(cnt);
+			}
+		}
+
+	cout << house_set.size() << endl;
+	sort(house_set.begin(), house_set.end());
+	for (int i = 0; i < house_set.size(); i++)
+		cout << house_set[i] << endl;
 }
