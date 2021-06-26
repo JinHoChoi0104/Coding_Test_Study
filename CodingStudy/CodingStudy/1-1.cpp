@@ -1,29 +1,33 @@
-// BAEKJOON 11729
-// Hanoi Tower
 #include <iostream>
+#include <algorithm>
+#include <string>
 
-int Hanoi_cnt(int n) {
-	if (n == 1)
-		return 1;
-	else
-		return Hanoi_cnt(n - 1) * 2 + 1;
-}
-void Hanoi(int from, int mid, int to, int n) {
-	if (n == 1)
-		printf("%d %d\n", from, to);
-	
-	else {
-		Hanoi(from, to, mid, n - 1);
-		Hanoi(from, mid, to, 1);
-		Hanoi(mid, from, to, n - 1);
-	}
-}
+using namespace std;
 
-int main() {
+int main()
+{
+	//a=97
 	int N;
-	scanf("%d", &N);
+	cin >> N;
 
-	printf("%d\n", Hanoi_cnt(N));
-	Hanoi(1, 2, 3, N);
-	
+	for (int i = 0; i < N; i++) {
+
+	}
+
+	string word;
+	cin >> word;
+	char* arr = new char[word.length() + 1]; // string to char array
+	memmove(arr, word.c_str(), word.length());
+	for (int i = 0; i < word.length() -1 ; i++) {
+		if(arr[i] == arr[i+1])
+	}
+	/*
+	size_t pos;
+	while (1) {
+		pos = str.find("c=");
+		if (pos == string::npos)
+			break;
+		str.replace(pos, 2, " ");
+	}*/
+	return 0;
 }
