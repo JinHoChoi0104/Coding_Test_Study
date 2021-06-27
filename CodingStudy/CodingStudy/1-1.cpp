@@ -1,33 +1,41 @@
 #include <iostream>
-#include <algorithm>
 #include <string>
+#include <vector>
 
 using namespace std;
 
 int main()
 {
-	//a=97
-	int N;
+	int N, cnt;
 	cin >> N;
+	cnt = N;
 
 	for (int i = 0; i < N; i++) {
+		string input; 
+		cin >> input;
 
-	}
+		// string to char vector
+		vector <char> strToChar(input.begin(), input.end()); 
+		
+		int index = 0;
+		while (index < strToChar.size() - 1) {
+			if (strToChar[index] == strToChar[index + 1]) // exclude continuous duplicate characters
+				strToChar.erase(strToChar.begin() + index);
+			else
+				index++;
+		}
 
-	string word;
-	cin >> word;
-	char* arr = new char[word.length() + 1]; // string to char array
-	memmove(arr, word.c_str(), word.length());
-	for (int i = 0; i < word.length() -1 ; i++) {
-		if(arr[i] == arr[i+1])
+		bool isAlpha[26] = { false };
+		for (int i = 0; i < strToChar.size(); i++) { // In ASCII a = 97
+			if (!isAlpha[(int)strToChar[i] - 97]) // if the character has never appeared
+				isAlpha[(int)strToChar[i] - 97] = true;
+			else { // if the character has been appeared befor
+				cnt--;
+				break;
+			}
+		}
 	}
-	/*
-	size_t pos;
-	while (1) {
-		pos = str.find("c=");
-		if (pos == string::npos)
-			break;
-		str.replace(pos, 2, " ");
-	}*/
+	cout << cnt;
+
 	return 0;
 }
