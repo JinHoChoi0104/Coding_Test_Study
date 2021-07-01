@@ -2,7 +2,6 @@
 #include<stdio.h>
 #include<string>
 #include<vector>
-#include<algorithm>
 
 using namespace std;
 
@@ -10,21 +9,22 @@ int main(void) {
 	int N;
 	scanf("%d", &N);
 	
-	vector < vector <string> > byLength(50);
-	string word;
-
+	vector < vector <string> > byAge(201);
+	int age;
+	string name;
+	
 	for (int i = 0; i < N; i++) {
-		cin >> word;
-		byLength[word.length() - 1].push_back(word);	
+		scanf("%d", &age);
+		cin >> name;
+		byAge[age].push_back(name);
 	}
 		
-	for (int i = 0; i < 50; i++) {
-		if (byLength[i].size() > 0) {			
-			sort(byLength[i].begin(), byLength[i].end());		
-			byLength[i].erase(unique(byLength[i].begin(), byLength[i].end()), byLength[i].end());
-				
-			for (int j = 0; j < byLength[i].size(); j++)
-				cout << byLength[i][j] << endl;		
+	for (int i = 1; i < 201; i++) {
+		if (byAge[i].size() > 0) {				
+			for (int j = 0; j < byAge[i].size(); j++) {
+				printf("%d ", i);
+				cout << byAge[i][j] << endl;
+			}
 		}
 	}
 	return 0;
