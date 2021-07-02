@@ -5,25 +5,24 @@
 
 using namespace std;
 
-int main(void) {	
+int main(void) {
 	int N;
-	scanf("%d", &N);
-	
+	cin >> N;
+
 	vector < vector <string> > byAge(201);
 	int age;
 	string name;
-	
+
 	for (int i = 0; i < N; i++) {
-		scanf("%d", &age);
-		cin >> name;
+		cin >> age >> name;
 		byAge[age].push_back(name);
 	}
-		
+
 	for (int i = 1; i < 201; i++) {
-		if (byAge[i].size() > 0) {				
+		if (byAge[i].size() > 0) {
 			for (int j = 0; j < byAge[i].size(); j++) {
-				printf("%d ", i);
-				cout << byAge[i][j] << endl;
+				cout << i << " " << byAge[i][j];
+				printf("\n");
 			}
 		}
 	}
