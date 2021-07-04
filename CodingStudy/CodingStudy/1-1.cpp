@@ -1,54 +1,77 @@
+// BAEKJOON 9663
 #include<iostream>
-#include<stdio.h>
-#include<string>
-#include<vector>
-#include<algorithm>
 using namespace std;
 
-class location {
-public:
-	int rank;
-	int X;
-	int transX;
-	location(int _rank, int _X) {
-		rank = _rank;
-		X = _X;
+void locateQueen(int y, int x, int N, bool isAble[][14]) {
+	for (int i = 0; i < N; i++) 
+		isAble[y][i] = false;
+	for (int i = 0; i < N; i++)
+		isAble[i][x] = false;
+
+	int y2 = y, x2 = x;
+	while (y2 >= 0 && x2 >= 0) 
+		isAble[y2--][x2--] = false;
+
+	y2 = y, x2 = x;
+	while (y2 >= 0 && x2 < N) 
+		isAble[y2--][x2++] = false;
+
+	y2 = y, x2 = x;
+	while (y2 < N && x2 >= 0) 
+		isAble[y2++][x2--] = false;
+
+	y2 = y, x2 = x;
+	while (y2 < N && x2 < N) 
+		isAble[y2++][x2++] = false;
+}
+
+void chessTree(int y, int x, int N, bool isAble[][14], int *cnt) { // (0~N-1, 0)
+	bool isAble2[14][14];
+	for (int i = 0; i < N; i++)
+		for (int j = 0; j < N; j++)
+			isAble2[i][j] = isAble[i][j];
+	locateQueen(y, x, N, isAble2);
+
+	for (int i = 0; i < N; i++) {
+		if (isAble2[i][x + 1]) {
+			if (x + 1 == N - 1)
+				(*cnt)++;
+			else
+				chessTree(i, x + 1, N, isAble2, cnt);
+		}
 	}
-};
-bool compareByX(location a, location b) {
-	return a.X < b.X;
 }
-bool compareByRank(location a, location b) {
-	return a.rank < b.rank;
+
+void showMeTheBoard(int N, bool board[][14]) {
+	for (int i = 0; i < N; i++) {
+		for (int j = 0; j < N; j++) {
+			if (board[i][j])
+				printf("0");
+			else
+				printf("1");
+		}
+		printf("\n");
+	}
 }
+
 int main(void) {
 	int N;
 	cin >> N;
-
-	vector <location> arr;
-	vector <int> xValue;
-	int X;
-
-	for (int i = 0; i < N; i++) {
-		scanf("%d", &X);
-		arr.push_back(location(i, X));
-		xValue.push_back(X);
-	}
-	sort(xValue.begin(), xValue.end());
-	xValue.erase(unique(xValue.begin(), xValue.end()), xValue.end());
-
-	sort(arr.begin(), arr.end(), compareByX);
-	int index = 0;
-	for (int i = 0; i < N; i++) {
-		if (arr[i].X == xValue[index]) 
-			arr[i].transX = index;
-		else
-			arr[i].transX = ++index;	
-	}
-	sort(arr.begin(), arr.end(), compareByRank);
-
+ 
+	bool isAble[14][14];
 	for (int i = 0; i < N; i++)
-		printf("%d ", arr[i].transX);
-	
+		for (int j = 0; j < N; j++)
+			isAble[i][j] = true;
+
+	int cnt = 0, cnt2 = 0;
+	if (N != 1) {
+		for (int i = 0; i < N; i++) {
+			cnt2 = 0;
+			chessTree(i, 0, N, isAble, &cnt2);
+			cnt += cnt2;
+		}
+	}
+	cout << cnt << endl;
+
 	return 0;
 }
