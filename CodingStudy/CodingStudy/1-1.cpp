@@ -64,7 +64,9 @@ int main(void) {
 			isAble[i][j] = true;
 
 	int cnt = 0, cnt2 = 0;
-	if (N != 1) {
+	if (N == 1)
+		cnt = 1;
+	else {
 		for (int i = 0; i < N; i++) {
 			cnt2 = 0;
 			chessTree(i, 0, N, isAble, &cnt2);
