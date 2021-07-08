@@ -1,99 +1,75 @@
-// BAEKJOON 2580
-// Sudoku
+// BAEKJOON 14889
+
 #include<iostream>
-#include<queue>
+#include<math.h>
 #include<vector>
 
 using namespace std;
 
+int score_arr[20][20];
+int min_difference = 100000;
 
-void showBoard(vector<int>& board) {
-	for (int i = 0; i < 9; i++) {
-		for (int j = 0; j < 9; j++) {
-			printf("%d ", board[i * 9 + j]);
-		}
-		printf("\n");
-	}
-}
-
-void findZero(vector<int> board, queue<pair<int, int>>& arr) {
-	for (int i = 0; i < 9; i++)
-		for (int j = 0; j < 9; j++)
-			if (board[i * 9 + j] == 0)
-				arr.push(make_pair(i, j));
-}
-
-void make_false(bool* check) {
-	for (int i = 0; i < 10; i++)
+bool check[20] = { false };
+void makeFalse(bool* check) {
+	for (int i = 0; i < 20; i++)
 		check[i] = false;
 }
+void calculateScore(vector<int> member, int total_mem) {
+	makeFalse(check);
+	//Team with member0
+	int sum1 = 0;
+	for (int i = 0; i < member.size() - 1; i++) {
+		for (int j = i + 1; j < member.size(); j++) {
+			sum1 += score_arr[member[i]][member[j]];
+			sum1 += score_arr[member[j]][member[i]];
+		}
+	}
+	for (int i = 0; i < member.size(); i++) {
+		check[member[i]] = true;
+	}
 
-bool finished = false;
-vector<int> answer_board;
+	//Team without member0
+	vector<int>member2;
+	for (int i = 0; i < total_mem; i++) {
+		if (!check[i])
+			member2.push_back(i);
+	}
 
-void DFS(vector<int> board, queue<pair<int, int>> zero_arr) {
-	if (zero_arr.empty()) {
-		answer_board = board;
-		finished = true;
+	int sum2 = 0;
+	for (int i = 0; i < member2.size()-1; i++) {
+		for (int j = i+1; j < member2.size(); j++) {
+			sum2 += score_arr[member2[i]][member2[j]];
+			sum2 += score_arr[member2[j]][member2[i]];
+		}
+	}
+
+	if (min_difference > abs(sum1 - sum2))
+		min_difference = abs(sum1 - sum2);
+}
+
+void findMember(vector<int> member, int last_mem , int total_mem, int need) {
+	member.push_back(last_mem);
+	if (need == 0) {
+		calculateScore(member, total_mem);
 	}
 	else {
-		bool check[10] = { false };
-		int cnt = 0;
-		make_false(check);
-
-		int i = zero_arr.front().first;
-		int j = zero_arr.front().second;
-		zero_arr.pop();
-
-
-		for (int k = 0; k < 9; k++) {
-			if (!check[board[i * 9 + k]]) {
-				check[board[i * 9 + k]] = true;
-				cnt++;
-			}
-
-			if (!check[board[k * 9 + j]]) {
-				check[board[k * 9 + j]] = true;
-				cnt++;
-			}
-			if (cnt == 10)
-				break;
-		}
-
-		for (int a = 0; a < 3; a++) {
-			if (cnt == 10)
-				break;
-			for (int b = 0; b < 3; b++) {
-				if (!check[board[((i / 3) * 3 + a) * 9 + ((j / 3) * 3 + b)]]) {
-					check[board[((i / 3) * 3 + a) * 9 + ((j / 3) * 3 + b)]] = true;
-				}
-			}
-		}
-
-		for (int k = 1; k < 10; k++) {
-			if (!check[k]) {
-				board[i * 9 + j] = k;
-				if (!finished)
-					DFS(board, zero_arr);
-				else
-					break;
-			}
-		}
+		for (int i = last_mem + 1; i < total_mem; i++) 
+			findMember(member, i, total_mem, need - 1);
 	}
 }
+
 int main(void) {
-	vector<int> board;
-	int num = 0;
-	for (int i = 0; i < 81; i++) {
-		scanf("%d", &num);
-		board.push_back(num);
-	}
-	
-	queue<pair<int, int>> zero_arr;
-	findZero(board, zero_arr);
+	int N; 
+	cin >> N;
+	int n = N / 2 - 1;//Number of people required per team
 
-	DFS(board, zero_arr);
+	for (int i = 0; i < N; i++)
+		for (int j = 0; j < N; j++)
+			cin >> score_arr[i][j];
 
-	showBoard(answer_board);
+	vector<int> member;
+	findMember(member, 0, N, n);
+
+	cout << min_difference;
 	return 0;
 }
