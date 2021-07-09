@@ -1,7 +1,2 @@
 ﻿  1-1.cpp
-C:\Users\82107\Desktop\Github\Coding_Test_Study\CodingStudy\CodingStudy\1-1.cpp(20,20): warning C4018:  '<': signed 또는 unsigned가 일치하지 않습니다.
-C:\Users\82107\Desktop\Github\Coding_Test_Study\CodingStudy\CodingStudy\1-1.cpp(21,25): warning C4018:  '<': signed 또는 unsigned가 일치하지 않습니다.
-C:\Users\82107\Desktop\Github\Coding_Test_Study\CodingStudy\CodingStudy\1-1.cpp(27,20): warning C4018:  '<': signed 또는 unsigned가 일치하지 않습니다.
-C:\Users\82107\Desktop\Github\Coding_Test_Study\CodingStudy\CodingStudy\1-1.cpp(39,20): warning C4018:  '<': signed 또는 unsigned가 일치하지 않습니다.
-C:\Users\82107\Desktop\Github\Coding_Test_Study\CodingStudy\CodingStudy\1-1.cpp(40,23): warning C4018:  '<': signed 또는 unsigned가 일치하지 않습니다.
   CodingStudy.vcxproj -> C:\Users\82107\Desktop\Github\Coding_Test_Study\CodingStudy\Debug\CodingStudy.exe
