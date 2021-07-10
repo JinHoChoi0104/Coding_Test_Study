@@ -1,39 +1,75 @@
-// BAEKJOON 2156
+// BAEKJOON 1941
 #include<iostream>
-
+#include<vector>
+#include<queue>
+#include<algorithm>
 using namespace std;
 
-int main(void) {
-	int N; 
-	scanf("%d", &N);
-
-	int arr[10000];
-	for (int i = 0; i < N; i++)
-		scanf("%d", &arr[i]);
-
-	int drinkingState[4] = { 0 }; // OX, XO, OO, XX , 4 states of sipping
-	int OX = 0, XO = 0, OO = 0, XX = 0;
-
-	for (int i = 0; i < N; i++) {
-		OX = drinkingState[0];
-		XO = drinkingState[1];
-		OO = drinkingState[2];
-		XX = drinkingState[3];
-		
-		//XO , OO -> OX
-		drinkingState[0] = XO > OO ? XO : OO;
-		//OX , XX -> XO
-		drinkingState[1] = OX > XX ? OX + arr[i] : XX + arr[i];
-		//XO -> OO
-		drinkingState[2] = XO + arr[i];
-		//OX -> XX
-		drinkingState[3] = OX;
+int arr[5][5];
+void showRoutine(vector<pair<int, int>>routine) {
+	cout << "========" << endl;
+	for (int i = 0; i < 5; i++)
+		for (int j = 0; j < 5; j++)
+			arr[i][j] = 0;
+	int y = 0, x = 0;
+	while (!routine.empty()) {
+		y = routine.back().first;
+		x = routine.back().second;
+		arr[y][x] = 1;
+		routine.pop_back();
 	}
-
-	int max_sip = 0;
-	for (int i = 0; i < 4; i++) 
-		max_sip < drinkingState[i] ? max_sip = drinkingState[i] : NULL;
+	for (int i = 0; i < 5; i++) {
+		for (int j = 0; j < 5; j++) {
+			cout << arr[i][j];
+		}
+		cout << endl;
+	}
+}
+void DFS(int y, int x, vector<pair<int, int>> routine, int n) {
+	if (y > -1 && y < 5 && x > -1 && x < 5) {
+		//cout << "a";
+		routine.push_back(pair<int, int>(y, x));
+		n++;
+		if (n == 4)
+			showRoutine(routine);
+		else {
+			DFS(y + 1, x, routine, n);
+			DFS(y, x + 1, routine, n);
+			DFS(y - 1, x, routine, n);
+			DFS(y, x - 1, routine, n);
+		}
+	}
 	
-	cout << max_sip;
-	return 0;
+}
+
+
+
+int main(void) {
+	vector<pair<int, int>> routine;
+	//DFS(2, 2, routine, 0);
+	routine.push_back(pair<int, int>(1, 1));
+	routine.push_back(pair<int, int>(1, 2));
+
+
+	vector<pair<int, int>> routine2;
+	//DFS(2, 2, routine, 0);
+	routine2.push_back(pair<int, int>(1, 1));
+	routine2.push_back(pair<int, int>(1, 2));
+
+	vector<vector<pair<int, int>>>arr;
+	arr.push_back(routine);
+	arr.push_back(routine2);
+
+	arr.erase(unique(arr.begin(), arr.end()), arr.end());
+	vector<pair<int, int>> a;
+	while (!arr.empty()) {
+		a = arr.back();
+		arr.pop_back();
+		cout << "=====" << endl;
+
+		while (!a.empty()) {
+			cout << a.back().first << ", " << a.back().second << endl;
+			a.pop_back();
+		}
+	}
 }
