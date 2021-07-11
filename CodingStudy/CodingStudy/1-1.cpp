@@ -1,77 +1,43 @@
-// BAEKJOON 1941
-#include<iostream>
-#include<vector>
-
+// BAEKJOON 11000
+#include <iostream>
+#include <vector>
+#include <algorithm>
 using namespace std;
 
-int arr[25];
-bool board[5][5];
-int sum = 0;
 
-// 1. choose 7 people 25C7
-// 2. eliminate under 3 S
-// while doing 1, use cutting by using logic 2
-// 3. check whether they are linked
-
-void makeFalse(){
-	for (int i = 0; i < 5; i++)
-		for (int j = 0; j < 5; j++)
-			board[i][j] = false;
+bool compare(const pair<int, int>& a, const pair <int, int>& b) {
+	return a.first < b.first;
 }
 
-void DFS(int y, int x, int &cnt) {
-	if (y > -1 && y < 5 && x > -1 && x < 5)	{
-		if (board[y][x]) {
-			cnt++;
-			board[y][x] = false;
+int main() {
+	int N; // 1 <= N <= 200,000
+	scanf ("%d", &N);
 
-			DFS(y + 1, x, cnt);
-			DFS(y, x + 1, cnt);
-			DFS(y - 1, x, cnt);
-			DFS(y, x - 1, cnt);
+	vector <pair <int, int>> arr;
+	int S, T;
+	for (int i = 0; i < N; i++) {
+		scanf("%d %d", &S, &T);
+		arr.push_back(pair<int , int>(S, T));
+	}
+	sort(arr.begin(), arr.end(), compare);
+	// before assigning lecture to class room, sort list of lecture by it's 'S' (start time)
+	// using Sort
+
+	int result = 0; // how many class?
+	int check = 1; // when the previous class is over
+	
+	while (!arr.empty()) {
+		for (int i = 0; i < arr.size(); i++) {	
+			if (arr[i].first >= check) {
+				
+				check = arr[i].second;
+				arr.erase(arr.begin() + i);
+				i--;
+			}		
 		}
-	}
-}
-
-void isLinked(vector<int> member) {
-	makeFalse();
-	for (int i = 0; i < member.size(); i++) {
-		board[member[i]/5][member[i]%5] = true;
+		result++;
+		check = 1;
 	}
 
-	int cnt = 0;
-	DFS(member[0] / 5, member[0] % 5, cnt);
-	if (cnt == 7)
-		sum++;
-}
-
-void findMember(vector<int> member, int last_mem, int need, int isS) {
-	member.push_back(last_mem);
-	if (need == 0) {
-		if(isS >= 4)
-			isLinked(member);
-	}
-	else if(isS >= 4 - need){
-		for (int i = last_mem + 1; i < 25; i++) {
-			findMember(member, i, need - 1, isS + arr[i]);
-		}
-	}
-}
-
-int main(void) {
-	char a;
-	int index = 0;
-	for (int i = 0; i < 29; i++) {
-		scanf("%1c", &a);
-		if (a == 'S')
-			arr[index++] = 1;
-		else if (a == 'Y')
-			arr[index++] = 0;
-	}
-
-	vector<int> b;
-	for (int i = 0; i < 25; i++) 
-		findMember(b, i, 6, arr[i] );
-
-	cout << sum;
+	printf("%d", result);
 }
