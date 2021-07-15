@@ -1,49 +1,50 @@
-//BAEKJOON 1672
 #include<iostream>
+#include<vector>
+#include<queue>
+
 using namespace std;
 
-int main(void) {
-	char c[1000000];
-	const char* board[] = { "ACAG",
-	"CGTA",
-	"ATCG",
-	"GAGT" };
-	int N, a, b;
-	
-	scanf("%d%s",&N, c);
-	while (N > 1) {
-		switch (c[N - 1]) {
-		case 'A':
-			a = 0;
-			break;
-		case 'G':
-			a = 1;
-			break;
-		case 'C':
-			a = 2;
-			break;
-		case 'T':
-			a = 3;
-			break;
-		}
-		switch (c[N - 2]) {
-		case 'A':
-			b = 0;
-			break;
-		case 'G':
-			b = 1;
-			break;
-		case 'C':
-			b = 2;
-			break;
-		case 'T':
-			b = 3;
-			break;
-		}
-		c[N - 2] = board[a][b];
-		N--;
+struct consult{int sum, n;};
+int sum_max = 0, N = 0;
+vector <pair<int, int>> arr;
+queue <consult> con_arr;
+
+void consulting(){	
+	consult con;
+	int endT = 0, sum = 0;
+
+	while (!con_arr.empty()) {
+		endT = con_arr.front().n;
+		sum = con_arr.front().sum;
+		con_arr.pop();
+		
+		if (sum > sum_max)
+			sum_max = sum;
+		if (endT < N) 
+			for (int i = endT; i < endT + arr[endT].first && i < N; i++) 
+				if (arr[i].first + i <= N) //if in range
+					con_arr.push({ arr[i].second + sum, arr[i].first + i });//if in range
 	}
-	
-	printf("%c", c[0]);
+}
+
+int main(void) {
+	int T, P;
+	cin >> N;
+	for (int i = 0; i < N; i++) {
+		scanf("%d%d", &T, &P);
+		arr.push_back(pair<int, int> (T, P));
+	}
+
+	int index = 0;
+	while (arr[index].first + index > N) {
+		index++;
+		if (index == N)
+			break;
+	}
+	if (index < N) {
+		con_arr.push({ 0, index });
+		consulting();
+	}
+	cout << sum_max;
 	return 0;
 }
