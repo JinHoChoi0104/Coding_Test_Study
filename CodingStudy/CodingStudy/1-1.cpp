@@ -1,57 +1,33 @@
 #include<iostream>
 #include<vector>
+#include<algorithm>
 using namespace std;
-struct doc { int rank, value; };
-
-void clearImportance(int *importance){
-	for (int i = 0; i < 10; i++)
-		importance[i] = 0;
+bool compare1(const pair<long long, long long>& a, const pair<long long, long long>& b) {
+	return a.first < b.first;
 }
-
+bool compare2(const pair<long long, long long>& a, const pair<long long, long long>& b) {
+	return a.second < b.second;
+}
 int main(void) {
-	vector <doc> arr;
-	int importance[10] = { 0 };
-	int T = 1, N = 0, M = 0, input = 0, target = 0, cnt, index, value_index; // M =  target, target = target's value
-	scanf("%d", &T);
-	for (int i = 0; i < T; i++) {
-		scanf("%d %d", &N, &M);
-		clearImportance(importance);//reset importance []
+	int N = 0;
+	scanf("%d", &N);
+	vector<pair <long long , long long >> arr(N);
 
-		for (int j = 0; j < N; j++) {
-			scanf("%d", &input);
-			arr.push_back({ j, input });
-			importance[input]++;
-			if (j == M)
-				target = input;
-		}
+	for (int i = 0; i < N; i++) 
+		scanf("%d %d", &arr[i].first, &arr[i].second);
 
-		index = 0, value_index = 9, cnt = 0;
-		while (value_index > target) { //remove higer importance
-			while (importance[value_index] > 0) {
-				if (arr[index].value == value_index) {
-					cnt++;
-					importance[value_index]--;
-				}
-				index++;
-				if (index == N)
-					index = 0;
-			}
-			value_index--;
+	sort(arr.begin(), arr.end(), compare1);
+	stable_sort(arr.begin(), arr.end(), compare2);
+
+	int index = 0, cnt = 0;
+	long long end_time = 0;
+	while (index < N) {
+		if (end_time <= arr[index].first) {
+			cnt++;
+			end_time = arr[index].second;
 		}
-		
-		while (1) { // now value index = target
-			if (arr[index].value == target) {
-				cnt++;
-				if (arr[index].rank == M)
-					break;
-			}
-			index++;
-			if (index == N)
-				index = 0;
-		}
-		cout << cnt << endl;
-		arr.clear();
+		index++;
 	}
-
+	cout << cnt;
 	return 0;
 }
