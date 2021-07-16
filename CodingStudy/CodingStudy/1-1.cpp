@@ -1,50 +1,57 @@
 #include<iostream>
 #include<vector>
-#include<queue>
-
 using namespace std;
+struct doc { int rank, value; };
 
-struct consult{int sum, n;};
-int sum_max = 0, N = 0;
-vector <pair<int, int>> arr;
-queue <consult> con_arr;
-
-void consulting(){	
-	consult con;
-	int endT = 0, sum = 0;
-
-	while (!con_arr.empty()) {
-		endT = con_arr.front().n;
-		sum = con_arr.front().sum;
-		con_arr.pop();
-		
-		if (sum > sum_max)
-			sum_max = sum;
-		if (endT < N) 
-			for (int i = endT; i < endT + arr[endT].first && i < N; i++) 
-				if (arr[i].first + i <= N) //if in range
-					con_arr.push({ arr[i].second + sum, arr[i].first + i });//if in range
-	}
+void clearImportance(int *importance){
+	for (int i = 0; i < 10; i++)
+		importance[i] = 0;
 }
 
 int main(void) {
-	int T, P;
-	cin >> N;
-	for (int i = 0; i < N; i++) {
-		scanf("%d%d", &T, &P);
-		arr.push_back(pair<int, int> (T, P));
+	vector <doc> arr;
+	int importance[10] = { 0 };
+	int T = 1, N = 0, M = 0, input = 0, target = 0, cnt, index, value_index; // M =  target, target = target's value
+	scanf("%d", &T);
+	for (int i = 0; i < T; i++) {
+		scanf("%d %d", &N, &M);
+		clearImportance(importance);//reset importance []
+
+		for (int j = 0; j < N; j++) {
+			scanf("%d", &input);
+			arr.push_back({ j, input });
+			importance[input]++;
+			if (j == M)
+				target = input;
+		}
+
+		index = 0, value_index = 9, cnt = 0;
+		while (value_index > target) { //remove higer importance
+			while (importance[value_index] > 0) {
+				if (arr[index].value == value_index) {
+					cnt++;
+					importance[value_index]--;
+				}
+				index++;
+				if (index == N)
+					index = 0;
+			}
+			value_index--;
+		}
+		
+		while (1) { // now value index = target
+			if (arr[index].value == target) {
+				cnt++;
+				if (arr[index].rank == M)
+					break;
+			}
+			index++;
+			if (index == N)
+				index = 0;
+		}
+		cout << cnt << endl;
+		arr.clear();
 	}
 
-	int index = 0;
-	while (arr[index].first + index > N) {
-		index++;
-		if (index == N)
-			break;
-	}
-	if (index < N) {
-		con_arr.push({ 0, index });
-		consulting();
-	}
-	cout << sum_max;
 	return 0;
 }
