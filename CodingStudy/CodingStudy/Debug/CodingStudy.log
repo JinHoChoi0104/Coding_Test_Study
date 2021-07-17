@@ -1,16 +1,2 @@
 ﻿  1-1.cpp
-C:\Users\82107\Desktop\Github\Coding_Test_Study\CodingStudy\CodingStudy\1-1.cpp(17,9): warning C4477:  'scanf' : 서식 문자열 '%d'에 'int *' 형식의 인수가 필요하지만 variadic 인수 1의 형식이 '_Ty1 *'입니다.
-C:\Users\82107\Desktop\Github\Coding_Test_Study\CodingStudy\CodingStudy\1-1.cpp(17,9): warning C4477:         with
-C:\Users\82107\Desktop\Github\Coding_Test_Study\CodingStudy\CodingStudy\1-1.cpp(17,9): warning C4477:         [
-C:\Users\82107\Desktop\Github\Coding_Test_Study\CodingStudy\CodingStudy\1-1.cpp(17,9): warning C4477:             _Ty1=__int64
-C:\Users\82107\Desktop\Github\Coding_Test_Study\CodingStudy\CodingStudy\1-1.cpp(17,9): warning C4477:         ]
-C:\Users\82107\Desktop\Github\Coding_Test_Study\CodingStudy\CodingStudy\1-1.cpp(17,9): message :  서식 문자열에서 '%lld'을(를) 사용하는 것이 좋습니다.
-C:\Users\82107\Desktop\Github\Coding_Test_Study\CodingStudy\CodingStudy\1-1.cpp(17,9): message :  서식 문자열에서 '%I64d'을(를) 사용하는 것이 좋습니다.
-C:\Users\82107\Desktop\Github\Coding_Test_Study\CodingStudy\CodingStudy\1-1.cpp(17,9): warning C4477:  'scanf' : 서식 문자열 '%d'에 'int *' 형식의 인수가 필요하지만 variadic 인수 2의 형식이 '_Ty2 *'입니다.
-C:\Users\82107\Desktop\Github\Coding_Test_Study\CodingStudy\CodingStudy\1-1.cpp(17,9): warning C4477:         with
-C:\Users\82107\Desktop\Github\Coding_Test_Study\CodingStudy\CodingStudy\1-1.cpp(17,9): warning C4477:         [
-C:\Users\82107\Desktop\Github\Coding_Test_Study\CodingStudy\CodingStudy\1-1.cpp(17,9): warning C4477:             _Ty2=__int64
-C:\Users\82107\Desktop\Github\Coding_Test_Study\CodingStudy\CodingStudy\1-1.cpp(17,9): warning C4477:         ]
-C:\Users\82107\Desktop\Github\Coding_Test_Study\CodingStudy\CodingStudy\1-1.cpp(17,9): message :  서식 문자열에서 '%lld'을(를) 사용하는 것이 좋습니다.
-C:\Users\82107\Desktop\Github\Coding_Test_Study\CodingStudy\CodingStudy\1-1.cpp(17,9): message :  서식 문자열에서 '%I64d'을(를) 사용하는 것이 좋습니다.
   CodingStudy.vcxproj -> C:\Users\82107\Desktop\Github\Coding_Test_Study\CodingStudy\Debug\CodingStudy.exe

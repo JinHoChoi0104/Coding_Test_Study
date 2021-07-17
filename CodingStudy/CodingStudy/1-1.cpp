@@ -1,33 +1,25 @@
 #include<iostream>
-#include<vector>
 #include<algorithm>
 using namespace std;
-bool compare1(const pair<long long, long long>& a, const pair<long long, long long>& b) {
-	return a.first < b.first;
-}
-bool compare2(const pair<long long, long long>& a, const pair<long long, long long>& b) {
-	return a.second < b.second;
-}
-int main(void) {
-	int N = 0;
-	scanf("%d", &N);
-	vector<pair <long long , long long >> arr(N);
+// Sutdying LIS (Longest Increasing Subsequence)
 
-	for (int i = 0; i < N; i++) 
-		scanf("%d %d", &arr[i].first, &arr[i].second);
+int n;
+int cache[100], S[100];
 
-	sort(arr.begin(), arr.end(), compare1);
-	stable_sort(arr.begin(), arr.end(), compare2);
-
-	int index = 0, cnt = 0;
-	long long end_time = 0;
-	while (index < N) {
-		if (end_time <= arr[index].first) {
-			cnt++;
-			end_time = arr[index].second;
-		}
-		index++;
+// S[start]에서 시작하는 증가 부분 수열 중 최대 길이를 반환한다.
+int list(int start) {
+	int& ret = cache[start];
+	if (ret != -1) return ret;
+	//항상 S[start]는 있기 때문에 길이는 최하 1
+	ret = 1;
+	for (int next = start + 1; next < n; ++next) {
+		if (S[start] < S[next])
+			ret = max(ret, lis2(next) + 1);
+		return ret;
 	}
-	cout << cnt;
+}
+
+int main(void) {
+
 	return 0;
 }
