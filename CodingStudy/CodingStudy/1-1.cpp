@@ -1,35 +1,75 @@
 #include<iostream>
 #include<algorithm>
 using namespace std;
-// Sutdying LIS (Longest Increasing Subsequence)
-// Studying with book '프로그래밍 대회에서 배우는 알고리즘 문제 해결 전략'
-int n;
-int cache[1000], S[1000];
 
-// return LIS starts from S[start] (and this includes S[start])
-int lis2(int start) {
-	int& ret = cache[start];
-	if (ret != -1) return ret; //if LIS for start has been answered immediately return
+int n, max_locate = 0;//board size
+int p, q;
+bool canLocate(bool board[][10]) {
+	for (int i = 0; i < n; i++)
+		for (int j = 0; j < n; j++)
+			if (board[i][j])
+				return true;
+	return false;
+}
 
-	// since S[start] is always at there, LIS should be at least 1
-	ret = 1;
-	for (int next = start + 1; next < n; ++next) 
-		if (S[start] < S[next])
-			ret = max(ret, lis2(next) + 1);
-	
-	return ret;
+int m0[4] = { 1, 1, -1, -1 }, m1[4] = { 1,-1 ,-1,1 };
+void locateBishop(int x, int y, bool arr[][10], int cnt) {
+	bool board[10][10];
+	for (int i = 0; i < n; i++)
+		for (int j = 0; j < n; j++)
+			board[i][j] = arr[i][j];
+
+	board[x][y] = false;
+	for (int i = 0; i < 4; i++) { //lock diagonal
+		p = x + m0[i], q = y + m1[i];
+		while (p > -1 && p < n && q > -1 && q < n) {
+			board[p][q] = false;
+			p += m0[i], q += m1[i];
+		}
+	}
+
+	if (!canLocate(board)) // if cant locate any more
+		max_locate = max(max_locate, cnt + 1);
+	else { // can locate more bishop
+		for (int i = 0; i < n; i++)
+			for (int j = 0; j < n; j++)
+				if (board[i][j]) {
+					p = i, q = j;
+					while (p < n && q > -1) {
+						if (board[p][q])
+							locateBishop(p, q, board, cnt+1);
+						p++, q--;
+					}
+					i = n, j = n;
+				}
+	}
 }
 
 int main(void) {
-	scanf("%d", &n);
-	for (int i = 0; i < n; i++) {
-		scanf("%d", &S[i]);
-		cache[i] = -1;
-	}
-	int max_lis = 0;
-	for (int i = 0; i < n; i++) 
-		max_lis = max(max_lis, lis2(i));
+	bool board[10][10]; //true: can go , false: can't go
+	cin >> n;
+	int x;
+	for (int i = 0; i < n; i++)
+		for (int j = 0; j < n; j++) {
+			cin >> x;
+			if (x)
+				board[i][j] = true;
+			else
+				board[i][j] = false;
+		}
 
-	cout << max_lis;
-	return 0;
+
+	for (int i = 0; i < n; i++)
+		for (int j = 0; j < n; j++)
+			if (board[i][j]) {
+				p = i, q = j;
+				while (p < n &&q > -1) {
+					if (board[p][q]) 
+						locateBishop(p, q, board, 0);
+					p++, q--;
+				}
+				i = n, j = n;
+			}
+
+	cout << max_locate;
 }
