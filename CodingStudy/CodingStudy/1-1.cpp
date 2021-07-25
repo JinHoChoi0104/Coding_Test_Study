@@ -1,25 +1,45 @@
 #include<iostream>
-#include<queue>
+#include<vector>
 
 using namespace std;
 
-int main(void) {
-	int N, K;
-	scanf("%d%d", &N, &K);
-	queue<int>q;
-	for (int i = 1; i <= N; i++)
-		q.push(i);
+vector < vector<bool> > video(64, vector<bool>(64, false));
 
-	printf("<", q.front());
-	while (q.size()!=1) {
-		for (int i = 1; i < K; i++) {
-			q.push(q.front());
-			q.pop();
+void QuadTree(int x, int y, int size) {
+	bool color = video[x][y];
+	if (size != 1) {
+		for (int i = x; i < x + size; i++) {
+			for (int j = y; j < y + size; j++) {
+				if (color != video[i][j]) {
+					printf("(");
+					QuadTree(x, y, size / 2);
+					QuadTree(x, y + size / 2, size / 2);
+					QuadTree(x + size / 2, y, size / 2);
+					QuadTree(x + size / 2, y + size / 2, size / 2);
+					printf(")");
+					return;
+				}
+			}
 		}
-		printf("%d, ", q.front());
-		q.pop();
 	}
-	printf("%d>", q.front());
 
+	if (color)
+		printf("1");
+	else
+		printf("0");
+}
+
+int main(void) {
+	int N, num;
+	scanf("%d", &N);
+	for (int i = 0; i < N; i++) {
+		for (int j = 0; j < N; j++) {
+			scanf("%1d", &num);
+			if (num == 1)
+				video[i][j] = true;
+		}
+	}
+	
+	QuadTree(0, 0, N);
 	return 0;
 }
