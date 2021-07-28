@@ -5,49 +5,32 @@
 using namespace std;
 
 int N;
-vector < int > a(1000000);
-vector < int > l; //save lis
-vector < int > p(1000000); //save array num's position in lis
+vector < int > a(1000);
+vector < int > l; //save lds
 
-void lis() { // changed way of getting LIS and it's O(n log n )
-	int index = 0, k = 0;
-	l.push_back(a[0]), p[0] = 0;
+void lds() { // simply change direction of LIS
+	int index = 0;
+	l.push_back(a[N-1]);
 
-	for (int i = 1; i < N; i++) {
+	for (int i = N-2; i >=0 ; i--) {
 		if (l[index] < a[i]) {
 			l.push_back(a[i]);
 			index++;
-			p[i] = index;
 		}
-		else {
-			k = lower_bound(l.begin(), l.end(), a[i]) - l.begin();
-			l[k] = a[i];
-			p[i] = k;
-		}
+		else 
+			l[lower_bound(l.begin(), l.end(), a[i]) - l.begin()] = a[i];
 	}
-
-	k = N;
-	for (int i = index; i >= 0; i--) { //find out what's real LIS member
-		while (1) {
-			k--;
-			if (p[k] == i) {
-				l[i] = a[k];
-				break;
-			}
-		}
-	}
-
-	printf("%d\n", index+1);
-	for (int i = 0; i <= index; i++)
-		printf("%d ", l[i]);
+	
+	printf("%d", index+1);
 }
 
 int main(void) {
+	//freopen("input.txt", "r", stdin);
 	scanf("%d", &N);
 	for (int i = 0; i < N; i++)
 		scanf("%d", &a[i]);
 
-	lis();
+	lds();
 
 	return 0;
 }
