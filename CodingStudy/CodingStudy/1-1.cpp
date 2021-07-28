@@ -1,43 +1,42 @@
 #include<iostream>
 #include<vector>
 #include<algorithm>
-
 using namespace std;
 
-int N, max_i = 0;
-vector<int> a(500, -1);
-vector<int> cache(500, -1); //save lis starting at i
-
-int lis(int start) {
-	int &ret = cache[start];
-	if (ret != -1)
-		return ret;
-
-	ret = 1;
-	for (int i = start+1; i <= max_i; i++) {
-		if (a[start] < a[i])
-			ret = max(ret, lis(i) + 1);
+void binarySearch(int l, int r, int num, vector<int>& note1) {
+	if (l > r) {
+		printf("0\n");
+		return;
 	}
-	return ret;
+	int mid = (l + r) / 2;
+
+	if (num == note1[mid])
+		printf("1\n");
+	else if (num < note1[mid])
+		binarySearch(l, mid - 1, num, note1);
+	else if (num > note1[mid])
+		binarySearch(mid + 1, r, num, note1);
 }
 
 int main(void) {
-	//freopen("input.txt", "r", stdin);
-	scanf("%d", &N);
+//	freopen("input.txt", "r", stdin);
+	int T, N, M, num;
+	scanf("%d", &T);
 
-	int from, to;
-	for (int i = 0; i < N; i++) {
-		scanf("%d%d", &from, &to);
-		a[from] = to;
-		max_i = max(max_i, from);
+	while (T--) {
+		vector<int> note1;
+		scanf("%d", &N);
+		for (int i = 0; i < N; i++) {
+			scanf("%d", &num);
+			note1.push_back(num);
+		}
+		sort(note1.begin(), note1.end());
+
+		scanf("%d", &M);
+		while (M--) {
+			scanf("%d", &num);
+			binarySearch(0, N - 1, num, note1);
+		}
 	}
-
-	/*
-	by putting -1 (minimul than all ather elements) in to infront of array
-	a[0] = -1
-	cache(0) - 1 (which is lis(0) - 1) is LIS of total array
-	*/
-	// (total power code) - (remaining code) = (removed code) 
-	printf("%d", N - (lis(0) - 1));
 	return 0;
 }
