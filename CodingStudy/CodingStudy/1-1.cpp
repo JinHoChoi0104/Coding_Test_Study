@@ -1,42 +1,53 @@
 #include<iostream>
 #include<vector>
 #include<algorithm>
+
 using namespace std;
 
-void binarySearch(int l, int r, int num, vector<int>& note1) {
-	if (l > r) {
-		printf("0\n");
-		return;
-	}
-	int mid = (l + r) / 2;
+int N;
+vector < int > a(1000000);
+vector < int > l; //save lis
+vector < int > p(1000000); //save array num's position in lis
 
-	if (num == note1[mid])
-		printf("1\n");
-	else if (num < note1[mid])
-		binarySearch(l, mid - 1, num, note1);
-	else if (num > note1[mid])
-		binarySearch(mid + 1, r, num, note1);
+void lis() { // changed way of getting LIS and it's O(n log n )
+	int index = 0, k = 0;
+	l.push_back(a[0]), p[0] = 0;
+
+	for (int i = 1; i < N; i++) {
+		if (l[index] < a[i]) {
+			l.push_back(a[i]);
+			index++;
+			p[i] = index;
+		}
+		else {
+			k = lower_bound(l.begin(), l.end(), a[i]) - l.begin();
+			l[k] = a[i];
+			p[i] = k;
+		}
+	}
+
+	k = N;
+	for (int i = index; i >= 0; i--) { //find out what's real LIS member
+		while (1) {
+			k--;
+			if (p[k] == i) {
+				l[i] = a[k];
+				break;
+			}
+		}
+	}
+
+	printf("%d\n", index+1);
+	for (int i = 0; i <= index; i++)
+		printf("%d ", l[i]);
 }
 
 int main(void) {
-//	freopen("input.txt", "r", stdin);
-	int T, N, M, num;
-	scanf("%d", &T);
+	scanf("%d", &N);
+	for (int i = 0; i < N; i++)
+		scanf("%d", &a[i]);
 
-	while (T--) {
-		vector<int> note1;
-		scanf("%d", &N);
-		for (int i = 0; i < N; i++) {
-			scanf("%d", &num);
-			note1.push_back(num);
-		}
-		sort(note1.begin(), note1.end());
+	lis();
 
-		scanf("%d", &M);
-		while (M--) {
-			scanf("%d", &num);
-			binarySearch(0, N - 1, num, note1);
-		}
-	}
 	return 0;
 }
