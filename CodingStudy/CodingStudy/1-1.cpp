@@ -1,43 +1,41 @@
 #include<iostream>
-#include<list>
-#include<algorithm>
+#include<vector>
+#include<set>
+
 using namespace std;
 
-void NM(int index, int cnt, list<int>& pre, list <int>& remain) {
-	list <int> l(pre);
-	list <int> l2(remain);
-	list <int> ::iterator iter = l2.begin();
+int M;
+set <int> s;
 
+void NM(int index, int cnt, vector<int> &a) {
+	vector<int> arr(a);
+	set<int>::iterator iter = s.begin();
 	for (int i = 0; i < index; i++)
 		iter++;
-
-	l.push_back(*iter);
-	l2.erase(iter);
+	arr.push_back(*iter);
 
 	if (cnt == 0) {
-		for (iter = l.begin(); iter != l.end(); iter++)
-			printf("%d ", *iter);
+		for (int i = 0; i < M; i++)
+			printf("%d ", arr[i]);
 		printf("\n");
 		return;
 	}
-	for (int i = 0; i < l2.size(); i++)
-		NM(i, cnt - 1, l, l2);
+
+	for (int i = index; i < s.size(); i++)
+		NM(i, cnt - 1, arr);
 }
 
 int main(void) {
-	int N, M, num;
+	freopen("input.txt", "r", stdin);
+	int N, num;
 	scanf("%d %d", &N, &M);
-
-	list <int> l, l2;
+	
 	for (int i = 0; i < N; i++) {
 		scanf("%d", &num);
-		l2.push_back(num);
+		s.insert(num);
 	}
-
-	l2.sort();
-
-	for (int i = 0; i < N; i++)
-		NM(i, M - 1, l, l2);
-
+	vector<int>arr;
+	for (int i = 0; i < s.size(); i++)
+		NM(i, M-1, arr);
 	return 0;
 }
