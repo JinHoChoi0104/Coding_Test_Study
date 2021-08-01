@@ -1,116 +1,85 @@
 #include<iostream>
 #include<vector>
-#include<queue>
 
 using namespace std;
 
-int N;
-struct tree {
-	int x, y;
-	bool rot; // true: horizontal, false: vertical คั คำ
-	int cnt;
-	bool rotated;
-};
-queue <tree> q;
-vector<vector<bool>> map(50, vector<bool>(50, true));
-vector<vector<bool>> hvisited(50, vector<bool>(50, false));
-vector<vector<bool>> vvisited(50, vector<bool>(50, false));
-vector<pair<int, int>> target, start;
-int m[2][4] = { {-1,1,0,0} , {0,0,-1,1} };
+vector<vector<bool>> arr(2046, vector<bool>(4090, false));
 
-void BFS() {
-	int x, y, tox, toy, turn, cnt;
-	int x1, y1, x2, y2;
-	bool rot;
-	while (!q.empty()) {
-		x = q.front().x, y = q.front().y;
-		cnt = q.front().cnt + 1;
-		rot = q.front().rot;
-		if (!q.front().rotated) { // turm
-			turn = 0;
-			for(int i = -1; i < 2; i++)
-				for (int j = -1; j < 2; j++) {
-					tox = x + i, toy = y + j;
-					if (tox > -1 && tox < N && toy > -1 && toy < N) 
-						if (map[tox][toy]) 
-							turn++;
-				}
-			if(turn == 9)
-				q.push({ x, y, !rot, cnt, true });
-		}
-
-		for (int i = 0; i < 4; i++) { //move
-			tox = x + m[0][i], toy = y + m[1][i];
-			if (tox > -1 && tox < N && toy > -1 && toy < N) {
-				if (map[tox][toy]){
-					if (rot) {//hori
-						if (!hvisited[tox][toy]) {
-							x1 = tox, x2 = tox;
-							y1 = toy - 1, y2 = toy + 1;
-						}
-						else
-							continue;
-					}
-					else {
-						if (!vvisited[tox][toy]) {
-							x1 = tox - 1, x2 = tox + 1;
-							y1 = toy, y2 = toy;
-						}
-						else
-							continue;
-					}
-					if (x1 > -1 && x1 < N && y1 > -1 && y1 < N)
-						if (x2 > -1 && x2 < N && y2 > -1 && y2 < N)
-							if (map[x1][y1] && map[x2][y2]) {
-								if (target[0].first == x1 && target[0].second == y1) { // check arrival
-									if (target[1].first == tox && target[1].second == toy)
-										if (target[2].first == x2 && target[2].second == y2) {
-											printf("%d ", cnt);
-											return;
-										}
-								}
-								q.push({ tox, toy, rot, cnt, false });
-								if(rot)
-									hvisited[tox][toy] = true;
-								else
-									vvisited[tox][toy] = true;
-							}
-					
-				}
-			}
-		}
-		q.pop();
+void triangle(int x, int y, int size) { // 3 -> 5
+	arr[x][y] = true;
+	for (int i = 1; i <= size ; i++) {
+		arr[x + i][y + i] = true;
+		arr[x + i][y - i] = true;
 	}
-	printf("0");
+	x += (size + 1);
+	y -= (size + 1);
+	for (int i = 0; i < size * 2 + 3; i++)
+		arr[x][y + i] = true;
+}
+void reTriangle(int x, int y, int size) { // 3 -> 5
+	for (int i = 0; i <= size+1; i++) {
+		arr[x][y + i] = true;
+		arr[x][y - i] = true;
+	}
+	int y1 = y - (size + 1);
+	for (int i = 1; i <= size; i++)
+		arr[x + i][y1 + i] = true;
+	y1 = y + (size + 1);
+	for (int i = 1; i <= size+1; i++)
+		arr[x + i][y1 - i] = true;
 }
 
-
-int main(void) {
-	//freopen("input.txt", "r", stdin);
-	scanf("%d", &N);
-	char c;	//scanf() recognize blank as a single character, so instead of using "%c" should use " %c"
-	
-	for (int i = 0; i < N; i++) {
-		for (int j = 0; j < N; j++) {
-			scanf(" %c", &c);
-			if (c == 'B') 
-				start.push_back(make_pair(i, j));
-			else if(c=='E')
-				target.push_back(make_pair(i, j));		
-			else if (c == '1') 
-				map[i][j] = false;	
-		}
-	}
-
-	if (start[0].first == start[1].first) { // horizontal
-		q.push({ start[1].first,start[1].second, true, 0, false });
-		hvisited[start[1].first][start[1].second] = true;
+void triTree(int x, int y, int size, int k) {
+	if (k % 2 == 1) {
+		triangle(x, y, size);
+		x += (size + 1) /2;
 	}
 	else {
-		q.push({ start[1].first,start[1].second, false, 0, false });
-		vvisited[start[1].first][start[1].second] = true;
+		reTriangle(x, y, size);
+		x++;
 	}
+	size -= 3;
+	size /= 2;
 
-	BFS();
+	if (k == 0)
+		return;
+	triTree(x, y, size, k - 1);
+}
+
+int main(void) {
+	ios_base::sync_with_stdio(false);
+	cin.tie(NULL);
+	cout.tie(NULL);
+
+	int N, size = 1, k = 0;
+	cin >> N;
+	for(int i = 2; i < N; i++){ // a[n] = 2 * a[n-1] + 3
+		size *= 2;
+		size += 3;
+	}
+	if (N == 1) {
+		cout << "*";
+		return 0;
+	}
+	triTree(0, size + 1, size, N);
+	int len = size * 2 + 3;
+	for (int i = 0; i < size + 2; i++) {
+		for (int j = 0; j < len; j++) {
+			if (arr[i][j])
+				cout << "*";
+			else
+				cout << " ";
+			if (N % 2 == 0) {
+				if (j == len - i)
+					break;
+			}
+			else
+				if (j == len/2 +i)
+					break;
+				
+		}
+		if(i != size+1)
+			cout << "\n";
+	}
 	return 0;
 }
