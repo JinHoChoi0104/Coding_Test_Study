@@ -1,85 +1,45 @@
 #include<iostream>
-#include<vector>
+#include<queue>
+#include<algorithm>
 
 using namespace std;
+int max_snow = 0, N, M;
+struct snow { int size, cnt, pos; };
+queue<snow> q;
+vector<int> a;
+void rolling() { //Brute Force!
+	int size, cnt, pos;
+	while (!q.empty()) { // you can use recursion instead of using queue
+		size = q.front().size, cnt = q.front().cnt, pos = q.front().pos;
+		q.pop();
+		if (cnt == M || pos == N)
+			max_snow = max(max_snow, size);
+		else {
+			if (pos < N) // case 1
+				q.push({ size + a[pos + 1], cnt + 1, pos + 1 });
 
-vector<vector<bool>> arr(2046, vector<bool>(4090, false));
-
-void triangle(int x, int y, int size) { // 3 -> 5
-	arr[x][y] = true;
-	for (int i = 1; i <= size ; i++) {
-		arr[x + i][y + i] = true;
-		arr[x + i][y - i] = true;
-	}
-	x += (size + 1);
-	y -= (size + 1);
-	for (int i = 0; i < size * 2 + 3; i++)
-		arr[x][y + i] = true;
-}
-void reTriangle(int x, int y, int size) { // 3 -> 5
-	for (int i = 0; i <= size+1; i++) {
-		arr[x][y + i] = true;
-		arr[x][y - i] = true;
-	}
-	int y1 = y - (size + 1);
-	for (int i = 1; i <= size; i++)
-		arr[x + i][y1 + i] = true;
-	y1 = y + (size + 1);
-	for (int i = 1; i <= size+1; i++)
-		arr[x + i][y1 - i] = true;
-}
-
-void triTree(int x, int y, int size, int k) {
-	if (k % 2 == 1) {
-		triangle(x, y, size);
-		x += (size + 1) /2;
-	}
-	else {
-		reTriangle(x, y, size);
-		x++;
-	}
-	size -= 3;
-	size /= 2;
-
-	if (k == 0)
-		return;
-	triTree(x, y, size, k - 1);
-}
-
-int main(void) {
-	ios_base::sync_with_stdio(false);
-	cin.tie(NULL);
-	cout.tie(NULL);
-
-	int N, size = 1, k = 0;
-	cin >> N;
-	for(int i = 2; i < N; i++){ // a[n] = 2 * a[n-1] + 3
-		size *= 2;
-		size += 3;
-	}
-	if (N == 1) {
-		cout << "*";
-		return 0;
-	}
-	triTree(0, size + 1, size, N);
-	int len = size * 2 + 3;
-	for (int i = 0; i < size + 2; i++) {
-		for (int j = 0; j < len; j++) {
-			if (arr[i][j])
-				cout << "*";
-			else
-				cout << " ";
-			if (N % 2 == 0) {
-				if (j == len - i)
-					break;
-			}
-			else
-				if (j == len/2 +i)
-					break;
-				
+			if (pos < N - 1) // case 2
+				q.push({ size / 2 + a[pos + 2], cnt + 1, pos + 2 });
 		}
-		if(i != size+1)
-			cout << "\n";
 	}
+}
+/*
+Why not Greed !???
+since you have chance to arrive at ending point before time M
+you have to check every cases!!
+=> Brute Force!!
+*/
+int main(void) {
+	scanf("%d %d", &N, &M);
+
+	int num;
+	a.push_back(0);
+	for (int i = 0; i < N; i++) {
+		scanf("%d", &num);
+		a.push_back(num);
+	}
+	q.push({ 1, 0, 0 });
+	rolling();
+	printf("%d", max_snow);
 	return 0;
 }
