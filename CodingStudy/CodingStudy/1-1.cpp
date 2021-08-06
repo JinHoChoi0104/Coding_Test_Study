@@ -1,59 +1,107 @@
 #include <iostream>
+#include <vector>
 #include <algorithm>
 using namespace std;
 
-int board[500][500];
-int N, M, max_sum = 0, m[2][4] = { {-1,1,0,0} , {0,0,-1,1} };
+int largest_num = 0, N, m[2][4] = { {-1,1,0,0}, {0,0,-1,1} }; //up, down, left, right
 
-void DFS(int x, int y, int cnt, int dir, int sum) {
-	int tox, toy, add = 0, add2 = 0;
-	sum += board[x][y];
-	
-	if (dir == 1) dir = 0;
-	else if (dir == 0) dir = 1;
-	else if (dir == 2) dir = 3; 
-	else if (dir == 3) dir = 2; //not going back
+int findBig(vector<vector<int>> board) {
+	for (int i = 0; i < N; i++) 
+		for (int j = 0; j < N; j++) 
+			largest_num = max(largest_num, board[i][j]);
+	return 0;
+}
 
-	for (int k = 0; k < 4; k++) {
-		if (k == dir)
-			continue;
-		tox = x + m[0][k], toy = y + m[1][k];
-		if (tox > -1 && tox <N && toy > -1 && toy < M) {
-			if (cnt != 3) {
-				DFS(tox, toy, cnt + 1, k, sum);
-				if (cnt == 2) {
-					if (board[tox][toy] > add && board[tox][toy] > add2) {
-						add2 = add;
-						add = board[tox][toy];
-					}
-					else if (board[tox][toy] > add2)
-						add2 = board[tox][toy];
-				}
-			}
-			else 
-				add = max(add, board[tox][toy]);
+void adding(vector<vector<int>>& board, int i, int j, int dir) {
+	int tox = i - m[0][dir], toy = j - m[1][dir];
+	while (tox > -1 && tox < N && toy > -1 && toy < N) {
+		if (board[tox][toy] == 0) 
+			tox -= m[0][dir], toy -= m[1][dir];
+		else if (board[tox][toy] == board[i][j]) {
+			board[i][j] *= 2;
+			board[tox][toy] = 0;
+			i = tox, j = toy;
+			return;
+		}
+		else {
+			i = tox + m[0][dir], j = toy + m[1][dir];
+			return;
 		}
 	}
-	if (cnt == 2) {
-		sum = sum + add + add2;
-		max_sum = max(max_sum, sum);
-	}
-	else if (cnt == 3) {
-		sum += add;
-		max_sum = max(max_sum, sum);
+}
+void moving(vector<vector<int>>& board, int fromx, int fromy, int dir) {
+	int tox = fromx + m[0][dir], toy = fromy + m[1][dir];
+	while (tox > -1 && tox < N && toy > -1 && toy < N) {
+		if (board[tox][toy] == 0) {
+			board[tox][toy] = board[fromx][fromy];
+			board[fromx][fromy] = 0;
+			fromx = tox, fromy = toy;
+			tox += m[0][dir], toy += m[1][dir];
+		}
+		else
+			return;
 	}
 }
-int main() {
-	//freopen("input.txt", "r", stdin);
-	scanf("%d %d", &N, &M);
-	for (int i = 0; i < N; i++)
-		for (int j = 0; j < M; j++)
-			scanf("%d", &board[i][j]);
-	int ans = 0, sum = 0;
-	for (int i = 0; i < N; i++) 
-		for (int j = 0; j < M; j++)
-			DFS(i, j, 1, 4, 0);
+void DFS(vector<vector<int>> board, int cnt, int dir) {
+	if (dir == 0) { //up
+		for (int j = 0; j < N; j++) {//y 
+			for (int i = 0; i < N; i++) //x
+				if (board[i][j] != 0)
+					adding(board, i, j, dir);
+			for (int i = 0; i < N; i++)
+				if (board[i][j] != 0)
+					moving(board, i, j, dir);
+		}
+	}
+	else if (dir == 1){ //down
+		for (int j = 0; j < N; j++) { //y 
+			for (int i = N - 1; i >= 0; i--) //x
+				if (board[i][j] != 0)
+					adding(board, i, j, dir);
+			for (int i = N - 1; i >= 0; i--)
+				if (board[i][j] != 0)
+					moving(board, i, j, dir);
+		}
+	}
+	else if (dir == 2) {//left
+		for (int i = 0; i < N; i++) {//x
+			for (int j = 0; j < N; j++)  //y
+				if (board[i][j] != 0) 
+					adding(board, i, j, dir);	
+			for (int j = 0; j < N; j++) 
+				if (board[i][j] != 0) 
+					moving(board, i, j, dir);
+		}
+	}
+	else if (dir == 3) { //right
+		for (int i = 0; i < N; i++) { //x
+			for (int j = N - 1; j >= 0; j--)  //y 
+				if (board[i][j] != 0)
+					adding(board, i, j, dir);
+			for (int j = N - 1; j >= 0; j--)
+				if (board[i][j] != 0)
+					moving(board, i, j, dir);
+		}
+	}
+	if (cnt != 5)
+		for (int k = 0; k < 4; k++)
+			DFS(board, cnt + 1, k);
+	else
+		findBig(board);
+	
+}
 
-	printf("%d", max_sum);
+int main() {
+	vector<vector<int>>  board(20, vector<int>(20));
+	scanf("%d", &N);
+	for (int i = 0; i < N; i++)
+		for (int j = 0; j < N; j++)
+			scanf("%d", &board[i][j]);
+
+	for (int k = 0; k < 4; k++)
+		DFS(board, 1, k);
+
+	printf("%d", largest_num);
+
 	return 0;
 }
