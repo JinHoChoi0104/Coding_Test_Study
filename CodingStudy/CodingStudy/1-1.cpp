@@ -1,41 +1,58 @@
 #include <iostream>
-#include <vector>
 #include <algorithm>
 using namespace std;
-bool isClean[50][50];
-bool wall[50][50];
-int N, M, cnt = 0, m[2][4] = { {-1,0,1,0 }, {0,1,0,-1} };//up, right, down, left
-
-void cleaning(int x, int y, int d) {
-	if (!isClean[x][y]) { // 1
-		isClean[x][y] = true;
-		cnt++;
-	}
-	int tox, toy;
-	for (int k = 1; k <= 4; k++) { //2
-		d--;
-		if (d == -1) d = 3;
-		tox = x + m[0][d], toy = y + m[1][d];
-		if (!wall[tox][toy] && !isClean[tox][toy]) { //2-a
-			cleaning(tox, toy, d);
-			return;
+int arr[501], sum = 0, W, H;
+void left(int to) { //  0 ~ index
+	int tallest = arr[to - 1], index = to - 1;
+	bool isPole = false;
+	for (int i = to - 2; i > -1; i--) {
+		if (arr[i] >= tallest) {
+			tallest = arr[i];
+			index = i;
+			isPole = true;
 		}
+		if (arr[i] > arr[i + 1])
+			isPole = true;
 	}
-	tox = x - m[0][d], toy = y - m[1][d];
-	if (!wall[tox][toy]) //2-c
-		cleaning(tox, toy, d);
-} //2-d
+	if (!isPole)
+		return;
+	for (int i = index + 1; i < to; i++) 
+		sum += (tallest - arr[i]);
+	if (index != 0)
+		left(index);
+}
+void right(int to) { //index ~ end
+	int tallest = arr[to + 1], index = to + 1;
+	bool isPole = false;
+	for (int i = to + 2; i < W; i++) {
+		if (arr[i] >= tallest) {
+			tallest = arr[i];
+			index = i;
+			isPole = true;
+		}
+		if (arr[i-1] < arr[i])
+			isPole = true;
+	}
+	if (!isPole)
+		return;
+	for (int i = to + 1; i < index; i++) 
+		sum += (tallest - arr[i]);
+	if (index != W-1)
+		right(index);
+}
 int main() {
-	//freopen("input.txt", "r", stdin);
-	int r, c, d, num;
-	scanf("%d %d %d %d %d", &N, &M, &r, &c, &d);
-//	scanf("%d %d %d", &r, &c, &d);
-	for(int i = 0; i < N; i++)
-		for (int j = 0; j < M; j++) {
-			scanf("%d", &num);
-			wall[i][j] = num;
+//	freopen("input.txt", "r", stdin);
+	int tallest = 0, index = 0;
+	scanf("%d %d", &H, &W);
+	for (int i = 0; i < W; i++) {
+		scanf("%d", &arr[i]);
+		if (arr[i] > tallest) {
+			tallest = arr[i];
+			index = i;
 		}
-	cleaning(r, c, d);
-	printf("%d", cnt);
+	}
+	left(index);
+	right(index);
+	printf("%d", sum);
 	return 0;
 }
