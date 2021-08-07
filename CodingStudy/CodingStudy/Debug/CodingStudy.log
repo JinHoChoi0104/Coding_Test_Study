@@ -1,9 +1,2 @@
 ﻿  1-1.cpp
-C:\Users\82107\Desktop\Github\Coding_Test_Study\CodingStudy\CodingStudy\1-1.cpp(54,23): warning C4101:  'fromy' :참조되지 않은 지역 변수입니다.
-C:\Users\82107\Desktop\Github\Coding_Test_Study\CodingStudy\CodingStudy\1-1.cpp(54,11): warning C4101:  'toy' :참조되지 않은 지역 변수입니다.
-C:\Users\82107\Desktop\Github\Coding_Test_Study\CodingStudy\CodingStudy\1-1.cpp(54,37): warning C4101:  'stopy' :참조되지 않은 지역 변수입니다.
-C:\Users\82107\Desktop\Github\Coding_Test_Study\CodingStudy\CodingStudy\1-1.cpp(54,6): warning C4101:  'tox' :참조되지 않은 지역 변수입니다.
-C:\Users\82107\Desktop\Github\Coding_Test_Study\CodingStudy\CodingStudy\1-1.cpp(54,16): warning C4101:  'fromx' :참조되지 않은 지역 변수입니다.
-C:\Users\82107\Desktop\Github\Coding_Test_Study\CodingStudy\CodingStudy\1-1.cpp(54,44): warning C4101:  'index' :참조되지 않은 지역 변수입니다.
-C:\Users\82107\Desktop\Github\Coding_Test_Study\CodingStudy\CodingStudy\1-1.cpp(54,30): warning C4101:  'stopx' :참조되지 않은 지역 변수입니다.
   CodingStudy.vcxproj -> C:\Users\82107\Desktop\Github\Coding_Test_Study\CodingStudy\Debug\CodingStudy.exe
