@@ -1,58 +1,60 @@
 #include <iostream>
+#include <vector>
 #include <algorithm>
+
 using namespace std;
-int arr[501], sum = 0, W, H;
-void left(int to) { //  0 ~ index
-	int tallest = arr[to - 1], index = to - 1;
-	bool isPole = false;
-	for (int i = to - 2; i > -1; i--) {
-		if (arr[i] >= tallest) {
-			tallest = arr[i];
-			index = i;
-			isPole = true;
-		}
-		if (arr[i] > arr[i + 1])
-			isPole = true;
+
+vector<int> graph[10001];
+vector<int> graph2[10001];
+int arr[10001];
+bool visited[10001];
+bool visited2[10001];
+bool done[10001];
+
+int N, M;
+int DFS(int to) {
+	int com = 1, num;
+	visited[to] = true;
+	done[to] = true;
+	for (int i = 0; i < graph[to].size(); i++) {
+		num = graph[to][i];
+		if (!visited[num])
+			com += DFS(num);
 	}
-	if (!isPole)
-		return;
-	for (int i = index + 1; i < to; i++) 
-		sum += (tallest - arr[i]);
-	if (index != 0)
-		left(index);
+	return com;
 }
-void right(int to) { //index ~ end
-	int tallest = arr[to + 1], index = to + 1;
-	bool isPole = false;
-	for (int i = to + 2; i < W; i++) {
-		if (arr[i] >= tallest) {
-			tallest = arr[i];
-			index = i;
-			isPole = true;
-		}
-		if (arr[i-1] < arr[i])
-			isPole = true;
+void reverseDFS(int to, int val) {
+	int com = 1, num;
+	visited2[to] = true, arr[to] = val;
+	for (int i = 0; i < graph2[to].size(); i++) {
+		num = graph2[to][i];
+		if (visited[num] && !visited2[num])
+			reverseDFS(num, val);
 	}
-	if (!isPole)
-		return;
-	for (int i = to + 1; i < index; i++) 
-		sum += (tallest - arr[i]);
-	if (index != W-1)
-		right(index);
+}
+void reset() {
+	for (int i = 1; i <= N; i++)
+		visited[i] = false;
 }
 int main() {
-//	freopen("input.txt", "r", stdin);
-	int tallest = 0, index = 0;
-	scanf("%d %d", &H, &W);
-	for (int i = 0; i < W; i++) {
-		scanf("%d", &arr[i]);
-		if (arr[i] > tallest) {
-			tallest = arr[i];
-			index = i;
+	scanf("%d %d", &N, &M);
+	int from, to, max_com = 0;
+	while(M--) {
+		scanf("%d %d", &from, &to);
+		graph[to].push_back(from);
+		graph2[from].push_back(to);
+	}
+
+	for (int i = 1; i <= N; i++) {
+		if (!done[i]) {
+			reset();
+			arr[i] = DFS(i);
+			reverseDFS(i, arr[i]);
+			max_com = max(max_com, arr[i]);
 		}
 	}
-	left(index);
-	right(index);
-	printf("%d", sum);
+	for (int i = 1; i <= N; i++)
+		if (arr[i] == max_com)
+			printf("%d ", i);
 	return 0;
 }
