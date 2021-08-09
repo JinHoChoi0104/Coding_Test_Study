@@ -1,60 +1,63 @@
 #include <iostream>
+#include <map>
 #include <vector>
 #include <algorithm>
-
 using namespace std;
 
-vector<int> graph[10001];
-vector<int> graph2[10001];
-int arr[10001];
-bool visited[10001];
-bool visited2[10001];
-bool done[10001];
-
-int N, M;
-int DFS(int to) {
-	int com = 1, num;
-	visited[to] = true;
-	done[to] = true;
-	for (int i = 0; i < graph[to].size(); i++) {
-		num = graph[to][i];
-		if (!visited[num])
-			com += DFS(num);
-	}
-	return com;
-}
-void reverseDFS(int to, int val) {
-	int com = 1, num;
-	visited2[to] = true, arr[to] = val;
-	for (int i = 0; i < graph2[to].size(); i++) {
-		num = graph2[to][i];
-		if (visited[num] && !visited2[num])
-			reverseDFS(num, val);
-	}
-}
-void reset() {
-	for (int i = 1; i <= N; i++)
-		visited[i] = false;
-}
-int main() {
-	scanf("%d %d", &N, &M);
-	int from, to, max_com = 0;
-	while(M--) {
-		scanf("%d %d", &from, &to);
-		graph[to].push_back(from);
-		graph2[from].push_back(to);
-	}
-
-	for (int i = 1; i <= N; i++) {
-		if (!done[i]) {
-			reset();
-			arr[i] = DFS(i);
-			reverseDFS(i, arr[i]);
-			max_com = max(max_com, arr[i]);
+int N, arr[10002], lis_size;
+vector<int> l; //save lis
+vector<int> p(10002); //save array num's position in lis
+void lis() {
+	int index = 0, k = 0;
+	l.push_back(arr[0]), p[0] = 0;
+	for (int i = 1; i < N; i++) {
+		if (l[index] < arr[i]) {
+			l.push_back(arr[i]);
+			index++;
+			p[i] = index;
+		}
+		else {
+			k = lower_bound(l.begin(), l.end(), arr[i]) - l.begin();
+			l[k] = arr[i];
+			p[i] = k;
 		}
 	}
-	for (int i = 1; i <= N; i++)
-		if (arr[i] == max_com)
-			printf("%d ", i);
+	k = N, lis_size = index + 1;
+	printf("%d\n", lis_size);
+	for (int i = index; i >= 0; i--) { //find out real members of LIS
+		while (1) {
+			k--;
+			if (p[k] == i) {
+				l[i] = arr[k];
+				break;
+			}
+		}
+	}
+}
+int main() {
+	//freopen("input.txt", "r", stdin);
+	int num, a[10001];
+	map <int, int> m; //key, value
+	scanf("%d", &N);
+	for (int i = 1; i <= N; i++) {
+		scanf("%d", &num);
+		a[num] = i;
+		m.insert({ i, num });
+	}
+	for (int i = 0; i < N; i++) {
+		scanf("%d", &num);
+		arr[i] = a[num];
+	}
+
+	lis();
+
+	map <int, int> ans;
+	for (int i = 0; i < lis_size; i++) {
+		map<int, int>::iterator it = m.find(l[i]);
+		ans[it->second]++;
+	}
+	for (map<int, int>::iterator it = ans.begin(); it != ans.end(); it++)
+		printf("%d ", it->first);
+
 	return 0;
 }
