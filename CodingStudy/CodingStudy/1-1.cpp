@@ -1,58 +1,48 @@
 #include <iostream>
-#include <vector>
+#include <queue>
 using namespace std;
-int total_cost = 0;
-int a[500];
-void file_division(int l, int r, int cost) {
-	//cout << l << r << endl;
-	if (l == r)
-		return;
-	int lsum = 0, rsum = 0, index;
-	int i = l, j = r;
-	while (i <= j) {
-		if (lsum < rsum) {
-		//	index = i;
-			lsum += a[i++];
-		}
-		else {
-			//index = j;
-			rsum += a[j--];
-		}
-	}
-	i--;
-	j++;
-	
 
-	cout << lsum << " "<<rsum << endl;
-	if (l != i)
-		total_cost += lsum;
-	if (j != r)
-		total_cost += rsum;
-	if(l+1 !=i)
-		file_division(l, i, lsum);
-	if(j+1!=r)
-		file_division(j, r, rsum);
-}
-int main() {
-	ios_base::sync_with_stdio(false);
-	cin.tie(NULL);
-	cout.tie(NULL);
-	freopen("input.txt", "r", stdin);
-	
-	int T, K, cost_sum;
-	scanf("%d", &T);
-	
-	
-	while (T--) {
-		scanf("%d", & K);
-		cost_sum = 0;
-		for (int i = 0; i < K; i++) {
-			scanf("%d", &a[i]);
-			cost_sum += a[i];
-		}
-		total_cost = cost_sum;
-		file_division(0, K - 1, cost_sum);
-		printf("%d\n", total_cost);
+int N, M, m[2][8] = { {-1,0,1,-1,1,-1,0,1}, {-1,-1,-1,0,0,1,1,1} };
+bool letter[250][250];
+
+void DFS(int x, int y) {
+	int tox, toy;
+	letter[x][y] = false;
+	for (int k = 0; k < 8; k++) {
+		tox = x + m[0][k], toy = y + m[1][k];
+		if (tox > -1 && tox < N && toy > -1 && toy < M)
+			if (letter[tox][toy])
+				DFS(tox, toy);
 	}
+}
+
+int main() {
+	scanf("%d %d", &N, &M);
+	int num;
+	queue<pair<int, int>>q;
+	bool isl = false;
+	for (int i = 0; i < N; i++) {
+		isl = false;
+		for (int j = 0; j < M; j++) {
+			scanf("%d", &num);
+			if (num == 1) {
+				letter[i][j] = true;
+				if (!isl) //if it's in same line you don't have to start searching at that point
+					q.push(make_pair(i, j)); //save 1's postion to search
+				isl = true;
+			}
+			else
+				isl = false;
+		}
+	}
+	int cnt = 0;
+	while (!q.empty()) {
+		if (letter[q.front().first][q.front().second]) {
+			DFS(q.front().first, q.front().second);
+			cnt++; //count DFS
+		}
+		q.pop();
+	}
+	printf("%d", cnt);
 	return 0;
 }
