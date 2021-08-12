@@ -1,92 +1,87 @@
 #include <iostream>
+#include <map>
+#include <list>
 using namespace std;
 
-int N, ground[11][11], a[11][11], b[11][11]; //size, ground's status, A[][], dead tree
-int m[2][8] = { {-1,-1,-1,0,0,1,1,1}, {-1,0,1,-1,1,-1,0,1} };
-int forest[11][11][1012], oldest[11][11];
-void spring() {
-	int grown, prev, d, index = 0; //how many tree will be grown, how many tree has been grown from front
-	for (int i = 1; i <= N; i++) {
-		for (int j = 1; j <= N; j++) {
-			prev = 0, index = 0;
-			for (int p = 1; p <= oldest[i][j] + 2; p++) { //age
-				int& ret = forest[i][j][p];
-
-				if (ret * p <= ground[i][j])  //no tree or enough soil
-					grown = ret;
-				else { //dead
-					grown = ground[i][j] / p;
-					d = p / 2; // since you throw away decimal, should calculate as if only one tree
-					b[i][j] += (ret - grown) * d;
-				}
-
-				ret = prev,	prev = grown;
-				ground[i][j] -= p * grown;
-				if (ret > 0)
-					index = p;
-			}
-			oldest[i][j] = index;
-		}
-	}
-}
-void summer() {
-	for (int i = 1; i <= N; i++)
-		for (int j = 1; j <= N; j++) {
-			ground[i][j] += b[i][j];
-			b[i][j] = 0;
-		}
-}
-void fall() {
-	int tox, toy;
-	for (int i = 1; i <= N; i++) {
-		for (int j = 1; j <= N; j++) {
-			for (int p = 5; p <= oldest[i][j]; p+=5) {
-				int& ret = forest[i][j][p];
-				if (ret > 0) {
-					for (int k = 0; k < 8; k++) {
-						tox = i + m[0][k], toy = j + m[1][k];
-						if (tox > 0 && tox <= N && toy > 0 && toy <= N) 
-							forest[tox][toy][1] += ret;
-					}
-				}
-			}
-		}
-	}
-}
-void winter() {
-	for (int i = 1; i <= N; i++)
-		for (int j = 1; j <= N; j++)
-			ground[i][j] += a[i][j];
-}
 int main() {
-	int M, K;
-	scanf("%d %d %d", &N, &M, &K);
-	for (int i = 1; i <= N; i++) {
-		for (int j = 1; j <= N; j++) {
-			scanf("%d", &a[i][j]);
-			ground[i][j] = 5;
+	ios_base::sync_with_stdio(false);
+	cin.tie(NULL);
+	cout.tie(NULL);
+	freopen("input.txt", "r", stdin);
+	map<int, int> sum; //position, sum of a[n] + a[n+1]
+	int T, K, index, min_num, size;
+	scanf("%d", &T);
+	int a[500];
+	list<pair<int,int>> l;
+	while (T--) {
+		scanf("%d", & K);
+		for (int i = 0; i < K; i++) {
+			scanf("%d", &a[i]);
 		}
-	}
-	int x, y, z; // position, age
-	for (int i = 0; i < M; i++) {
-		scanf("%d %d %d", &x, &y, &z);
-		forest[x][y][z]++;
-		oldest[x][y] = z;
-	}
+		for (int i = 0; i < K - 1; i++) {
+			l.push_back(make_pair(a[i], a[i] + a[i + 1]));
+		}
+		l.push_back(make_pair(a[K - 1], 10000));
+		size = K;
+		int total = 0;
+		while (size-- > 1) {
+			min_num = 10000, index = 0;
+			int k = 0;
+			for (auto it = l.begin(); it != l.end(); it++) {
+				//cout << it->first << " ";
+				if (min_num > it->second) {
+					min_num = it->second;
+					index = k;
+				}
+				k++;
+			}
+			cout << endl;
+			//		cout << "?? " << index << endl ;
+			auto it = l.begin();
+			for (int i = 0; i <= index + 1; i++) {
 
-	while (K--) {
-		spring();
-		summer();
-		fall();
-		winter();
+				it++;
+			}
+			int next;
+			if (it == l.end()) {
+				next = 10000;
+				it--;
+			}
+			else {
+				next = it->first;
+				it--;
+			}
+			it--;
+			int new_file = it->second;
+			l.insert(it, make_pair(new_file, new_file + next));
+
+			it++;
+			auto it2 = it;
+			it--;
+			l.erase(it2);
+			auto it3 = it;
+			it--;
+			l.erase(it3);
+
+			int before = 0;
+			if (it == l.begin()) {
+				before = 0;
+			}
+			else {
+				it--;
+				before = it->first;
+				l.insert(it, make_pair(before, before + new_file));
+			//	it--;
+				l.erase(it);
+			}
+			cout << size << endl;
+		//	for (auto it = l.begin(); it != l.end(); it++)	printf("%3d ", it->first);
+			cout << new_file;
+			//for (auto it = l.begin(); it != l.end(); it++)	printf("%3d ", it->second);
+			cout << endl;
+			total += new_file;
+		}
+		cout << total << endl;
 	}
-
-	int cnt = 0;
-	for (int i = 1; i <= N; i++)
-		for (int j = 1; j <= N; j++)
-			for (int p = 1; p <= oldest[i][j] + 1; p++)
-				cnt += forest[i][j][p];
-
-	printf("%d", cnt);
 	return 0;
 }
