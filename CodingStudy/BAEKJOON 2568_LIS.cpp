@@ -24,7 +24,7 @@ int main() {
 	pos[0] = 0;
 
 	int index, k = n;
-	for (int i = 1; i < n; i++) { //LIS , O(N * log N)
+	for (int i = 1; i < n; i++) {
 		if (tmp.back() < a[i].second) {
 			pos[i] = tmp.size();
 			tmp.push_back(a[i].second);
@@ -37,23 +37,24 @@ int main() {
 	}
 	
 	index = tmp.size()-1;
-	vector<int> rest; //numbers except lis members
-
-	for (int i = index; i >= 0; i--) { //find all LIS members
+	vector<int> rest;
+	
+	
+	for (int i = index; i >= 0; i--) {
 		while (1) {
 			k--;
-			if (pos[k] == i) //LIS
+			if (pos[k] == i) 
 				break;
-			else //not LIS
+			else
 				rest.push_back(a[k].first);
 		}
 	}
-	while (k-- > 0) //remains are not LIS members
+
+	while (k-- > 0) 
 		rest.push_back(a[k].first);
 	
-	printf("%d\n", n - index - 1);
+	printf("%d\n", n - index-1);
 	for (int i = rest.size() - 1; i >= 0 ; i--)
-
 		printf("%d ", rest[i]);
 	return 0;
 }
