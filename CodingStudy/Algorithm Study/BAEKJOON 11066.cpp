@@ -6,17 +6,26 @@ using namespace std;
 int N;
 vector<vector<int>> dp(500, vector<int>(500, -1)); 
 // dp[i][j] = i에서 j까지의 파일을 합치는데 필요한 최소 비용
+vector<vector<int>> sum_dp(500, vector<int>(500, -1));
+// i에서 j까지의 파일크기 합 저장
 vector<int> arr(500);
 // 파일 크기 저장
+
+int sumrange(int l, int r) {
+	int& ret = sum_dp[l][r];
+	if (ret != -1) //값을 이미 구한 경우
+		return ret;
+	ret = arr[l] + sumrange(l + 1, r);
+	return ret;
+}
 
 int merging(int l, int r){ //분할 정복!
 	int& ret = dp[l][r];
 	if (ret != -1) //값을 이미 구한 경우
 		return ret;
 
-	ret = 0;
-	for (int i = l; i <= r; i++) //l에서 r까지 파일크기 합
-		ret += arr[i];
+	ret = sumrange(l, r);//l에서 r까지 파일크기 합
+
 	int num = 2147483647; //int 최대값
 	for (int i = l; i < r; i++) 
 		num = min(num, merging(l, i) + merging(i + 1, r)); // 파일을 합칠 수 있는 모든 경우의 수들 중 최소를 찾는다
@@ -35,11 +44,14 @@ int main() {
 	while (T--) {
 		scanf("%d", &N);
 		for (int i = 0; i < N; i++) 
-			for (int j = 0; j < N; j++)
+			for (int j = 0; j < N; j++) {
 				dp[i][j] = -1;
+				sum_dp[i][j] = -1;
+			}
 		
 		for (int i = 0; i < N; i++) {
 			scanf("%d", &arr[i]);
+			sum_dp[i][i] = arr[i];
 			dp[i][i] = 0; //파일 1개는 합치는 비용이 0이다
 		}
 
