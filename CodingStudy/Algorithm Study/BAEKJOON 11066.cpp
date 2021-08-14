@@ -3,58 +3,40 @@
 #include <algorithm>
 using namespace std;
 
-int N;
-vector<vector<int>> dp(500, vector<int>(500, -1)); 
+vector<vector<int>> dp(500, vector<int>(500, -1));
 // dp[i][j] = i에서 j까지의 파일을 합치는데 필요한 최소 비용
-vector<vector<int>> sum_dp(500, vector<int>(500, -1));
-// i에서 j까지의 파일크기 합 저장
+vector<int> sum(500);
+// 0에서 j까지의 파일크기 합 저장
 vector<int> arr(500);
 // 파일 크기 저장
 
-int sumrange(int l, int r) {
-	int& ret = sum_dp[l][r];
-	if (ret != -1) //값을 이미 구한 경우
-		return ret;
-	ret = arr[l] + sumrange(l + 1, r);
-	return ret;
-}
-
-int merging(int l, int r){ //분할 정복!
-	int& ret = dp[l][r];
-	if (ret != -1) //값을 이미 구한 경우
-		return ret;
-
-	ret = sumrange(l, r);//l에서 r까지 파일크기 합
-
-	int num = 2147483647; //int 최대값
-	for (int i = l; i < r; i++) 
-		num = min(num, merging(l, i) + merging(i + 1, r)); // 파일을 합칠 수 있는 모든 경우의 수들 중 최소를 찾는다
-	
-	ret += num; 
-	//l에서 r까지의 파일을 합치는데 필요한 최소 비용 = l에서 r까지 파일크기 합 + 이전 단계의 파일 2개를 만드는 데 필요합 비용의 합
-	return ret;
-}
-
-
 int main() {
-	//freopen("input.txt", "r", stdin);
-	int T, num;
+	int T, N;
 	scanf("%d", &T);
-
+	sum[0] = 0;
 	while (T--) {
 		scanf("%d", &N);
-		for (int i = 0; i < N; i++) 
-			for (int j = 0; j < N; j++) {
-				dp[i][j] = -1;
-				sum_dp[i][j] = -1;
-			}
 		
 		for (int i = 0; i < N; i++) {
 			scanf("%d", &arr[i]);
-			sum_dp[i][i] = arr[i];
+			sum[i + 1] = sum[i] + arr[i];
 			dp[i][i] = 0; //파일 1개는 합치는 비용이 0이다
 		}
 
-		printf("%d\n", merging(0, N - 1));
+		for (int len = 2; len <= N; len++) { //파일이 len개일 때의 최소값을 구한다
+			for (int i = 0; i <= N - len; i++) {
+				int &ret = dp[i][i-1+len];
+				ret = 2147483647; //int 최대값
+		
+				for (int j = i; j < i + len - 1; j++) 
+					ret = min(ret, dp[i][j] + dp[j + 1][i + len - 1]);
+				// 파일을 합칠 수 있는 모든 경우의 수들 중 최소를 찾는다
+
+				ret += (sum[i + len] - sum[i]); //l에서 r까지 파일크기 합
+
+				//l에서 r까지의 파일을 합치는데 필요한 최소 비용 = l에서 r까지 파일크기 합 + 이전 단계의 파일 2개를 만드는 데 필요합 비용의 합
+			}
+		}
+		printf("%d\n", dp[0][N - 1]);
 	}
 }
