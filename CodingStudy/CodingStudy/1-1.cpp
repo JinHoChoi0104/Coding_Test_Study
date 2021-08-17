@@ -1,63 +1,33 @@
 #include <iostream>
+#include <vector>
 #include <algorithm>
-#include <queue>
 using namespace std;
 
+#define ll long long
+
 int main(void) {
-	string str;
-	cin >> str;
-	int index = str.at(0),len = str.length();
-	string ans = "z";
-	for (int i = 1; i < len; i++) 
-		ans += "z";
-	queue<int>q1;
-	q1.push(0);
-	for (int i = 1; i < len - 2; i++) { //제일 뒤의 두 알파벳을 제외하고, 제일 작은 알파벳을 찾는다
-		if (index > str.at(i)) {
-			while(!q1.empty())
-				q1.pop();
-			q1.push(i);
-			index = str.at(i);
-		}
-		else if (index == str.at(i)) //제일 작은 것이 여러개인 경우
-			q1.push(i);
+	int N, x1, y1, x2, y2, x3, y3, pre, now, jump, max_jump=0;
+	scanf("%d", &N);
+	scanf("%d %d", &x1, &y1);
+	scanf("%d %d", &x2, &y2);
+
+	pre = abs(x1 - x2) + abs(y1 - y2); //a1과 a2간의 거리
+	ll max_len = pre;
+	for (int i = 2; i < N; i++) {
+		scanf("%d %d", &x3, &y3);
+		now = abs(x3 - x2) + abs(y3 - y2); //a2와 a3간의 거리
+		jump = abs(x1 - x3) + abs(y1 - y3); //a1과 a3간의 거리
+
+		max_len += now;
+		max_jump = max(max_jump, now + pre - jump);
+		//점프를 했을 때 dis(a1,a2) + dis(a2,a3) 과 dis(a1,a3)의 차이만큼 이득을 본다
+
+		x1 = x2, y1 = y2;
+		x2 = x3, y2 = y3;
+		pre = now;
 	}
-	while (!q1.empty()) {
-		int cut1 = q1.front()+1;
-		q1.pop();
-		string str1 = str.substr(0, cut1); //cut1을 포함하여 앞을 자르고
-		reverse(str1.begin(), str1.end()); //뒤집는다
 
-		//2번째 자를 곳 탐색
-		queue <int> q2;
-		q2.push(cut1);
-		index = str.at(cut1 );
-		for (int i = cut1 + 1; i < len - 1; i++) { //제일 뒤의 알파벳 하나를 제외하고, 제일 작은 알파벳을 찾는다
-			if (index > str.at(i)) {
-				while (!q2.empty())
-					q2.pop();
-				q2.push(i);
-				index = str.at(i);
-			}
-			else if (index == str.at(i)) //제일 작은 것이 여러개인 경우
-				q2.push(i);
-		}
-
-		while (!q2.empty()) {
-			int cut2 = q2.front()+1;
-			q2.pop();
-			string str2 = str.substr(cut1, cut2 - cut1); //cut1 뒤에서부터 cut2까지 자른다
-			string str3 = str.substr(cut2); //나머지
-			reverse(str2.begin(), str2.end()); //뒤집는다
-			reverse(str3.begin(), str3.end());
-
-			string tmp = str1; //3파트 합친다
-			tmp += str2, tmp += str3;
-
-			if (ans > tmp) //제일 작은 문자열을 찾는다
-				ans = tmp;
-		}
-	}
-	cout << ans;
+	max_len -= max_jump; //전체길이에서 점프로 얻을 수 있는 가장 큰 이득을 빼준다
+	printf("%lld", max_len);
 	return 0;
 }
