@@ -22,7 +22,6 @@ int main() {
 			sum[i + 1] = sum[i] + arr[i];
 			dp[i][i] = 0; //파일 1개는 합치는 비용이 0이다
 		}
-
 		for (int len = 2; len <= N; len++) { //파일이 len개일 때의 최소값을 구한다
 			for (int i = 0; i <= N - len; i++) {
 				int &ret = dp[i][i-1+len];
@@ -37,6 +36,7 @@ int main() {
 				//l에서 r까지의 파일을 합치는데 필요한 최소 비용 = l에서 r까지 파일크기 합 + 이전 단계의 파일 2개를 만드는 데 필요합 비용의 합
 			}
 		}
+		// 0, N-1
 		printf("%d\n", dp[0][N - 1]);
 	}
 }

@@ -1,106 +1,70 @@
-#include <iostream>
-#include <vector>
-#include <algorithm>
+// BAEKJOON 14889
+
+#include<iostream>
+#include<math.h>
+#include<vector>
+#include<memory.h>
+#include<algorithm>
 using namespace std;
 
-struct shark { int x, y, z; };
-struct shark2 { int y, z; }; //weak shark
-vector<shark>arr;
-int N, min_surivor;
-bool compare(const shark &a, const shark &b) {
-	if (a.x == b.x && a.y == b.y) 
-		return a.z < b.z;	
-	else if (a.x == b.x) 
-		return a.y < b.y;
-	else
-		return a.x < b.x;
-}
-bool compare2(const shark2& a, const shark2& b) {
-	if (a.y == b.y)
-		return a.z < b.z;
-	else
-		return a.y < b.y;
-}
-void carnival(vector<shark2>remain, int e1, int e2, int index) { //index of sharks staring to eat
-	if (e2 != -1) { //eat 2nd shark
-		remain.erase(remain.begin() + e2);
-	}
-	if (e1 != -1){ //eat 1st shark
-		remain.erase(remain.begin() + e1);
-	}
+int score_arr[20][20];
+int N, min_dif = 987654321;
+bool check[20];
 
-	for (int i = index; i < N; i++) {
-		sort(remain.begin(), remain.end(), compare2);
-		shark& ret = arr[i];
-		vector<int> tmp;
-		remain.push_back({ ret.y , ret.z});
-		for (int j = 0; j < remain.size() - 1; j++) {
-			if (remain[j].y <= ret.y && remain[j].z <= ret.z) {
-				//cout << "j: " << j << " : " << remain[j].y << " " << remain[j].z << endl;
-				tmp.push_back(j); //save index of weaker shark above remain sharks
-			}
-		}
-		if (tmp.size() < 3) {
-			for (int j = tmp.size() - 1; j >= 0; j--) { //erase from back
-				//cout << remain[tmp[j]].y << " " << remain[tmp[j]].z << endl;
-				remain.erase(remain.begin() + tmp[j]);
-			}
-//			sort(remain.begin(), remain.end(), compare2);
-		}
-		else {//is there strongest sharks in remain?
-			int len = tmp.size();
-			shark2& ret1 = remain[tmp[len-1]]; //last input is eater shark
-			shark2& ret2 = remain[tmp[len-2]];
-			bool isbig1 = true;
-			bool isbig2 = true;
-
-			for (int j = len - 3; j >= 0; j--) {
-				if (remain[tmp[j]].z > ret1.z)
-					isbig1 = false;
-				if (remain[tmp[j]].z > ret2.z)
-					isbig2 = false;
-				if (!isbig1 && !isbig2)
-					break;
-			}
-			if (isbig1 && isbig2) { //eat both strongest sharks
-				remain.erase(remain.begin() + tmp[len - 2]);
-				remain.erase(remain.begin() + tmp[len - 1]);
-			}
-			else if (isbig1) { //eat 1 strongest shark and eat 1 shark in random
-				remain.erase(remain.begin() + tmp[len - 1]);
-				for (int j = 0; j < len - 1; j++) {
-				//	cout << tmp[j] << endl;
-					carnival(remain, tmp[j], -1, i + 1);
-				}
-				return;
-			}
-			else { //eat 2 sharks in random
-				for (int p = 0; p < len - 1; p++)
-					for (int q = p + 1; q < len; q++)
-						carnival(remain, tmp[p], tmp[q], i + 1);
-				return;
-			}
-		}
+void calculateScore(vector<int> member, int total_mem) {
+	memset(check, false, N);
+	
+	// 0번이 포함된 1팀 점수 계산
+	int sum1 = 0;
+	for (int i = 0; i < member.size() - 1; i++) {
+		for (int j = i + 1; j < member.size(); j++)
+			sum1 += score_arr[member[i]][member[j]];
+		check[member[i]] = true; //이미 뽑힌 인원 체크
 	}
-//	for (int i = 0; i < remain.size(); i++)
-//		cout << remain[i].y << " " << remain[i].z << endl;
-//	cout << endl;
-	min_surivor = min(min_surivor, (int)remain.size());
+	check[member.back()] = true;
+
+	//Team without member0
+	vector<int>member2;
+	for (int i = 0; i < total_mem; i++) //아직 안 뽑힌 인원은 2팀으로
+		if (!check[i])
+			member2.push_back(i);
+
+	// 0번이 없는 2팀 점수 계산
+	int sum2 = 0;
+	for (int i = 0; i < member2.size() - 1; i++) 
+		for (int j = i + 1; j < member2.size(); j++) 
+			sum2 += score_arr[member2[i]][member2[j]];
+
+	min_dif = min(min_dif, abs(sum1 - sum2));
+}
+// 0번이 포함 된 1팀 먼저 선정 후
+void findMember(vector<int> member, int last_mem, int total_mem, int need) {
+	member.push_back(last_mem);
+	if (need == 0) //All member1's team is choosen
+		calculateScore(member, total_mem); //점수계산
+	
+	else  //not yet, go find other team members
+		for (int i = last_mem + 1; i < total_mem; i++)
+			findMember(member, i, total_mem, need - 1);
 }
 
-int main() {
-	int x, y ,z;
-	scanf("%d", &N);
-	min_surivor = N;
-	for (int i = 0; i < N; i++) {
-		scanf("%d %d %d", &x, &y, &z);
-		arr.push_back({ x,y,z });
-	}
-	sort(arr.begin(), arr.end(), compare);
+int main(void) {
+	ios_base::sync_with_stdio(false);
+	cin.tie(NULL), cout.tie(NULL);
 
-	vector<shark2>remain; //weak sharks, that haven't been eaten yet 
-	remain.push_back({ arr[0].y, arr[0].z });
-	carnival(remain, -1, -1, 1);
-	printf("%d", min_surivor);
+	cin >> N;
+	int n = N / 2 - 1;//한 팀당 필요한 인원, 0번째는 1팀에 이미 들어가 있으니 -1
+
+	for (int i = 0; i < N; i++) // i와 j, j와 i는 항상 같이 더해지므로 미리 더한다
+		for (int j = 0; j < N; j++) {
+			cin >> score_arr[i][j];
+			if (i > j)
+				score_arr[j][i] += score_arr[i][j];
+		}
+
+	vector<int> member;
+	findMember(member, 0, N, n);
+
+	cout << min_dif;
 	return 0;
 }
