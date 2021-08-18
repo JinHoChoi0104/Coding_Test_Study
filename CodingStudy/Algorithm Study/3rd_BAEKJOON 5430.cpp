@@ -40,7 +40,7 @@ int main(void) {
 		else { //에러가 아니면 출력
 			cout << "[";
 			while (!dq.empty()) {
-				if (front == 1) { //정렬 방법에 따라 다르게 출력
+				if (front == 1) {
 					cout << dq.front();
 					dq.pop_front();
 					if (!dq.empty())
