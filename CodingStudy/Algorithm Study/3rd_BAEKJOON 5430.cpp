@@ -5,10 +5,12 @@ using namespace std;
 int main(void) {
 	ios_base::sync_with_stdio(false);
 	cin.tie(NULL), cout.tie(NULL);
+	
 	int T, N, num;
 	string str,str2;
 	char c;
-	for (cin >> T; T > 0; T--) {
+
+	for (cin >> T; T > 0; T--) { //테케 입력받기
 		cin >> str >> N;
 		deque <int > dq;
 		for (int i = 0; i < N; i++) {
