@@ -1,61 +1,114 @@
 #include <iostream>
-#include <deque>
+#include <vector>
+#include <queue>
+#include <map>
+#include <algorithm>
 using namespace std;
+vector<vector<int>> arr(101, vector<int>(101));
+int r = 3, c = 3; 
+
+struct compare {
+	bool operator()(const pair<int, int>& a, const pair<int, int>& b) {
+		if (a.second == b.second) //if the number of numbers is the same 
+			return a.first > b.first;
+		return a.second > b.second;
+	}
+};
+
+void Rsorting() {
+	vector<int>len; //remember row's length
+	int max_c = c;
+	for (int i = 1; i <= r; i++) {
+		map<int, int>m;
+		for (int j = 1; j <= c; j++) {
+			if (arr[i][j] == 0)
+				continue;
+			m[arr[i][j]]++;
+		}
+		priority_queue<pair<int, int>, vector<pair<int, int>>, compare> pq;
+		for (auto it = m.begin(); it != m.end(); it++)
+			pq.push(*it);
+		int k = 1;
+		while (!pq.empty()) {
+			arr[i][k++] = pq.top().first, arr[i][k++] = pq.top().second;
+			pq.pop();
+			if (k == 101)
+				break;
+		}
+		max_c = max(max_c, k - 1);
+		len.push_back(k);
+	}
+	c = max_c;
+	for (int i = 1; i <= r; i++) {
+		for (int j = len[i-1]; j <= c; j++) {
+			arr[i][j] = 0;
+		}
+	}	
+}
+
+
+void Csorting() {
+	vector<int>len; //remember column's length
+	int max_r = r;
+	for (int i = 1; i <= c; i++) {
+		map<int, int>m;
+		for (int j = 1; j <= r; j++) {
+			if (arr[j][i] == 0)
+				continue;
+			m[arr[j][i]]++;
+		}
+		priority_queue<pair<int, int>, vector<pair<int, int>>, compare> pq;
+		for (auto it = m.begin(); it != m.end(); it++)
+			pq.push(*it);
+		int k = 1;
+		while (!pq.empty()) {
+			arr[k++][i] = pq.top().first, arr[k++][i] = pq.top().second;
+			pq.pop();
+			if (k == 101)
+				break;
+		}
+		max_r = max(max_r, k - 1);
+		len.push_back(k);
+	}
+	r = max_r;
+	for (int i = 1; i <= c; i++) {
+		for (int j = len[i - 1]; j <= r; j++) {
+			arr[j][i] = 0;
+		}
+	}
+}
+
+void show() {
+	for (int i = 1; i <= r; i++) {
+		for (int j = 1; j <= c; j++)
+			cout << arr[i][j] << " ";
+		cout << endl;
+	}
+	cout << endl;
+}
 
 int main(void) {
 	ios_base::sync_with_stdio(false);
 	cin.tie(NULL), cout.tie(NULL);
-	int T, N, num;
-	string str,str2;
-	char c;
-	for (cin >> T; T > 0; T--) {
-		cin >> str >> N;
-		deque <int > dq;
-		for (int i = 0; i < N; i++) {
-			cin >> c >> num; //문자 숫자 번갈아 가며 입력 받기
-			dq.push_back(num);
-		}
-		cin >> str2; //마지막 문자 ] 입력 받기
-		//숫자가 없어서 입력이 []인 경우를 위해 string으로 입력받기
-		
-		int len = str.length(), front = 1; //front 는 뒤집어져있는지 여부 확인 용
-		bool iserror = false; // 에러인지 확인용
-		for (int i = 0; i < len; i++) {
-			if (str.at(i) == 'R')
-				front *= -1;
-			else {
-				if (dq.empty()) {
-					iserror = true;
-					break;
-				}
-				if (front == 1)
-					dq.pop_front();
-				else
-					dq.pop_back();
-			}
-		}
 
-		if (iserror)
-			cout << "error\n";
-		else { //에러가 아니면 출력
-			cout << "[";
-			while (!dq.empty()) {
-				if (front == 1) { //정렬 방법에 따라 다르게 출력
-					cout << dq.front();
-					dq.pop_front();
-					if (!dq.empty())
-						cout << ",";
-				}
-				else {
-					cout << dq.back();
-					dq.pop_back();
-					if (!dq.empty())
-						cout << ",";
-				}
-			}
-			cout << "]\n";
-		}
+	int x, y, k, cnt = 0;
+	cin >> x >> y >> k;
+	for (int i = 1; i <= 3; i++)
+		for (int j = 1; j <= 3; j++)
+			cin >> arr[i][j];
+	int& ret = arr[x][y];
+	
+	while (ret != k && cnt < 101) {
+		cnt++;
+		if (r >= c)
+			Rsorting();
+		else
+			Csorting();
 	}
 
+	if (cnt == 101) //Time over, couldn't find answer
+		cout << -1;
+	else
+		cout << cnt;
 	return 0;
 }
