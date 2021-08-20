@@ -81,9 +81,9 @@ int main(void) {
 		sum[3] += arr[5];
 	else
 		sum[3] += arr[4];
-
+	//cout << sum[1] << " " << sum[2] << " " << sum[3] << endl;
 	long long ans = 0;
-	ans += (5 * n * n - 16 * n + 12) * sum[1]; //만약 n이 long long 이 아닌 int 일 경우 n*n을 하는 과정에서 overflow가 발생한다.
+	ans += (5 * n * n - 16 * n + 12) * sum[1];
 	ans += (8 * n - 12) * sum[2];
 	ans += 4 * sum[3];
 	printf("%lld", ans);
