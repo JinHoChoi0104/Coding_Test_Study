@@ -1,6 +1,2 @@
 ﻿  1-1.cpp
-C:\Users\82107\Desktop\Github\Coding_Test_Study\CodingStudy\CodingStudy\1-1.cpp(32,10): warning C4477:  'printf' : 서식 문자열 '%lld'에 '__int64' 형식의 인수가 필요하지만 variadic 인수 1의 형식이 'int'입니다.
-C:\Users\82107\Desktop\Github\Coding_Test_Study\CodingStudy\CodingStudy\1-1.cpp(32,10): message :  서식 문자열에서 '%d'을(를) 사용하는 것이 좋습니다.
-C:\Users\82107\Desktop\Github\Coding_Test_Study\CodingStudy\CodingStudy\1-1.cpp(32,10): message :  서식 문자열에서 '%Id'을(를) 사용하는 것이 좋습니다.
-C:\Users\82107\Desktop\Github\Coding_Test_Study\CodingStudy\CodingStudy\1-1.cpp(32,10): message :  서식 문자열에서 '%I32d'을(를) 사용하는 것이 좋습니다.
   CodingStudy.vcxproj -> C:\Users\82107\Desktop\Github\Coding_Test_Study\CodingStudy\Debug\CodingStudy.exe
