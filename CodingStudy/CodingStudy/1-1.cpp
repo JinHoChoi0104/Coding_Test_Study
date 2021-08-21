@@ -1,54 +1,36 @@
 #include <iostream>
 #include <vector>
-#include <deque>
-#include <algorithm>
+
 using namespace std;
 
+#define DIV 998244353
+
 int main(void) {
-	ios_base::sync_with_stdio(false);
-	cin.tie(NULL), cout.tie(NULL);
-
 	int N, num;
-	cin >> N;
-	deque<int> arr;
-	for (int i = 0; i < N; i++) {
-		cin >> num;
-		arr.push_back(num);
-	}
-	sort(arr.begin(), arr.end());
-	
-	deque<int> dq;
-	while (1) {
-		dq.push_front(arr.front()); //제일 작은 수를 먼저 넣고
-		dq.push_back(arr.back()); //제일 큰 수를 뒤에
-		arr.pop_front(), arr.pop_back();
-		if (N == 3) break;
-		dq.push_front(arr.back()); //그 다음으로 큰 수를 앞에
-		arr.pop_back();
-		if( N == 4) break;
-		dq.push_back(arr.front()); //남은 수 중 제일 작은 수를 앞에서 넣었던 제일 큰 수 옆으로
-		arr.pop_front();
-		if (N == 5) break;
-		dq.push_front(arr.front());
-		arr.pop_front();
-		if (N == 6) break;
-		dq.push_back(arr.back());
-		arr.pop_back();
-		if (N == 7) break;
-		dq.push_front(arr.back());
-		arr.pop_back();
-		break;
-	}
-	if (abs(dq.front() - arr.front()) > abs(dq.back() - arr.front()))
-		dq.push_front(arr.front());
-	else  //남은 하나의 수는 앞 뒤 중 차이가 큰 곳으로
-		dq.push_back(arr.front());
+	scanf("%d", &N);
 
-	int ans = 0;
-	for (int i = 0; i < N - 1; i++) 
-		ans += abs(dq[i] - dq[i + 1]);
+	vector<int>arr(N); //A의 값들 저장
+	vector<long long>dp(N, 1); //overflow 방지용 long long으로 선언
+	/*
+	가정) arr[1] 과 arr[2] 보다 arr[3가] 클 경우
+	dp[1]은 arr[1]을 무조건 포함한다, 그러나 arr[2]는 포함하지 않는다
+	dp[2]는 arr[2]를 무조건 포함한다
+	즉, dp[1]과 dp[2]는 서로 겹치는 경우가 없는 독립 집합이다
 	
-	cout << ans;
-		
+	이것을 이용해 dp[3]은 단순히 dp[1]의 모든 경우에 arr[3]을 뒤에 붙이고, 마찬가지로 dp[2]에도 arr[3]을 붙여준다.
+	이 두 가지의 경우도 앞에서와 같이 독립집합이다
+	마지막으로 arr[3] 혼자 있는 경우도 있으니, dp[3]에 1을 더해준다.
+	*/
+	for (int i = 0; i < N; i++) {
+		scanf("%d", &arr[i]);
+		for (int j = 0; j < i; j++) 
+			if (arr[j] < arr[i]) //앞에 있는 수보다 더 크다면 그 수 다음에 arr[i]를 붙힐 수 있다.
+				dp[i] += dp[j]; //이 과정에서 int 범위를 초과할 경우 overflow 발생한다
+		dp[i] %= DIV;
+	}
+
+	for (int i = 0; i < N; i++)
+		printf("%lld ", dp[i]);
+
 	return 0;
 }
