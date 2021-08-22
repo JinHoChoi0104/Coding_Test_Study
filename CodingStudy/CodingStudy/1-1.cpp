@@ -1,47 +1,79 @@
 #include <iostream>
 #include <vector>
 #include <queue>
+#include <algorithm>
 using namespace std;
 
-vector<vector<int> >edge(100001, vector<int>(0));
-int parent[100001];
-
-void BFS() {
-	queue <int> q;
-	int x;
-	q.push(1); //push root first
+struct line {
+	int to, len;
+};
+vector <vector<line>> edge(100001, vector<line>(0));
+vector<bool> visited(100001);
+int N;
+void clear() {
+	for (int i = 1; i <= N; i++)
+		visited[i] = false;
+}
+int BFS(int index) {
+	clear();
+	queue<line> q;
+	q.push({ index, 0 });
+	visited[index] = true;
+	int from, sum ,index2, max_di =0;
+	bool end;
 	while (!q.empty()) {
-		x = q.front();
+		from = q.front().to, sum = q.front().len;
 		q.pop();
-		for (int i = 0; i < edge[x].size(); i++) { //search all node connected with x
-			if (parent[edge[x][i]] == 0) { //if node has no parent yet
-				parent[edge[x][i]] = x; // x is node's parent
-				q.push(edge[x][i]);
+		end = true;
+		for (int i = 0; i < edge[from].size(); i++) {
+			if (!visited[edge[from][i].to]) { //not visited yet
+				visited[edge[from][i].to] = true;
+				q.push({ edge[from][i].to, sum + edge[from][i].len });
+				end = false;
+			}
+		}
+		if (end) { // if no where to go
+			if (sum > max_di) {
+				index2 = from;
+				max_di = sum;
 			}
 		}
 	}
-}
-
-int main(void) {
-	int N, a, b;
-	scanf("%d", &N);
-
-	parent[1] = -1; //node 1 is root
-	for (int i = 1; i < N; i++) {
-		scanf("%d %d", &a, &b);
-		if (a == 1) {
-			edge[a].push_back(b);
-			continue;
+	clear();
+	q.push({ index2, 0 });
+	visited[index2] = true;
+	while (!q.empty()) {
+		from = q.front().to, sum = q.front().len;
+		q.pop();
+		end = true;
+		for (int i = 0; i < edge[from].size(); i++) {
+			if (!visited[edge[from][i].to]) { //not visited yet
+				visited[edge[from][i].to] = true;
+				q.push({ edge[from][i].to, sum + edge[from][i].len });
+				end = false;
+			}
 		}
-		if (b == 1) {
-			edge[b].push_back(a);
-			continue;
-		}
-		edge[a].push_back(b);
-		edge[b].push_back(a);
+		if (end) // if no where to go
+			max_di = max (max_di, sum);
 	}
-	BFS();
-	for (int i = 2; i <= N; i++)
-		printf("%d\n", parent[i]);
+	return max_di;
+}
+int main(void) {
+	ios_base::sync_with_stdio(false);
+	cin.tie(NULL), cout.tie(NULL);
+	int from, to, len, max_len = 0;
+	cin >> N;
+
+	for (int i = 0; i < N; i++) {
+		cin >> from >> to;
+		while (to != -1) {
+			cin >> len;
+			edge[from].push_back({ to, len });
+			cin >> to;
+		}
+	}
+
+	cout << BFS(1);
+	
 	return 0;
 }
