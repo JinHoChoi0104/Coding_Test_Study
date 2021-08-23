@@ -1,79 +1,55 @@
 #include <iostream>
 #include <vector>
-#include <queue>
-#include <algorithm>
 using namespace std;
 
-struct line {
-	int to, len;
-};
-vector <vector<line>> edge(100001, vector<line>(0));
-vector<bool> visited(100001);
-int N;
-void clear() {
-	for (int i = 1; i <= N; i++)
-		visited[i] = false;
-}
-int BFS(int index) {
-	clear();
-	queue<line> q;
-	q.push({ index, 0 });
-	visited[index] = true;
-	int from, sum ,index2, max_di =0;
-	bool end;
-	while (!q.empty()) {
-		from = q.front().to, sum = q.front().len;
-		q.pop();
-		end = true;
-		for (int i = 0; i < edge[from].size(); i++) {
-			if (!visited[edge[from][i].to]) { //not visited yet
-				visited[edge[from][i].to] = true;
-				q.push({ edge[from][i].to, sum + edge[from][i].len });
-				end = false;
-			}
-		}
-		if (end) { // if no where to go
-			if (sum > max_di) {
-				index2 = from;
-				max_di = sum;
-			}
-		}
+vector<int>arr1(100000);
+vector<int>arr2(100000);
+vector<int>ans(100000);
+int N, index = 0;
+
+void find_root(int l1, int r1, int l2, int r2) {
+	ans[index++] = arr2[r2];
+	if (r1 - l1 < 2) {
+		if (r1 - l1 == 1)
+			ans[index++] = arr2[r2 - 1];
+		return;
 	}
-	clear();
-	q.push({ index2, 0 });
-	visited[index2] = true;
-	while (!q.empty()) {
-		from = q.front().to, sum = q.front().len;
-		q.pop();
-		end = true;
-		for (int i = 0; i < edge[from].size(); i++) {
-			if (!visited[edge[from][i].to]) { //not visited yet
-				visited[edge[from][i].to] = true;
-				q.push({ edge[from][i].to, sum + edge[from][i].len });
-				end = false;
-			}
-		}
-		if (end) // if no where to go
-			max_di = max (max_di, sum);
+	int k = r1;
+	while (1) {
+		if (arr1[k] == arr2[r2])
+			break;
+		else
+			k--;
 	}
-	return max_di;
+	int k2 = r2;
+	while (k != r1) { // if there is no child on the right
+		if (arr2[k2] == arr1[k + 1])
+			break;
+		else
+			k2--;
+	}
+
+	if (l1 <= k - 1 && l2 <= k2 - 1)
+		find_root(l1, k - 1, l2, k2 - 1); //left child 
+	if (k + 1 <= r1 && k2 <= r2 - 1)
+		find_root(k + 1, r1, k2, r2 - 1); //right child
+
 }
 int main(void) {
 	ios_base::sync_with_stdio(false);
 	cin.tie(NULL), cout.tie(NULL);
-	int from, to, len, max_len = 0;
+	freopen("input.txt", "r", stdin);
 	cin >> N;
 
-	for (int i = 0; i < N; i++) {
-		cin >> from >> to;
-		while (to != -1) {
-			cin >> len;
-			edge[from].push_back({ to, len });
-			cin >> to;
-		}
-	}
+	for (int i = 0; i < N; i++)
+		cin >> arr1[i];
 
-	cout << BFS(1);
-	
+	for (int i = 0; i < N; i++)
+		cin >> arr2[i];
+
+	find_root(0, N - 1, 0, N - 1);
+
+	for (int i = 0; i < N; i++)
+		cout << ans[i] << " ";
 	return 0;
 }

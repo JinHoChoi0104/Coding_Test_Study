@@ -38,7 +38,7 @@ void calculateScore(vector<int> member, int total_mem) {
 	min_dif = min(min_dif, abs(sum1 - sum2));
 }
 // 0번이 포함 된 1팀 먼저 선정 후
-void findMember(vector<int> member, int last_mem, int total_mem, int need) {
+void findMember(vector<int> member, int last_mem, int total_mem, int need) { //뽑힌 인원, 마지막으로 뽑힌 인원, 전체 인원, 필요 잉원
 	member.push_back(last_mem);
 	if (need == 0) //All member1's team is choosen
 		calculateScore(member, total_mem); //점수계산
@@ -47,7 +47,9 @@ void findMember(vector<int> member, int last_mem, int total_mem, int need) {
 		for (int i = last_mem + 1; i < total_mem; i++)
 			findMember(member, i, total_mem, need - 1);
 }
-
+//10
+// 1 4 ,5 6 7
+// 4 1
 int main(void) {
 	ios_base::sync_with_stdio(false);
 	cin.tie(NULL), cout.tie(NULL);
