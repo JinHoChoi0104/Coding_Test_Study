@@ -10,9 +10,9 @@ int main(void) {
 	string str,str2;
 	char c;
 
-	for (cin >> T; T > 0; T--) { //테케 입력받기
+	for (cin >> T; T-- > 0;) { //테케 입력받기
 		cin >> str >> N;
-		deque <int > dq;
+		deque <int> dq;
 		for (int i = 0; i < N; i++) {
 			cin >> c >> num; //문자 숫자 번갈아 가며 입력 받기
 			dq.push_back(num);

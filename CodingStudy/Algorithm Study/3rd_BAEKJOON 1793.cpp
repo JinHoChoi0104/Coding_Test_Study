@@ -12,7 +12,10 @@ int main(void) {
 	vector<vector<int>> dp(10, vector<int>(251)); //숫자가 너무 커지면 벡터를 이용해 나누어서 저장한다
 	vector<int> len(251); //몇 개의 데이터에 나눠서 저장했는지 기억한다
 	dp[0][0] = 1, dp[0][1] = 1;
-
+	/*
+	if num = 1354  7025 1111
+	dp[1][num] = 1354, dp[0][num] = 7025 1111
+	*/
 	for (int i = 2; i <= 250; i++) {
 		num = 0;
 		for (int j = 0; j <= index; j++) {

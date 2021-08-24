@@ -16,7 +16,12 @@ int main(void) {
 		arr.push_back(num);
 	}
 	sort(arr.begin(), arr.end());
-	
+	// 숫자들간의 차이를 크게 하기 위해서는 제일 큰 수와 제일 작은수를 붙여야한다
+	// 그리고 제일 큰 수와 제일 작은 수를 최대한 많이 이용하고 차이가 크게 붙여야한다.
+	/*
+	1 2 3 4 5 6 7 8
+	5 3 7 1 8 2 6 4
+	*/
 	deque<int> dq;
 	while (1) {
 		dq.push_front(arr.front()); //제일 작은 수를 먼저 넣고
