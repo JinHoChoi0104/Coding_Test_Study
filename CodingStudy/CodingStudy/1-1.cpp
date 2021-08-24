@@ -1,55 +1,41 @@
 #include <iostream>
 #include <vector>
 using namespace std;
+/*
+Connected Component (연결 요소)
+: The number of connected elements in a graph is the number of subgraphs
+Vertices of subgraphs must be connected each others by paths. 
+This means if two vertices are in same subgraphs. Must be able to go from one vertex to another.
+# GraphTheory #UndirectedGraph
+*/
+vector<int>arr[1001];
+vector<bool>visited(1001);
 
-vector<int>arr1(100000);
-vector<int>arr2(100000);
-vector<int>ans(100000);
-int N, index = 0;
-
-void find_root(int l1, int r1, int l2, int r2) {
-	ans[index++] = arr2[r2];
-	if (r1 - l1 < 2) {
-		if (r1 - l1 == 1)
-			ans[index++] = arr2[r2 - 1];
-		return;
-	}
-	int k = r1;
-	while (1) {
-		if (arr1[k] == arr2[r2])
-			break;
-		else
-			k--;
-	}
-	int k2 = r2;
-	while (k != r1) { // if there is no child on the right
-		if (arr2[k2] == arr1[k + 1])
-			break;
-		else
-			k2--;
-	}
-
-	if (l1 <= k - 1 && l2 <= k2 - 1)
-		find_root(l1, k - 1, l2, k2 - 1); //left child 
-	if (k + 1 <= r1 && k2 <= r2 - 1)
-		find_root(k + 1, r1, k2, r2 - 1); //right child
-
+void DFS(int index) {
+	visited[index] = true;
+	for (int i = 0; i < arr[index].size(); i++) 
+		if (!visited[arr[index][i]])
+			DFS(arr[index][i]);
 }
 int main(void) {
 	ios_base::sync_with_stdio(false);
 	cin.tie(NULL), cout.tie(NULL);
-	freopen("input.txt", "r", stdin);
+//	freopen("input.txt", "r", stdin);
+	int N, M, a, b, cnt = 0;
+
 	cin >> N;
+	for (cin >> M; M-- > 0;) {
+		cin >> a >> b;
+		arr[a].push_back(b);
+		arr[b].push_back(a);
+	}
+	for (int i = 1; i <= N; i++) {
+		if (!visited[i]) {
+			cnt++;
+			DFS(i);
+		}
+	}
+	cout << cnt;
 
-	for (int i = 0; i < N; i++)
-		cin >> arr1[i];
-
-	for (int i = 0; i < N; i++)
-		cin >> arr2[i];
-
-	find_root(0, N - 1, 0, N - 1);
-
-	for (int i = 0; i < N; i++)
-		cout << ans[i] << " ";
 	return 0;
 }
