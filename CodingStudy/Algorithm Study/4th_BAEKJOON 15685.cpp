@@ -1,34 +1,31 @@
-#include <iostream>
+ï»¿#include <iostream>
 #include <vector>
 using namespace std;
 
 /*
-px ¿Í py°¡ È¸ÀüÃàÀÌ µÇ´Â Á¡ÀÌ¶ó°í °¡Á¤
-Ä¿ºê¸¦ ÇÏ±â À§ÇØ¼­´Â
-1. ÀÌµ¿ÇÏ·Á´Â ÁÂÇ¥(x, y)¸¦ ¿øÁ¡À¸·Î ÀÌµ¿
-2. -90È¸Àü
-3. 1¿¡¼­ ÀÌµ¿Çß´ø °ÅÀÇ ¹Ý´ë¸¸Å­ ÀÌµ¿
-
+px ì™€ pyê°€ íšŒì „ì¶•ì´ ë˜ëŠ” ì ì´ë¼ê³  ê°€ì •
+ì»¤ë¸Œë¥¼ í•˜ê¸° ìœ„í•´ì„œëŠ”
+1. ì´ë™í•˜ë ¤ëŠ” ì¢Œí‘œ(x, y)ë¥¼ ì›ì ìœ¼ë¡œ ì´ë™
+2. -90íšŒì „
+3. 1ì—ì„œ ì´ë™í–ˆë˜ ê±°ì˜ ë°˜ëŒ€ë§Œí¼ ì´ë™
 (x - px, y - py)({0, 1}, {-1 0}) + (px, py)
-
 tox = -y + py +px, toy = x - px + py
-
-±¸ÇÑ ÁÂÇ¥´Â º¤ÅÍµÚ·Î Çª½¬ÇØÁØ´Ù
-È¸Àü ÈÄ ÁÂÇ¥¸¦ ±¸ÇÒ ¶§´Â ¿øÁ¡¿¡¼­ ¸Õ ÁÂÇ¥ºÎÅÍ ±¸ÇØÁÖ°í ¸¶Áö¸·À¸·Î ¿øÁ¡À» È¸ÀüÇÑ ÁÂÇ¥¸¦ ±¸ÇÑ´Ù.
-ÀÌ ¿øÁ¡À» È¸ÀüÇÑ ÁÂÇ¥°¡ ´ÙÀ½ ¼¼´ëÀÇ È¸ÀüÃàÀÌ µÇ´Â Á¡ÀÌ±â ¶§¹®ÀÌ´Ù.
+êµ¬í•œ ì¢Œí‘œëŠ” ë²¡í„°ë’¤ë¡œ í‘¸ì‰¬í•´ì¤€ë‹¤
+íšŒì „ í›„ ì¢Œí‘œë¥¼ êµ¬í•  ë•ŒëŠ” ì›ì ì—ì„œ ë¨¼ ì¢Œí‘œë¶€í„° êµ¬í•´ì£¼ê³  ë§ˆì§€ë§‰ìœ¼ë¡œ ì›ì ì„ íšŒì „í•œ ì¢Œí‘œë¥¼ êµ¬í•œë‹¤.
+ì´ ì›ì ì„ íšŒì „í•œ ì¢Œí‘œê°€ ë‹¤ìŒ ì„¸ëŒ€ì˜ íšŒì „ì¶•ì´ ë˜ëŠ” ì ì´ê¸° ë•Œë¬¸ì´ë‹¤.
 */
 bool board[101][101];
 
-void curving(vector<pair<int, int>>&arr, int g) {
+void curving(vector<pair<int, int>>& arr, int g) {
 	int px = arr.back().first, py = arr.back().second;
 	int tox, toy, len = arr.size();
 	for (int i = len - 2; i >= 0; i--) {
 		tox = -arr[i].second + py + px;
 		toy = arr[i].first - px + py;
 		arr.push_back({ tox, toy });
-		board[tox][toy] = true; //±×·ÁÁø ÁÂÇ¥ ÀúÀå
+		board[tox][toy] = true; //ê·¸ë ¤ì§„ ì¢Œí‘œ ì €ìž¥
 	}
-	if(g > 1)
+	if (g > 1)
 		curving(arr, --g);
 }
 
@@ -40,17 +37,17 @@ int main(void) {
 	for (cin >> N; N-- > 0;) {
 		cin >> x >> y >> d >> g;
 		vector<pair<int, int>>arr;
-		arr.push_back({ x, y});
+		arr.push_back({ x, y });
 		arr.push_back({ x + m[0][d], y + m[1][d] });
 		board[x][y] = true;
 		board[x + m[0][d]][y + m[1][d]] = true;
-		if(g > 0)
+		if (g > 0)
 			curving(arr, g);
 	}
 
 	int cnt = 0, tox, toy, m2[2][4] = { {0,0,1,1},{0,1,0,1} };
 	bool box;
-	for (int i = 0; i < 100; i++) { //¸î°³ÀÇ »ç°¢ÇüÀÌ ÀÖ´ÂÁö È®ÀÎ
+	for (int i = 0; i < 100; i++) { //ëª‡ê°œì˜ ì‚¬ê°í˜•ì´ ìžˆëŠ”ì§€ í™•ì¸
 		for (int j = 0; j < 100; j++) {
 			box = true;
 			for (int k = 0; k < 4; k++) {
