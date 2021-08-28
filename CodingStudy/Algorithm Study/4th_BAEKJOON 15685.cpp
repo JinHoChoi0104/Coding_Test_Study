@@ -14,6 +14,7 @@ tox = -y + py +px, toy = x - px + py
 회전 후 좌표를 구할 때는 원점에서 먼 좌표부터 구해주고 마지막으로 원점을 회전한 좌표를 구한다.
 이 원점을 회전한 좌표가 다음 세대의 회전축이 되는 점이기 때문이다.
 */
+
 bool board[101][101];
 
 void curving(vector<pair<int, int>>& arr, int g) {
@@ -34,15 +35,15 @@ int main(void) {
 	cin.tie(NULL), cout.tie(NULL);
 
 	int N, x, y, d, g, m[2][4] = { {1,0,-1,0},{0,-1,0,1} };
-	for (cin >> N; N-- > 0;) {
+	for (cin >> N; N-- > 0;) { //매 입력 받을 때 마다 바로 드래곤 커브 실행 해준다.
 		cin >> x >> y >> d >> g;
 		vector<pair<int, int>>arr;
 		arr.push_back({ x, y });
 		arr.push_back({ x + m[0][d], y + m[1][d] });
 		board[x][y] = true;
 		board[x + m[0][d]][y + m[1][d]] = true;
-		if (g > 0)
-			curving(arr, g);
+		if (g > 0) // 1세대 이상일 경우
+			curving(arr, g); //드래곤 커브 실행
 	}
 
 	int cnt = 0, tox, toy, m2[2][4] = { {0,0,1,1},{0,1,0,1} };
