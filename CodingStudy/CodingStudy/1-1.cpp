@@ -1,49 +1,38 @@
 #include <iostream>
-#include <set>
-#include <vector>
-#include <algorithm>
-
+#include <math.h>
 using namespace std;
 
-int N, K;
-set <int> s; 
-//Since sensors with same position means nothing, treat them as if only one sensor
-//And to get distance arrange them into a line by ascending order 
+int ans = 0;
+void dividing(int len, int r, int c) {
+	if (len == 0)
+		return;
+
+	if (r >= len && c >= len) {
+		ans += pow(len, 2) * 3;
+		r -= len, c -= len;
+		dividing(len / 2, r, c);
+	}
+	else if (r >= len) {
+		ans += pow(len, 2) * 2;
+		r -= len;
+		dividing(len / 2, r, c);
+	}
+	else if (c >= len) {
+		ans += pow(len, 2) * 1;
+		c -= len;
+		dividing(len / 2, r, c);
+	}
+	else {
+		dividing(len / 2, r, c);
+	}
+}
 
 int main() {
-	scanf("%d %d", &N, &K); 
-	int num;
-	for (int i = 0; i < N; i++) {
-		scanf("%d", &num);
-		s.insert(num);
-	}
+	int N, r, c;
+	scanf("%d %d %d", &N, &r, &c);
+	int len = pow(2, N - 1);
+	dividing(len, r, c);
 
-	//get total ditance = distance between closest sensor and most far sensor 
-	auto it = s.end();
-	it--;
-	int total_dis = *it - *s.begin(); 
-
-	//get distance with nearby sensors
-	vector<int>dis;
-	int pre = *s.begin(), pos;
-	for (auto it = ++s.begin(); it != s.end(); it++) {
-		pos = *it;
-		dis.push_back(pos - pre);
-		pre = pos;
-	}
-
-	//sort distances by descending order 
-	sort(dis.begin(), dis.end(), greater<>());
-
-	//get K - 1 longest distance between sensors
-	//take them out from total distance
-	for (int i = 0; i < K - 1; i++) {
-		if (i == dis.size())
-			break;
-		total_dis -= dis[i];
-	}
-	
-	//print out answer
-	printf("%d", total_dis);
+	printf("%d", ans);
 	return 0;
 }
