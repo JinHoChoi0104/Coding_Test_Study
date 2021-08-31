@@ -8,7 +8,10 @@ using namespace std;
 int N, K;
 set <int> s; //센서들이 같은 위치에 있는건 의미가 없으므로 하나로 친다
 //거리 순으로 정렬도 된다 set은
-
+/*
+position: 1    3     6   7     9
+distance:    2    3    1    2
+*/
 int main() {
 	scanf("%d %d", &N, &K); 
 	int num;

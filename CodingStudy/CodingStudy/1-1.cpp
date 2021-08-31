@@ -1,29 +1,31 @@
 #include <iostream>
 #include <vector>
-#include <algorithm>
-using namespace std;
-vector<vector<int>> dp(500, vector<int>(500)); //save minimum number of multiplication operations
-int arr[2][500]; //r c
-int main() {
-	int N;
-	scanf("%d", &N);
 
-	for (int i = 0; i < N; i++){
-		scanf("%d", &arr[0][i]);
-		scanf("%d", &arr[1][i]);
-		dp[i][i] = 0;
-	}
+using namespace std;
+vector<int> tree(400004), arr(100001);
+
+int init(int l, int r, int index) {
+	if (l == r) return tree[index] = arr[l];
+	int mid = (l + r) / 2;
 	
-	for (int i = 1; i < N; i++) { //i = [number of elements that going to be calculated] - 1
-		for (int j = 0; j < N - i; j++) { //index to start
-			dp[j][j + i] = 2147483647;
-			int tmp;
-			for (int k = j; k < j + i; k++) {
-				tmp = dp[j][k] + dp[k + 1][j + i] + arr[0][j] * arr[1][k] * arr[1][j + i];
-				dp[j][j + i] = min(tmp, dp[j][j + i]);
-			}
-		}
+	return tree[index] = init(l, mid, index * 2) + init(mid + 1, r, index * 2 + 1);
+}
+int sum(int l, int r, int index, int from, int to) {
+	if (from > r || to < l) return 0;
+	if (from <= l && to >= r) return tree[index];
+	int mid = (l + r) / 2;
+	return sum(l, mid, index * 2, from, to) + sum(mid+1, r, index * 2 + 1, from, to);
+}
+int main() {
+	int N, M, a ,b;
+	scanf("%d %d", &N, &M);
+
+	for (int i = 0; i < N; i++) 
+		scanf("%d", &arr[i]);
+	init(0, N-1, 1);
+	for (int i = 0; i < M; i++) {
+		scanf("%d %d", &a, &b);
+		printf("%d\n", sum(0,N-1,1,a-1,b-1));
 	}
-	printf("%d", dp[0][N - 1]);
 	return 0;
 }

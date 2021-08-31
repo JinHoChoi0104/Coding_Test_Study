@@ -7,7 +7,9 @@ int main(void) {
 	int N, num, ans = 1087654321, num1, num2;
 	scanf("%d", &N);
 	priority_queue<int>p; //양수는 큰 수가 먼저 나오게 저장
+	// 98 50 4
 	priority_queue<int, vector<int>, greater<>> m; // 음수는 작은 수가 먹저 나오게 저장
+	// -99 -2 -1
 	for (int i = 0; i < N; i++) {
 		scanf("%d", &num);
 		if (num > 0)
