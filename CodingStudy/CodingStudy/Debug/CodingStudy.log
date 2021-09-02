@@ -1,2 +1,6 @@
 ﻿  1-1.cpp
+C:\Users\82107\Desktop\Github\Coding_Test_Study\CodingStudy\CodingStudy\1-1.cpp(11,18): warning C4101:  'cnt' :참조되지 않은 지역 변수입니다.
+C:\Users\82107\Desktop\Github\Coding_Test_Study\CodingStudy\CodingStudy\1-1.cpp(11,12): warning C4101:  'jump' :참조되지 않은 지역 변수입니다.
+C:\Users\82107\Desktop\Github\Coding_Test_Study\CodingStudy\CodingStudy\1-1.cpp(11,9): warning C4101:  'y' :참조되지 않은 지역 변수입니다.
+C:\Users\82107\Desktop\Github\Coding_Test_Study\CodingStudy\CodingStudy\1-1.cpp(11,6): warning C4101:  'x' :참조되지 않은 지역 변수입니다.
   CodingStudy.vcxproj -> C:\Users\82107\Desktop\Github\Coding_Test_Study\CodingStudy\Debug\CodingStudy.exe
