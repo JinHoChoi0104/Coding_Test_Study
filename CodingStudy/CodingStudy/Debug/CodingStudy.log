@@ -1,5 +1,2 @@
 ﻿  1-1.cpp
-C:\Users\82107\Desktop\Github\Coding_Test_Study\CodingStudy\CodingStudy\1-1.cpp(22,20): warning C4018:  '<': signed 또는 unsigned가 일치하지 않습니다.
-C:\Users\82107\Desktop\Github\Coding_Test_Study\CodingStudy\CodingStudy\1-1.cpp(18,12): warning C4101:  'tmp2' :참조되지 않은 지역 변수입니다.
-C:\Users\82107\Desktop\Github\Coding_Test_Study\CodingStudy\CodingStudy\1-1.cpp(18,6): warning C4101:  'tmp1' :참조되지 않은 지역 변수입니다.
   CodingStudy.vcxproj -> C:\Users\82107\Desktop\Github\Coding_Test_Study\CodingStudy\Debug\CodingStudy.exe
