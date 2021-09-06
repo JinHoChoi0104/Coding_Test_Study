@@ -1,7 +1,10 @@
 #include <iostream>
 
 using namespace std;
-
+/*
+regex라는게 있다!!!
+패턴이있는지 판별 할 때 쓰자!
+*/
 int main()
 {
 	ios_base::sync_with_stdio(false);
@@ -31,7 +34,7 @@ int main()
 				}
 				while (str.at(i) == '0') 
 					i++;	
-
+				//1000111 '1' 1001 1 01 1101
 				if (str.at(i++) != '1') { //1이 1개는 무조건 있어야함
 					isP = false;
 					break;

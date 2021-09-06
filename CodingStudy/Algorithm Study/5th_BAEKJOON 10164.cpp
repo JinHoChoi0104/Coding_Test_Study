@@ -5,6 +5,11 @@ using namespace std;
 #define ll long long
 /*
 (N + M)! / N! / M!
+
+  (N + M)!
+  --------
+   N! * M!
+
 = (N+M) * (N+M-1) * (N+M-2) *... M+1 / N!
 */
 ll getWay(ll N, ll M) //조합계산
