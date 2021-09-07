@@ -1,73 +1,31 @@
 #include <iostream>
-#include <deque>
-
+#include <queue>
 using namespace std;
-
+#define ll long long
 int main() {
 	ios_base::sync_with_stdio(false);
 	cin.tie(NULL), cout.tie(NULL);
 
-	int N, K, cnt = 0, ans = 0; // cnt에 내구도가 0인 칸 갯수 저장
-	cin >> N >> K;
-
-	deque<int> dq1(N), dq2(N);
-	deque <int> robot; // 로봇의 위치 저장
-
-	for (int i = 0; i < N; i++)
-		cin >> dq1[i];
-	for (int i = N - 1; i >= 0; i--)
-		cin >> dq2[i];
-
-	while (cnt < K) { // 4.반복
-		// 1.벨트 이동
-		dq2.push_back(dq1.back());
-		dq1.pop_back();
-		dq1.push_front(dq2.front());
-		dq2.pop_front();
-		// 로봇도 이동
-		for (auto it = robot.begin(); it != robot.end(); it++)
-			(*it)++;
-		// 내리는 위치에 있으면 로봇 내려준다
-		if (!robot.empty())
-			if (robot.back() == N - 1)
-				robot.pop_back();
-		
-		if (!robot.empty()) {// 로봇이 있으면
-			bool isDrop = false;
-			int tmp = robot.size() - 1;
-			for (int i = tmp; i >= 0; i--) { // 2.먼저 올라간 로봇부터
-				if (i == tmp) { // 가장 먼저 올라간 로봇은 내릴수도 있으니
-					if (dq1[robot.back() + 1] > 0) {
-						robot.back()++;
-						dq1[robot.back()]--;
-						if (robot.back() == N - 1)
-							isDrop = true; // 내리는 위치다! 내리는거 예약
-						if (dq1[robot.back()] == 0)
-							cnt++;
-					}
-				}
-				else { // 나머지 로봇
-					if (dq1[robot[i] + 1] > 0 && robot[i + 1] != robot[i] + 1) {
-						robot[i]++;
-						dq1[robot[i]]--;
-						if (dq1[robot[i]] == 0)
-							cnt++;
-					}
-				}
-			}
-			if (isDrop)
-				robot.pop_back();
-		}
-
-		if (dq1[0] > 0) { // 3.올리는 위치에 내구도가 0 이상이면
-			dq1[0]--;
-			robot.push_front(0); //로봇 올린다
-			if (dq1[0] == 0)
-				cnt++;
-		}
-		ans++; //단계 카운트
+	priority_queue<ll, vector<ll>, greater<>>pq; 
+	//오름차순으로 정렬 되도록 해서 작은 수부터 pop된다
+	int N, num;
+	ll jun;
+	cin >> N >> jun;
+	for (int i = 1; i < N; i++) {
+		cin >> num;
+		pq.push(num);
 	}
-
-	cout << ans;
+	while (!pq.empty()) {
+		if (jun > pq.top()) { //준원이가 이길 수 있다
+			jun += pq.top();
+			pq.pop();
+		}
+		else //이길 수 없다
+			break; //나머지 인원들도 못 이기므로 break
+	}
+	if (pq.empty()) //모두 이겼다
+		cout << "Yes";
+	else //이기지 못한 사람도 있다
+		cout << "No";
 	return 0;
 }
