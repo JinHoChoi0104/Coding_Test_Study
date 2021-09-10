@@ -1,58 +1,67 @@
 #include <iostream>
+#include <vector>
+#include <algorithm>
 using namespace std;
 
-#define ll long long
+int N, ans = 987654321, total = 0, arr[20][20];
 
-int N, arr[5][5], ans[5][5];
+void geri(int x, int y) {
+	int d1 = min(y, N - 2 - x);
+	int d2 = min(N -1 - y, N - 2 - x);
 
-void pow() { // get Squared of A^n
-	int tmp[5][5];
-	for (int i = 0; i < N; i++)
-		for (int j = 0; j < N; j++) {
-			tmp[i][j] = 0;
-			for (int k = 0; k < N; k++)
-				tmp[i][j] += ans[i][k] * ans[k][j];
-		}
-	for (int i = 0; i < N; i++)
-		for (int j = 0; j < N; j++)
-			ans[i][j] = tmp[i][j] % 1000;
-}
-
-void getSquared(ll n) { // get A^n
-	if (n == 1) return;
-
-	getSquared(n / 2); // get A^(n/2)
-	pow();
-	if (n % 2 != 0) { // if n is odd num
-		int tmp[5][5];
-		for (int i = 0; i < N; i++)
-			for (int j = 0; j < N; j++) {
-				tmp[i][j] = 0;
-				for (int k = 0; k < N; k++)
-					tmp[i][j] += ans[i][k] * arr[k][j];
+	for (int i = 1; i <= d1; i++) {
+		for (int j = 1; j <= d2; j++) {
+			vector <int> v(5, 0);
+			vector<int>line[4];
+			for (int l = 0; l < x; l++) {
+				line[0].push_back(0);
+				line[1].push_back(0);
 			}
-		for (int i = 0; i < N; i++)
-			for (int j = 0; j < N; j++)
-				ans[i][j] = tmp[i][j] % 1000;
+			for (int l = 1; l <= i; l++)
+				line[0].push_back(l);
+			for (int l = 0; l <= j; l++)
+				line[1].push_back(l);
+			for (int l = j; l >= 0; l--)
+				line[2].push_back(l);
+			for (int l = i; l >= 1; l--)
+				line[3].push_back(l);
+			for (int l = x + i + j + 1; l < N; l++) {
+				line[2].push_back(0);
+				line[3].push_back(0);
+			}
+
+			for (int r = 0; r < x + i; r++)
+				for (int c = 0; c <= y - line[0][r]; c++)
+					v[0] += arr[r][c];
+			for (int r = 0; r <= x + j; r++)
+				for (int c = y+1+line[1][r]; c < N; c++)
+					v[1] += arr[r][c];
+			for (int r = x + i; r < N; r++)
+				for (int c = 0; c < y - i + j - line[2][r-x-i]; c++)
+					v[2] += arr[r][c];
+			for (int r = x + j + 1; r < N; r++)
+				for (int c = y-i+j + line[3][r - x - j - 1]; c < N; c++)
+					v[3] += arr[r][c];
+			v[4] = total - v[0] - v[1] - v[2] - v[3];
+			sort(v.begin(), v.end());
+			ans = min(ans, v[4] - v[0]);
+		}
 	}
 }
 
 int main() {
 	ios_base::sync_with_stdio(false);
 	cin.tie(NULL), cout.tie(NULL);
-	ll n;
-	cin >> N >> n;
+	cin >> N;
 	for (int i = 0; i < N; i++)
 		for (int j = 0; j < N; j++) {
 			cin >> arr[i][j];
-			ans[i][j] = arr[i][j] % 1000;
+			total += arr[i][j];
 		}		
-
-	getSquared(n);
-	for (int i = 0; i < N; i++) {
-		for (int j = 0; j < N; j++) 
-			cout << ans[i][j] <<" ";
-		cout << "\n";
-	}
+	for (int i = 0; i <= N - 3; i++)
+		for (int j = 1; j <= N - 2; j++) 
+			geri(i, j);
+		
+	cout << ans;
 	return 0;
 }
