@@ -14,7 +14,7 @@ void geri(int x, int y) {
 			vector <int> v(5, 0);
 			vector<int>line[4];
 			for (int l = 0; l < x; l++) {
-				line[0].push_back(0);
+				line[0].push_back(0); //첫번째 경계선의 y 좌표만 저장
 				line[1].push_back(0);
 			}
 			for (int l = 1; l <= i; l++)
