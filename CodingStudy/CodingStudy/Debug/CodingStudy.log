@@ -1,9 +1,2 @@
 ﻿  1-1.cpp
-C:\Users\82107\Desktop\Github\Coding_Test_Study\CodingStudy\CodingStudy\1-1.cpp(19,24): warning C4018:  '<': signed 또는 unsigned가 일치하지 않습니다.
-C:\Users\82107\Desktop\Github\Coding_Test_Study\CodingStudy\CodingStudy\1-1.cpp(29,24): warning C4018:  '<': signed 또는 unsigned가 일치하지 않습니다.
-C:\Users\82107\Desktop\Github\Coding_Test_Study\CodingStudy\CodingStudy\1-1.cpp(54,21): warning C4018:  '<': signed 또는 unsigned가 일치하지 않습니다.
-C:\Users\82107\Desktop\Github\Coding_Test_Study\CodingStudy\CodingStudy\1-1.cpp(55,22): warning C4018:  '<': signed 또는 unsigned가 일치하지 않습니다.
-C:\Users\82107\Desktop\Github\Coding_Test_Study\CodingStudy\CodingStudy\1-1.cpp(58,23): warning C4018:  '<': signed 또는 unsigned가 일치하지 않습니다.
-C:\Users\82107\Desktop\Github\Coding_Test_Study\CodingStudy\CodingStudy\1-1.cpp(62,23): warning C4018:  '<': signed 또는 unsigned가 일치하지 않습니다.
-C:\Users\82107\Desktop\Github\Coding_Test_Study\CodingStudy\CodingStudy\1-1.cpp(33,12): warning C4101:  'num' :참조되지 않은 지역 변수입니다.
   CodingStudy.vcxproj -> C:\Users\82107\Desktop\Github\Coding_Test_Study\CodingStudy\Debug\CodingStudy.exe
