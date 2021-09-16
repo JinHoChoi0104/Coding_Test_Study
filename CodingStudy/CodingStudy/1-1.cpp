@@ -1,14 +1,12 @@
 #include <iostream>
-#include <math.h>
+#include <algorithm>
 using namespace std;
 
 int main() {
 	ios_base::sync_with_stdio(false);
 	cin.tie(NULL), cout.tie(NULL);
-	double D, H, W;
-	cin >> D >> H >> W;
-	double ratio = pow(D, 2) / (pow(H, 2) + pow(W, 2));
-	ratio = sqrt(ratio);
-	cout << (int) (ratio * H) << " " << (int) (ratio * W);	
+	int a, b, c, d;
+	cin >> a >> b >> c >> d;
+	cout << min(a + d, c + b);
 	return 0;
 }
