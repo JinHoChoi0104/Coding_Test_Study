@@ -27,6 +27,7 @@ void dijkstra(int start) { //노드 확장이거나, 노드 값 변경임
 				dist[there] = nextDist;
 				pq.push({ nextDist, there });
 			}
+		
 		}
 	}
 }
