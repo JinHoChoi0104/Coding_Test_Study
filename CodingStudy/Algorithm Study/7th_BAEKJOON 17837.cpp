@@ -67,6 +67,7 @@ struct pieces {
 
 //색을 저장, 가장 위에 있는 말 번호 저장
 pieces p(10);
+
 int movePiece(int x, int y, int num) {
 	int& ret2 = board[p.pos[p.findB(num)].first][p.pos[p.findB(num)].second];
 	if (p.bottom[num] != num) {
@@ -76,7 +77,6 @@ int movePiece(int x, int y, int num) {
 	//이동하기 전에 원래 있던 곳 말의 위를 비어준다
 	else
 		ret2 = -1;
-
 
 	int& ret = board[x][y];
 	if (ret == -1) {//이동하는 곳에 아무것도 없어
@@ -121,10 +121,8 @@ int main() {
 			
 			int tox = x + m[0][dir], toy = y + m[1][dir];
 			if (tox < 0 || tox >= N || toy < 0 || toy >= N) {//벗어나면 반대방향
-				if (dir == 0 || dir == 2)
-					dir++;
-				else
-					dir--;
+				if (dir == 0 || dir == 2) dir++;
+				else dir--;
 				p.dir[i] = dir;
 				tox = x + m[0][dir], toy = y + m[1][dir];
 			}
@@ -135,12 +133,11 @@ int main() {
 			else if (color[tox][toy] == 1) //빨간색
 				size = movePiece(tox, toy, p.reverse(i));
 			else { //파란색
-				if (dir == 0 || dir == 2) //방향 반대로
-					dir++;
-				else
-					dir--;
+				if (dir == 0 || dir == 2) dir++;//방향 반대로
+				else dir--;
 				p.dir[i] = dir;
 				tox = x + m[0][dir], toy = y + m[1][dir];
+
 				if (tox > -1 && tox < N && toy > -1 && toy < N) {
 					if (color[tox][toy] == 0) //반대에 흰색
 						size = movePiece(tox, toy, i);
