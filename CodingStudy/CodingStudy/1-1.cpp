@@ -14,11 +14,11 @@ struct pieces {
 			bottom[i] = i, top[i] = i;
 	}
 
-	int findB(int n) { //°¡Àå ¹Ø ¹İÈ¯
+	int findB(int n) { //ê°€ì¥ ë°‘ ë°˜í™˜
 		if (n == bottom[n]) return n;
 		return findB(bottom[n]);
 	}
-	int findT(int n) { //°¡Àå À§ ¹İÈ¯
+	int findT(int n) { //ê°€ì¥ ìœ„ ë°˜í™˜
 		if (n == top[n]) return n;
 		return findT(top[n]);
 	}
@@ -27,9 +27,9 @@ struct pieces {
 		return getSize(bottom[n]) + 1;
 	}
 	
-	int reverse(int n) {//µÚÁı¾îÁø ÈÄ ±âµÕÀÇ °¡Àå ¹Ø ¿ø¼Ò ¹İÈ¯
+	int reverse(int n) {//ë’¤ì§‘ì–´ì§„ í›„ ê¸°ë‘¥ì˜ ê°€ì¥ ë°‘ ì›ì†Œ ë°˜í™˜
 		int ans = findT(n);
-		if (n == top[n]) //1°³¸é µÚÁıÀ» °Íµµ ¾ø´Ù
+		if (n == top[n]) //1ê°œë©´ ë’¤ì§‘ì„ ê²ƒë„ ì—†ë‹¤
 			return n;
 		int x = pos[findB(n)].first, y = pos[findB(n)].second;
 		board[x][y] = n;
@@ -43,16 +43,16 @@ struct pieces {
 				break;
 			n = top[n];
 		}
-		if (isOnly) { //¹Ø¿¡ ¹¹°¡ ¾ø´Ù
+		if (isOnly) { //ë°‘ì— ë­ê°€ ì—†ë‹¤
 			int next=n;
-			while (!s2.empty()) { //¹Ø¿¡ ¹¹°¡ ¾øÀ¸¸é Å¾°ú ¹ÙÅÒ ±×´ë·Î ¹Ù²Ù¸é µÈ´Ù.
+			while (!s2.empty()) { //ë°‘ì— ë­ê°€ ì—†ìœ¼ë©´ íƒ‘ê³¼ ë°”í…€ ê·¸ëŒ€ë¡œ ë°”ê¾¸ë©´ ëœë‹¤.
 				n = next;
 				next = bottom[n];
 				top[n] = s2.top(), bottom[n] = s1.top();
 				s2.pop(), s1.pop();
 			}
 		}
-		else{//¹Ø¿¡ ¹¹°¡ ÀÖÀ¸¸é À§¿¡´Â ¹«Á¶°Ç 2°³
+		else{//ë°‘ì— ë­ê°€ ìˆìœ¼ë©´ ìœ„ì—ëŠ” ë¬´ì¡°ê±´ 2ê°œ
 			int under = bottom[n];
 			int under2 = bottom[under]; //0
 			top[under2] = n;
@@ -65,7 +65,7 @@ struct pieces {
 	}
 };
 
-//»öÀ» ÀúÀå, °¡Àå À§¿¡ ÀÖ´Â ¸» ¹øÈ£ ÀúÀå
+//ìƒ‰ì„ ì €ì¥, ê°€ì¥ ìœ„ì— ìˆëŠ” ë§ ë²ˆí˜¸ ì €ì¥
 pieces p(10);
 int movePiece(int x, int y, int num) {
 	int& ret2 = board[p.pos[p.findB(num)].first][p.pos[p.findB(num)].second];
@@ -73,21 +73,21 @@ int movePiece(int x, int y, int num) {
 		p.top[p.bottom[num]] = p.bottom[num];
 		ret2 = p.bottom[num];
 	}
-	//ÀÌµ¿ÇÏ±â Àü¿¡ ¿ø·¡ ÀÖ´ø °÷ ¸»ÀÇ À§¸¦ ºñ¾îÁØ´Ù
+	//ì´ë™í•˜ê¸° ì „ì— ì›ë˜ ìˆë˜ ê³³ ë§ì˜ ìœ„ë¥¼ ë¹„ì–´ì¤€ë‹¤
 	else
 		ret2 = -1;
 
 
 	int& ret = board[x][y];
-	if (ret == -1) {//ÀÌµ¿ÇÏ´Â °÷¿¡ ¾Æ¹«°Íµµ ¾ø¾î
-		p.pos[num] = { x,y };//¸»¿¡ ÁÂÇ¥ ÀúÀå
-		p.bottom[num] = num; //°¡Àå ¹ØÀº ÀÌÁ¦ num
+	if (ret == -1) {//ì´ë™í•˜ëŠ” ê³³ì— ì•„ë¬´ê²ƒë„ ì—†ì–´
+		p.pos[num] = { x,y };//ë§ì— ì¢Œí‘œ ì €ì¥
+		p.bottom[num] = num; //ê°€ì¥ ë°‘ì€ ì´ì œ num
 	}
-	else {//¹¹°¡ ÀÖ´Ù
-		p.bottom[num] = ret; //num ¹Ø¿¡ ¿ø·¡ ÀÖ´ø ¸»ÀÇ top ÀúÀå
-		p.top[ret] = num; //¿ø·¡ ÀÖ´ø°Å À§¿¡ »õ·Î ¿Â ¸» Å¾½Â
+	else {//ë­ê°€ ìˆë‹¤
+		p.bottom[num] = ret; //num ë°‘ì— ì›ë˜ ìˆë˜ ë§ì˜ top ì €ì¥
+		p.top[ret] = num; //ì›ë˜ ìˆë˜ê±° ìœ„ì— ìƒˆë¡œ ì˜¨ ë§ íƒ‘ìŠ¹
 	}
-	ret = p.findT(num); //º¸µå¿¡ ¿Â ¸» ÀúÀå
+	ret = p.findT(num); //ë³´ë“œì— ì˜¨ ë§ ì €ì¥
 
 	return p.getSize(ret);
 }
@@ -101,7 +101,7 @@ int main() {
 	for (int i = 0; i < N; i++)
 		for (int j = 0; j < N; j++) {
 			cin >> color[i][j];
-			board[i][j] = -1;//º¸µå ÃÊ±âÈ­
+			board[i][j] = -1;//ë³´ë“œ ì´ˆê¸°í™”
 		}
 	for (int i = 0; i < K; i++) {
 		cin >> x >> y >> dir;
@@ -114,13 +114,13 @@ int main() {
 	
 	for (int t = 1; t <= 1000; t++) {
 		for (int i = 0; i < K; i++) {
-			//ÇöÀç À§Ä¡
+			//í˜„ì¬ ìœ„ì¹˜
 			int x = p.pos[p.findB(i)].first;
 			int y = p.pos[p.findB(i)].second;
 			dir = p.dir[i];
 			
 			int tox = x + m[0][dir], toy = y + m[1][dir];
-			if (tox < 0 || tox >= N || toy < 0 || toy >= N) {//¹ş¾î³ª¸é ¹İ´ë¹æÇâ
+			if (tox < 0 || tox >= N || toy < 0 || toy >= N) {//ë²—ì–´ë‚˜ë©´ ë°˜ëŒ€ë°©í–¥
 				if (dir == 0 || dir == 2)
 					dir++;
 				else
@@ -130,21 +130,21 @@ int main() {
 			}
 
 			int size = 1;
-			if (color[tox][toy] == 0) //Èò»ö
+			if (color[tox][toy] == 0) //í°ìƒ‰
 				size = movePiece(tox, toy, i);
-			else if (color[tox][toy] == 1) //»¡°£»ö
+			else if (color[tox][toy] == 1) //ë¹¨ê°„ìƒ‰
 				size = movePiece(tox, toy, p.reverse(i));
-			else { //ÆÄ¶õ»ö
-				if (dir == 0 || dir == 2) //¹æÇâ ¹İ´ë·Î
+			else { //íŒŒë€ìƒ‰
+				if (dir == 0 || dir == 2) //ë°©í–¥ ë°˜ëŒ€ë¡œ
 					dir++;
 				else
 					dir--;
 				p.dir[i] = dir;
 				tox = x + m[0][dir], toy = y + m[1][dir];
 				if (tox > -1 && tox < N && toy > -1 && toy < N) {
-					if (color[tox][toy] == 0) //¹İ´ë¿¡ Èò»ö
+					if (color[tox][toy] == 0) //ë°˜ëŒ€ì— í°ìƒ‰
 						size = movePiece(tox, toy, i);
-					else if(color[tox][toy] == 1) //¹İ´ë¿¡ »¡°£»ö
+					else if(color[tox][toy] == 1) //ë°˜ëŒ€ì— ë¹¨ê°„ìƒ‰
 						size = movePiece(tox, toy, p.reverse(i));
 				}
 			}
