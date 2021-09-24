@@ -1,20 +1,21 @@
 #include <iostream>
-
 using namespace std;
 
 int main() {
 	ios_base::sync_with_stdio(false);
 	cin.tie(NULL), cout.tie(NULL);
-	int x, y, num = 0, tmp;
-	for(int i=1; i<=9; i++)
-		for (int j = 1; j <= 9; j++) {
-			cin >> tmp;
-			if (tmp > num) {
-				x = i, y = j;
-				num = tmp ;
-			}
+	int T, a, b;
+	int arr[4] = { 0,1,2,3 };
+	for (cin >> T; T-- > 0; ) {
+		cin >> a >> b;
+		int tmp = arr[a];
+		arr[a] = arr[b];
+		arr[b] = tmp;
+	}
 
-		}
-	cout << num << "\n" << x << " " << y << "\n";
+	for (int i = 1; i <= 3; i++)
+		if (arr[i] == 1)
+			cout << i;
+
 	return 0;
 }
