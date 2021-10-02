@@ -1,59 +1,65 @@
 #include <iostream>
-#include <algorithm>
 #include <vector>
 using namespace std;
-typedef pair<int, int> pii;
-bool comp(const pii &a, const pii &b) {
-	return a.first < b.first;
+vector<int> tree(400005, 0), lazy(400005, -1);
+//lazy = -1: not changing state, 1: change state
+
+void propagationLazy(int l, int r, int index) {
+	if (lazy[index] == 1) { //if you have to change state
+		int& ret = tree[index];
+		ret = r - l + 1 - ret; //adjust lazy
+
+		if (l != r)
+			lazy[index * 2] *= -1, lazy[index * 2 + 1] *= -1; //give lazy to two childs
+		
+		lazy[index] = -1;
+	}
 }
+
+int sum(int l, int r, int index, int from, int to) {
+	propagationLazy(l, r, index);
+	if (from > r || to < l) return 0;
+	if (from <= l && to >= r) return tree[index];
+	int mid = (l + r) / 2;
+	return sum(l, mid, index * 2, from, to) + sum(mid + 1, r, index * 2 + 1, from, to);
+}
+
+//num: amount of change, from & to: range of number which will be modified
+void modify(int l, int r, int index, int from, int to) {
+	propagationLazy(l, r, index);
+	
+	if (from > r || to < l) return; //out of range
+
+	int& ret = tree[index];
+	if (from <= l && r <= to) { //if totally in range
+		ret = r - l + 1 - ret;
+		if (l != r)
+			lazy[index * 2] *= -1, lazy[index * 2 + 1] *= -1;
+		return;	
+	}
+
+	int mid = (l + r) / 2;
+	modify(l, mid, index * 2, from, to);
+	modify(mid + 1, r, index * 2 + 1, from, to);
+
+	ret = tree[index * 2] + tree[index * 2 + 1];
+}
+	
 int main() {
 	ios_base::sync_with_stdio(false);
 	cin.tie(NULL), cout.tie(NULL);
-	int N, num, M, max_mass = 0;
+
+	int N, M;
 	cin >> N;
-	vector<pii> crane;
-	for (int i = 0; i < N;i++) {
-		cin >> num;
-		crane.push_back({ num,0 });
-		max_mass = max(num, max_mass);
+
+	int mode, from, to;
+	for (cin >> M; M-- > 0;) {
+		cin >> mode >> from >> to;
+		if (mode == 0)  //Update
+			modify(0, N - 1, 1, from - 1, to - 1);
+		else  //get Range Sum
+			cout << sum(0, N - 1, 1, from - 1, to - 1) << "\n";
 	}
-	sort(crane.begin(), crane.end());
-	bool movable = true;
-	cin >> M;
-	for (int i = 0; i < M; i++) {
-		cin >> num;
-		if (num > max_mass) {
-			movable = false;
-			continue;
-		}
-		int index = lower_bound(crane.begin(), crane.end(), pii(num, 0), comp) - crane.begin();
-		crane[index].second++;
-	}
-	if (!movable) { //모든 박스 옮길 수 없다
-		cout << -1;
-		return 0;
-	}
-	int total_moved = 0, cnt = 0;
-	while (total_moved != M) {
-		cnt++;
-		int sum = 1; 
-		for (int i = N - 1; i >= 0; i--) { //무거운거 옮길 수 있는 크레인부터 확인
-			int& ret = crane[i].second; //이동 필요한 박스
-			if (ret == 0) { //자기 할당 없으면 다음 것 도와준다
-				sum++;
-				continue;
-			}
-			if (sum >= ret) { //옮길 수 있는 박스가 더 많은 경우
-				sum -= ret, total_moved += ret;
-				ret = 0;
-				sum++;
-			}
-			else if (sum < ret){ //더 적은 경우
-				ret -= sum, total_moved += sum;
-				sum = 1;
-			}
-		}
-	}
-	cout << cnt;
+
 	return 0;
 }
