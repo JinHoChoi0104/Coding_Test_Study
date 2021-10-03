@@ -1,64 +1,55 @@
 #include <iostream>
 #include <vector>
 using namespace std;
-vector<int> tree(400005, 0), lazy(400005, -1);
-//lazy = -1: not changing state, 1: change state
+#define ll long long
+#define DIVIDNG_NUM 1000000007
+vector<ll> arr(1000001), tree(4000005, 0);
 
-void propagationLazy(int l, int r, int index) {
-	if (lazy[index] == 1) { //if you have to change state
-		int& ret = tree[index];
-		ret = r - l + 1 - ret; //adjust lazy
-
-		if (l != r)
-			lazy[index * 2] *= -1, lazy[index * 2 + 1] *= -1; //give lazy to two childs
-		
-		lazy[index] = -1;
-	}
+ll init(int l, int r, int index) {
+	ll& ret = tree[index];
+	if (l == r) return ret = arr[l]; //leaf node
+	int mid = (l + r) / 2;
+	return ret = (init(l, mid, index * 2) * init(mid + 1, r, index * 2 + 1)) % DIVIDNG_NUM;
 }
 
-int sum(int l, int r, int index, int from, int to) {
-	propagationLazy(l, r, index);
-	if (from > r || to < l) return 0;
+ll mul(int l, int r, int index, int from, int to) {
+	if (from > r || to < l) return 1;
 	if (from <= l && to >= r) return tree[index];
 	int mid = (l + r) / 2;
-	return sum(l, mid, index * 2, from, to) + sum(mid + 1, r, index * 2 + 1, from, to);
+	return (mul(l, mid, index * 2, from, to) * mul(mid + 1, r, index * 2 + 1, from, to)) % DIVIDNG_NUM;
 }
 
-//num: amount of change, from & to: range of number which will be modified
-void modify(int l, int r, int index, int from, int to) {
-	propagationLazy(l, r, index);
-	
-	if (from > r || to < l) return; //out of range
-
-	int& ret = tree[index];
-	if (from <= l && r <= to) { //if totally in range
-		ret = r - l + 1 - ret;
-		if (l != r)
-			lazy[index * 2] *= -1, lazy[index * 2 + 1] *= -1;
-		return;	
+//value: amount of change, target: index of number which will be modified
+ll modify(int l, int r, int index, int target, int value) {
+	ll& ret = tree[index];
+	if (target > r || target < l) return ret; //out of range
+	if (l == r) {
+		arr[target] = value;
+		ret = arr[target];
+		return ret;
 	}
-
 	int mid = (l + r) / 2;
-	modify(l, mid, index * 2, from, to);
-	modify(mid + 1, r, index * 2 + 1, from, to);
-
-	ret = tree[index * 2] + tree[index * 2 + 1];
+	return ret = (modify(l, mid, index * 2, target, value) * modify(mid + 1, r, index * 2 + 1, target, value)) % DIVIDNG_NUM;
 }
 	
 int main() {
 	ios_base::sync_with_stdio(false);
 	cin.tie(NULL), cout.tie(NULL);
 
-	int N, M;
-	cin >> N;
+	int N, M, K;
+	cin >> N >> M >> K;
+	for (int i = 0; i < N; i++)
+		cin >> arr[i];
 
-	int mode, from, to;
-	for (cin >> M; M-- > 0;) {
-		cin >> mode >> from >> to;
-		if (mode == 0)  //Update
-			modify(0, N - 1, 1, from - 1, to - 1);
-		else  //get Range Sum
-			cout << sum(0, N - 1, 1, from - 1, to - 1) << "\n";
+	init(0, N - 1, 1);
+
+	int mode, a, b;
+	for (int i = 0; i < M + K; i++) {
+		cin >> mode >> a >> b;
+		if (mode == 1)  //Update
+			modify(0, N - 1, 1, a - 1, b);
+		else  //get Range Multiple
+			cout << mul (0, N - 1, 1, a - 1, b - 1) << "\n";
 	}
 
 	return 0;

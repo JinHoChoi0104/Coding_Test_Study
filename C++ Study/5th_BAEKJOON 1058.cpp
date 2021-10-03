@@ -19,7 +19,7 @@ int main() {
 				adj[j].push_back(i);
 			}
 		}
-
+	
 	for (int i = 0; i < N; i++) {
 		vector<bool> visited(N, false);
 		int cnt = -1; //자기 자신을 제외 하기 위해 -1
