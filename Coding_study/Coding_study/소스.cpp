@@ -6,15 +6,17 @@ int main() {
 	ios_base::sync_with_stdio(false);
 	cin.tie(NULL), cout.tie(NULL);
 
-	int N;
-	cin >> N;
-	string str, ans = "";
-	cin >> str;
-
-	for (int i = 0; i < str.size(); i++)
-		if (i % N == 0)
-			ans = ans + str[i];
-
+	int ans = 0;
+	char s;
+	for (int i = 0; i < 8; i++) {
+		for (int j = 0; j < 8; j++) {
+			cin >> s;
+			if(s=='F')
+				if ((i + j) % 2 == 0)
+					ans++;
+		}
+	}
 	cout << ans;
+
 	return 0;
 }
