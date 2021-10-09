@@ -6,17 +6,17 @@ using namespace std;
 int main() {
 	ios_base::sync_with_stdio(false);
 	cin.tie(NULL), cout.tie(NULL);
-	int a, b, c, ans;
-	cin >> a >> b >> c;
-	if (a == b && b == c) 
-		ans = 10000 + a * 1000;
-	else if (a == b || a==c) 
-		ans = 1000 + a * 100;
-	else if (b == c) 
-		ans = 1000 + b * 100;
-	else 
-		ans = max({ a,b,c }) * 100;
-	cout << ans;
-
+	int ans = 0, num;
+	char c[5] = { 'E', 'A', 'B', 'C', 'D' };
+	for (int j = 0; j < 3; j++) {
+		ans = 0;
+		for (int i = 0; i < 4; i++) {
+			cin >> num;
+			if (num == 0)
+				ans++;
+		}
+		cout << c[ans] << "\n";
+	}
+	
 	return 0;
 }
