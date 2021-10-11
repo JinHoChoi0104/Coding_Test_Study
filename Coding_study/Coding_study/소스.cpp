@@ -1,10 +1,7 @@
-/*
-copyright: "프로그래밍대회에서 배우는 알고리즘 문제해결전략"
-studing Unionfind, DisjointSet
-*/
 #include <iostream>
 #include <vector>
 #include <algorithm>
+#include <math.h>
 using namespace std;
 
 struct NaiveDisjointSet {
@@ -55,15 +52,17 @@ struct OptimizedDisjointSet {
 const int MAX_V = 10000;
 int V; // number of vertex
 //Graph's linked list. adj[0] = (vertex 0's adjacent vertex, weight to get there)
-vector<pair<int, int>> adj[MAX_V];
+vector<pair<int, double>> adj[MAX_V];
 
-int kruskal(vector<pair<int, int>>& selected) {
-	int ret = 0;
+double kruskal(vector<pair<int, int>>& selected) {
+	double ret = 0;
 	selected.clear();
-	vector<pair<int, pair<int, int>>> edges;
+	vector<pair<double, pair<int, int>>> edges;
 	for (int u = 0; u < V; u++)
 		for (int i = 0; i < adj[u].size(); i++) {
-			int v = adj[u][i].first, cost = adj[u][i].second;
+			int v = adj[u][i].first;
+			double cost = adj[u][i].second;
+		//	cout << cost << endl;
 			edges.push_back(make_pair(cost, make_pair(u, v)));
 		}
 	//sort edges by it's weight
@@ -71,7 +70,7 @@ int kruskal(vector<pair<int, int>>& selected) {
 	//
 	OptimizedDisjointSet sets(V);
 	for (int i = 0; i < edges.size(); i++) {
-		int cost = edges[i].first;
+		double cost = edges[i].first;
 		int u = edges[i].second.first, v = edges[i].second.second;
 		//if u and v are already in same set, then ignore
 		if (sets.find(u) == sets.find(v)) continue;
@@ -79,22 +78,43 @@ int kruskal(vector<pair<int, int>>& selected) {
 		sets.merge(u, v);
 		selected.push_back(make_pair(u, v));
 		ret += cost;
+	//	cout << ret << endl;
 	}
 	return ret;
 }
 
-
+vector<pair<double, double>> pos;
+double doublePow(double num) {
+	return num * num;
+}
+double getDis(int u, int v) {
+	double dx = doublePow(pos[u].first - pos[v].first);
+	double dy = doublePow(pos[u].second - pos[v].second);
+	return sqrt(dx + dy);
+}
 int main() {
 	ios_base::sync_with_stdio(false);
 	cin.tie(NULL), cout.tie(NULL);
-	int E, u, v, cost;
-	cin >> V >> E;
-	for (int i = 0; i < E; i++) {
-		cin >> u >> v >> cost;
-		adj[u - 1].push_back({ v - 1, cost });
-		adj[v - 1].push_back({ u - 1, cost });
+
+	cin >> V;
+	double a, b;
+	for (int i = 0; i < V; i++) {
+		cin >> a >> b;
+		pos.push_back({ a,b });
+	}
+	for (int i = 0; i < V; i++) {
+		for (int j = 0; j < V; j++) {
+			if (i == j)
+				continue;
+			double dis = getDis(i, j);
+			adj[i].push_back({ j, dis});
+			adj[j].push_back({ i, dis});
+		}
+
 	}
 	vector<pair<int, int>> selected;
+	cout << fixed;
+	cout.precision(2);
 	cout << kruskal(selected);
 	return 0;
 }
