@@ -6,25 +6,25 @@ int main() {
 	ios_base::sync_with_stdio(false);
 	cin.tie(NULL), cout.tie(NULL);
 
-	int a, b, c;
-	cin >> a >> b >> c;
-		
-	if (a + b == c)
-		cout << a << '+' << b << '=' <<c;
-	else if (a - b == c)
-		cout << a << '-' << b << '=' << c;
-	else if (a * b == c)
-		cout << a << '*' << b << '=' << c;
-	else if (a == b + c)
-		cout << a << '=' << b << '+' << c;
-	else if (a == b - c)
-		cout << a << '=' << b << '-' << c;
-	else if (a == b * c)
-		cout << a << '=' << b << '*' << c;
-	else if (a / b == c)
-		cout << a << '/' << b << '=' << c;
-	else
-		cout << a << '=' << b << '/' << c;
+	int N, L, ans = 0;
+	cin >> N >> L;
+	int i = 1;
+	for (;; i++) {
+		int num = i;
+		bool isAble = true;
+		while (num > 0) {
+			if (num % 10 == L) {
+				isAble = false;
+				break;
+			}
+			num /= 10;
+		}
+		if (isAble)
+			ans++;
+		if (ans == N)
+			break;
+	}
+	cout << i;
 		
 	return 0;
 }
