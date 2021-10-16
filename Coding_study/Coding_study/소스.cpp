@@ -6,25 +6,23 @@ int main() {
 	ios_base::sync_with_stdio(false);
 	cin.tie(NULL), cout.tie(NULL);
 
-	int N, L, ans = 0;
-	cin >> N >> L;
-	int i = 1;
-	for (;; i++) {
-		int num = i;
-		bool isAble = true;
-		while (num > 0) {
-			if (num % 10 == L) {
-				isAble = false;
-				break;
-			}
-			num /= 10;
+	int a1, b1, c1, a2, b2, c2;
+	int ans1, ans2, ans3;
+	for (int i = 0; i < 3; i++) {
+		cin >> a1 >> b1 >> c1 >> a2 >> b2 >> c2;
+		if (c2 < c1) {
+			b2--;
+			c2 += 60;
 		}
-		if (isAble)
-			ans++;
-		if (ans == N)
-			break;
+		ans3 = c2 - c1;
+		if (b2 < b1) {
+			a2--;
+			b2 += 60;
+		}
+		ans2 = b2 - b1;
+		ans1 = a2 - a1;
+
+		cout << ans1 << " " << ans2 << " " << ans3 << endl;
 	}
-	cout << i;
-		
 	return 0;
 }
