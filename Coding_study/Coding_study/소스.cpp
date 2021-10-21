@@ -6,8 +6,8 @@
 using namespace std;
 
 #define MAX_NUM 1987654321
-map<int, int>adj[10001]; //연결된 정점, 가중치
-vector<int>dist(10001, MAX_NUM); //최단거리 저장
+map<int, int>adj[1001]; //연결된 정점, 가중치
+vector<int>dist(1001, MAX_NUM); //최단거리 저장
 int V, E;
 
 void dijkstra(int start) { //노드 확장이거나, 노드 값 변경임
@@ -34,28 +34,32 @@ void dijkstra(int start) { //노드 확장이거나, 노드 값 변경임
 int main() {
 	ios_base::sync_with_stdio(false);
 	cin.tie(NULL), cout.tie(NULL);
-	int T, start;
-	for (cin >> T; T-- > 0;) {
-		cin >> V >> E >> start;
-		for (int i = 1; i <= V; i++) {
-			dist[i] = MAX_NUM;
-			adj[i].clear();
-		}
-		int u, v, w;
-		while (E-- > 0) {
-			cin >> v >> u >> w;
-			adj[u][v] = w;
-		}
-		dijkstra(start);
-		int ans = 0, cnt = 0;
-		for (int i = 1; i <= V; i++) {
-			if (dist[i] != MAX_NUM) {
-				cnt++;
-				ans = max(ans, dist[i]);
-			}
-		}
-		cout << cnt << " " << ans << "\n";
+
+	int X, u, v, w;
+	cin >> V >> E >> X;
+
+	while (E-- > 0) {
+		cin >> u >> v >> w;
+		adj[u][v] = w;
 	}
+
+	vector<int> arr(V);
+	arr.push_back(0);
+	
+	for (int i = 1; i <= V; i++) {
+		dijkstra(i);
+		arr[i] = dist[X];
+		for (int i = 1; i <= V; i++)
+			dist[i] = MAX_NUM;
+	}
+	dijkstra(X);
+	
+	int ans = 0;
+	for (int i = 1; i <= V; i++) {
+		arr[i] += dist[i];
+		ans = max(ans, arr[i]);
+	}
+	cout << ans;
 
 	return 0;
 }
