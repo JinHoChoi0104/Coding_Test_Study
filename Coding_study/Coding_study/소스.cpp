@@ -1,23 +1,35 @@
 #include <iostream>
-#include <set>
 using namespace std;
 
-int main() {
-	ios_base::sync_with_stdio(false);
-	cin.tie(NULL), cout.tie(NULL);
-	int N, M, num;
-	set<int> arr;
-	for (cin >> N; N-- > 0;) {
-		cin >> num;
-		arr.insert(num);
+void printArr(int* arr, int n) {
+	for (int i = 0; i < n; i++)
+		cout << " " << arr[i];
+	cout << endl;
+}
+/*
+Selection Sort by using array data structure
+*/
+void SelectionSort(int* arr, int n) { // n : number of elements in array
+	//start it's search(find smallest number) from second element to end element
+	for (int i = 0; i < n - 1; i++) {
+		int index = i; //index of element which smallest number will come
+		int tmp = arr[i];
+		for (int j = i + 1; j < n; j++) { //change to small number every time you find it
+			if (arr[i] > arr[j]) {
+				arr[i] = arr[j];
+				index = j;
+			}
+		}
+		arr[index] = tmp; //at last put original number(which was at index at first) to positon where smallest number was
+		cout << " " << i + 1 << "th Selection Sort is done" << endl;
+		printArr(arr, n);
 	}
-	for (cin >> M; M-- > 0; ) {
-		cin >> num;
-		if (arr.find(num) != arr.end())
-			cout << "1 ";
-		else
-			cout << "0 ";
-	}
+}
 
+int main() {
+	int arr[6] = { 5,3,2,9,1,4 };
+	cout << " Input array" << endl;
+	printArr(arr, 6);
+	SelectionSort(arr, 6);
 	return 0;
 }
