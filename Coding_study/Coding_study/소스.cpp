@@ -1,35 +1,42 @@
 #include <iostream>
+#include <map>
+#include <string>
 using namespace std;
 
-void printArr(int* arr, int n) {
-	for (int i = 0; i < n; i++)
-		cout << " " << arr[i];
-	cout << endl;
-}
-/*
-Selection Sort by using array data structure
-*/
-void SelectionSort(int* arr, int n) { // n : number of elements in array
-	//start it's search(find smallest number) from second element to end element
-	for (int i = 0; i < n - 1; i++) {
-		int index = i; //index of element which smallest number will come
-		int tmp = arr[i];
-		for (int j = i + 1; j < n; j++) { //change to small number every time you find it
-			if (arr[i] > arr[j]) {
-				arr[i] = arr[j];
-				index = j;
-			}
-		}
-		arr[index] = tmp; //at last put original number(which was at index at first) to positon where smallest number was
-		cout << " " << i + 1 << "th Selection Sort is done" << endl;
-		printArr(arr, n);
-	}
-}
+#define ll long long;
 
 int main() {
-	int arr[6] = { 5,3,2,9,1,4 };
-	cout << " Input array" << endl;
-	printArr(arr, 6);
-	SelectionSort(arr, 6);
+	ios_base::sync_with_stdio(false);
+	cin.tie(NULL), cout.tie(NULL);
+	map<string, string>dict;
+	dict["black"] = "0";
+	dict["brown"] = "1";
+	dict["red"] = "2";
+	dict["orange"] = "3";
+	dict["yellow"] = "4";
+	dict["green"] = "5";
+	dict["blue"] = "6";
+	dict["violet"] = "7";
+	dict["grey"] = "8";
+	dict["white"] = "9";
+	string str;
+	cin >> str;
+	string ans = dict[str];
+	if (ans == "0")
+		ans = "";
+	cin >> str;
+	ans = ans + dict[str];
+	cin >> str;
+	int n = stoi(dict[str]);
+	int num = stoi(ans);
+	if (num == 0) {
+		cout << 0;
+		return 0;
+	}
+	for (int i = 0; i < n; i++) 
+		ans = ans + "0";
+
+	cout << ans;
+
 	return 0;
 }
