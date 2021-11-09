@@ -1,6 +1,5 @@
 #include <iostream>
-#include <map>
-#include <string>
+#include <deque>
 using namespace std;
 
 #define ll long long;
@@ -8,35 +7,35 @@ using namespace std;
 int main() {
 	ios_base::sync_with_stdio(false);
 	cin.tie(NULL), cout.tie(NULL);
-	map<string, string>dict;
-	dict["black"] = "0";
-	dict["brown"] = "1";
-	dict["red"] = "2";
-	dict["orange"] = "3";
-	dict["yellow"] = "4";
-	dict["green"] = "5";
-	dict["blue"] = "6";
-	dict["violet"] = "7";
-	dict["grey"] = "8";
-	dict["white"] = "9";
-	string str;
-	cin >> str;
-	string ans = dict[str];
-	if (ans == "0")
-		ans = "";
-	cin >> str;
-	ans = ans + dict[str];
-	cin >> str;
-	int n = stoi(dict[str]);
-	int num = stoi(ans);
-	if (num == 0) {
-		cout << 0;
-		return 0;
+	
+	int n, num;
+	deque<pair<int,int>> q;
+	cin >> n;
+	for (int i = 1; i <= n; i++) {
+		cin >> num;
+		q.push_back({ i, num });
 	}
-	for (int i = 0; i < n; i++) 
-		ans = ans + "0";
-
-	cout << ans;
+	int to_move = q.front().second;
+	cout << q.front().first << " ";
+	q.pop_front();
+	while (!q.empty()) {
+		if (to_move > 0) {
+			for (int i = 1; i < to_move; i++) {
+				q.push_back(q.front());
+				q.pop_front();
+			}
+		}
+		else {
+			to_move *= -1;
+			for (int i = 0; i < to_move; i++) {
+				q.push_front(q.back());
+				q.pop_back();
+			}
+		}
+		to_move = q.front().second;
+		cout << q.front().first << " ";
+		q.pop_front();
+	}
 
 	return 0;
 }
