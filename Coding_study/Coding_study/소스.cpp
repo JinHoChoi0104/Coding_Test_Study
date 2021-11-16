@@ -1,41 +1,23 @@
 #include <iostream>
-#include <vector>
+#include <map>
 using namespace std;
-
-bool checkPalindrome(vector<int> &num) { //회문 여부 판단
-	int i = 0, j = num.size() - 1;
-	while (i < j) {
-		if(num[i++]!=num[j--])
-			return false;
-	}
-	return true;
-}
-
 
 int main() {
 	ios_base::sync_with_stdio(false);
 	cin.tie(NULL), cout.tie(NULL);
-	int T, num;
+	int T, tmp_cnt=0;
+	string str;
+	map<string, int>dict;
 	for (cin >> T; T-- > 0;) {
-		cin >> num;
-		bool is_Palin = false;
-		int i = 1;
-		while( i++ < 64 && !is_Palin) {
-			//진법 변환
-			int tmp = num;
-			vector<int> ans;
-			while (tmp > 0) {
-				ans.push_back(tmp%i);
-				tmp /= i;
-			}
-			is_Palin = checkPalindrome(ans);;
-			if (is_Palin) //회문이면 브레이크
-				break;
-		}
-		if (is_Palin)
-			cout << "1\n";
-		else
-			cout << "0\n";
+		cin >> str;
+		dict[str]++;
 	}
+	for (auto it = dict.begin(); it != dict.end(); it++) {
+		if (tmp_cnt < it->second) {
+			str = it -> first;
+			tmp_cnt = it -> second;
+		}
+	}
+	cout << str;
 	return 0;
 }
