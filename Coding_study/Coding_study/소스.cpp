@@ -1,23 +1,22 @@
 #include <iostream>
-#include <map>
+#include <set>
 using namespace std;
 
 int main() {
 	ios_base::sync_with_stdio(false);
 	cin.tie(NULL), cout.tie(NULL);
-	int T, tmp_cnt=0;
-	string str;
-	map<string, int>dict;
-	for (cin >> T; T-- > 0;) {
-		cin >> str;
-		dict[str]++;
+	set<int> day, arr;
+	int N, C, num;
+	cin >> N >> C;
+	for (int i = 0; i < N; i++) {
+		cin >> num;
+		if (day.find(num) != day.end())
+			continue;
+		if (num > C)
+			continue;
+		for (int j = num; j <= C; j += num)
+			day.insert(j);
 	}
-	for (auto it = dict.begin(); it != dict.end(); it++) {
-		if (tmp_cnt < it->second) {
-			str = it -> first;
-			tmp_cnt = it -> second;
-		}
-	}
-	cout << str;
+	cout << day.size();
 	return 0;
 }
