@@ -1,27 +1,53 @@
 #include <iostream>
+#include <algorithm>
 using namespace std;
 
+int N;
+string target;
+void changeNUM(string& num, int index) {
+	for (int i = index - 1; i <= index + 1; i++) {
+		if (i == N || i == -1)
+			continue;
+		if (num[i] == '0')
+			num[i] = '1';
+		else
+			num[i] = '0';
+	}
+}
+int LED(string str) {
+	int cnt1 = 1, cnt2 = 0, ans = -1;
+	string tmp1 = str, tmp2 = str;
+	changeNUM(tmp1, 0);
+	for (int i = 1; i < N; i++) {
+		if (target[i - 1] != tmp1[i - 1]) {
+			changeNUM(tmp1, i);
+			cnt1++;
+		}
+	}
+	if (tmp1 == target)
+		ans = cnt1;
+
+	for (int i = 1; i < N; i++) {
+		if (target[i - 1] != tmp2[i - 1]) {
+			changeNUM(tmp2, i);
+			cnt2++;
+		}
+	}
+	if (tmp2 == target)
+		ans = max(ans, cnt2);
+	return ans;
+}
 int main() {
 	ios_base::sync_with_stdio(false);
 	cin.tie(NULL), cout.tie(NULL);
-	long long X, Y;
-	cin >> X >> Y;
-	int Z = Y * 100 / X;
-	if (X == Y || Z == 99) {
-		cout << "-1";
+	cin >> N;
+	string str;
+	cin >> str >> target;
+	if (str == target) {
+		cout << 0;
 		return 0;
 	}
-	long long left = 0, right = X, mid, num, ans;
-	while (left <= right) {
-		mid = (left + right) / 2;
-		num = (Y+mid) * 100 / (X+mid);
-		if (num != Z) {
-			ans = mid;
-			right = mid - 1;
-		}
-		else
-			left = mid + 1;
-	}
-	cout << ans;
+
+	cout << LED(str);
 	return 0;
 }
