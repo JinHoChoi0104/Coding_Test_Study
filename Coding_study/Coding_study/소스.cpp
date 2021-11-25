@@ -1,24 +1,30 @@
 #include <iostream>
+#include <vector>
 using namespace std;
 
 int main() {
 	ios_base::sync_with_stdio(false);
 	cin.tie(NULL), cout.tie(NULL);
-	int N, M, arr[100][100], num;
-	cin >> N >> M;
-	for (int i = 0; i < N; i++)
-		for (int j = 0; j < M; j++)
-			cin >> arr[i][j];
-	for (int i = 0; i < N; i++)
-		for (int j = 0; j < M; j++) {
-			cin >> num;
-			arr[i][j] += num;
+	int N, M, L, cnt = -1, index = 0;
+	cin >> N >> M >> L;
+	vector<int>arr(50, 0);
+	while (!arr.empty()) {
+		int &tmp = arr[index];
+		tmp++, cnt++;
+		if (tmp % 2 == 1) {
+			index += L;
+			if (index >= N)
+				index -= N;
 		}
-	for (int i = 0; i < N; i++) {
-		for (int j = 0; j < M; j++)
-			cout << arr[i][j] << " ";
-		cout << "\n";
+		else {
+			index -= L;
+			if (index < 0)
+				index += N;
+		}
+		if (tmp == M) {
+			cout << cnt;
+			return 0;
+		}
 	}
-
 	return 0;
 }
