@@ -1,2 +1,3 @@
 ﻿  소스.cpp
+C:\Users\82107\Desktop\Github\Coding_Test_Study\Coding_study\Coding_study\소스.cpp(15,35): warning C4244:  '+=': 'double'에서 'int'(으)로 변환하면서 데이터가 손실될 수 있습니다.
   Coding_study.vcxproj -> C:\Users\82107\Desktop\Github\Coding_Test_Study\Coding_study\Debug\Coding_study.exe

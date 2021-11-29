@@ -1,27 +1,26 @@
 #include <iostream>
+#include <math.h>
 using namespace std;
-#define M 1234567891
-#define ll long long
-ll LongPow(ll num, int n) {
-	ll ans = 1;
-	for (int i = 0; i < n; i++) {
-		ans *= num;
-		ans %= M;
-	}
-	return ans;
-}
+
 int main() {
 	ios_base::sync_with_stdio(false);
 	cin.tie(NULL), cout.tie(NULL);
-	int N;
-	string str;
-	cin >> N >> str;
-	ll num = 0;
-	for (int i = 0; i < N; i++) {
-		ll tmp = str[i] - 'a' + 1;
-		num += tmp * LongPow(31, i);
-		num %= M;
+	
+	int t;
+	for (cin >> t; t-- > 0;) {
+		char c;
+		int tmp1 = 0, tmp2 = 0;
+		for (int i = 0; i < 3; i++) {
+			cin >> c;
+			tmp1 += (c - 'A') * pow(26,2-i);
+		}
+		cin >> c;
+		cin >> tmp2;
+
+		if (abs(tmp1 - tmp2) <= 100)
+			cout << "nice\n";
+		else
+			cout << "not nice\n";
 	}
-	cout << num;
 	return 0;
-} 
+}	
