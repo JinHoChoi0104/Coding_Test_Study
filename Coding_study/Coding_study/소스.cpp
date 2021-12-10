@@ -4,17 +4,23 @@ using namespace std;
 int main() {
 	ios_base::sync_with_stdio(false);
 	cin.tie(NULL), cout.tie(NULL);
-	int a, b;
-	string str;
-	while (1) {
-		cin >> str >> a >> b;
-		if (str == "#")
-			break;
-		cout << str;
-		if (a > 17 || b >= 80)
-			cout << " Senior\n";
+	int t, num;
+	for (cin >> t; t-- > 0;) {
+		cin >> num;
+		int cnt = 0, tmp = num, num2 = num * num;
+		while (tmp) {
+			cnt++;
+			tmp /= 10;
+		}
+		int di = 1;
+		for (int i = 0; i < cnt; i++) {
+			di *= 10;
+		}
+		num2 %= di;
+		if (num2 == num)
+			cout << "YES\n";
 		else
-			cout << " Junior\n";
+			cout << "NO\n";
 	}
 	return 0;
 }
