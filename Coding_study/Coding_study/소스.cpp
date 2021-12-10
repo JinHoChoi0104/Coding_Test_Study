@@ -4,23 +4,22 @@ using namespace std;
 int main() {
 	ios_base::sync_with_stdio(false);
 	cin.tie(NULL), cout.tie(NULL);
-	int t, num;
-	for (cin >> t; t-- > 0;) {
-		cin >> num;
-		int cnt = 0, tmp = num, num2 = num * num;
-		while (tmp) {
-			cnt++;
-			tmp /= 10;
+	int n, m, r, c;
+	cin >> n >> m >> r >> c;
+	char ch[50][50];
+	for (int i = 0; i < n; i++) 
+		for (int j = 0; j < m; j++) 
+			cin >> ch[i][j];
+	
+	for (int i = 0; i < n; i++) {
+		for (int x = 0; x < r; x++) {
+			for (int j = 0; j < m; j++) {
+				for(int y = 0; y < c; y++)
+					cout << ch[i][j];
+			}
+			cout << "\n";
 		}
-		int di = 1;
-		for (int i = 0; i < cnt; i++) {
-			di *= 10;
-		}
-		num2 %= di;
-		if (num2 == num)
-			cout << "YES\n";
-		else
-			cout << "NO\n";
 	}
+
 	return 0;
 }
