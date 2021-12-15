@@ -1,3 +1,2 @@
 ﻿  소스.cpp
-C:\Users\82107\Desktop\Github\Coding_Test_Study\Coding_study\Coding_study\소스.cpp(7,15): warning C4101:  'num' :참조되지 않은 지역 변수입니다.
   Coding_study.vcxproj -> C:\Users\82107\Desktop\Github\Coding_Test_Study\Coding_study\Debug\Coding_study.exe
