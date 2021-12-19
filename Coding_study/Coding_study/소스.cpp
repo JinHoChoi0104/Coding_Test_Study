@@ -1,23 +1,30 @@
 #include <iostream>
-#include <vector>
+#include <queue>
 using namespace std;
 
 int main() {
 	ios_base::sync_with_stdio(false);
 	cin.tie(NULL), cout.tie(NULL);
-	long long T, num, cnt = 0;
-	vector<long long> arr;
-	for (cin >> T; T-- > 0;) {
+	int n, m, num;
+	cin >> n >> m;
+	priority_queue<int> pq;
+	priority_queue<int, vector<int>,greater<int>> concent;
+	for (int i = 0; i < n; i++) {
 		cin >> num;
-		arr.push_back(num);
+		pq.push(num);
 	}
-	cin >> num;
-	for (int i = 0; i < arr.size(); i++) {
-		int tmp = arr[i];
-		tmp += num - 1;
-		tmp /= num;
-		cnt += tmp;
+	for (int i = 0; i < m; i++)
+		concent.push(0);
+	while (!pq.empty()) {
+		int tmp = concent.top() + pq.top();
+		concent.pop(), pq.pop();
+		concent.push(tmp);
 	}
-	cout << cnt * num;
+	int ans;
+	while (!concent.empty()) {
+		ans = concent.top();
+		concent.pop();
+	}
+	cout << ans;
 	return 0;
 }
