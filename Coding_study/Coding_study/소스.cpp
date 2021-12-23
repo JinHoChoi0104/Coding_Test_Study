@@ -1,16 +1,14 @@
 #include <iostream>
-#include <algorithm>
 using namespace std;
 
 int main() {
 	ios_base::sync_with_stdio(false);
 	cin.tie(NULL), cout.tie(NULL);
-	int a, b, c;
-	cin >> a >> b >> c;
-	int ans = max(c - b, b - a);
-	if (ans == 0)
-		cout << 0;
-	else
-		cout << ans - 1;
+	int ans = 0, num;
+	for (int i = 0; i < 5; i++) {
+		cin >> num;
+		ans += num;
+	}
+	cout << ans;
 	return 0;
 }
