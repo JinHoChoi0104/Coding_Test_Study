@@ -1,35 +1,25 @@
 #include <iostream>
 using namespace std;
 
+bool isSame(string a, string b) {
+	int len1 = a.size(), len2 = b.size();
+	for (int i = 0; i < len1 * len2; i++) {
+		if (a[i % len1] != b[i % len2])
+			return false;
+		if ((i+1) % len1 == 0 && (i+1) % len2 == 0)
+			return true;
+	}
+}
+
 int main() {
 	ios_base::sync_with_stdio(false);
 	cin.tie(NULL), cout.tie(NULL);
-	int n, m;
-	cin >> n >> m;
-	char c[101][101];
-	for (int i = 0; i < n; i++) 
-		for (int j = 0; j < m; j++) 
-			cin >> c[i][j];
-	int p, q;
-	cin >> p >> q;
-	
-	for (int i = 0; i < n; i++) 
-		for (int j = m; j < m * 2; j++) 
-			c[i][j] = c[i][2 * m - j - 1];
-	for (int i = n; i < n * 2; i++) 
-		for (int j = 0; j < m * 2; j++) 
-			c[i][j] = c[2 * n - i - 1][j];
-		
-	if (c[p - 1][q - 1] == '#')
-		c[p - 1][q - 1] = '.';
-	else
-		c[p - 1][q - 1] = '#';
+	string a, b;
+	cin >> a >> b;
 
-	for (int i = 0; i < n * 2; i++) {
-		for (int j = 0; j < m * 2; j++)
-			cout << c[i][j];
-		cout << "\n";
-	}
-	
+	if (isSame(a, b))
+		cout << 1;
+	else
+		cout << 0;
 	return 0;
 }
