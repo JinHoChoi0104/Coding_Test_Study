@@ -1,19 +1,20 @@
 #include <iostream>
+#include <math.h>
 using namespace std;
 
 int main() {
 	ios_base::sync_with_stdio(false);
 	cin.tie(NULL), cout.tie(NULL);
-	int t, num;
-	for (cin >> t; t-- > 0;) {
+	int n, w, h, num;
+	cin >> n >> w >> h;
+	int tmp = pow(w, 2) + pow(h, 2);
+	tmp = sqrt(tmp);
+	for (int i = 0; i < n; i++) {
 		cin >> num;
-		cout << "Pairs for " << num << ": ";
-		for (int i = 1; i < (num+1) / 2; i++) {
-			if (i != 1)
-				cout << ", ";
-			cout << i << " " << num - i;
-		}
-		cout << "\n";
+		if (num <= tmp)
+			cout << "DA\n";
+		else
+			cout << "NE\n";
 	}
 	return 0;
 }
