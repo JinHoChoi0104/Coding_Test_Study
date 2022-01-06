@@ -1,40 +1,41 @@
 #include <iostream>
 using namespace std;
-
+bool arr[3];
 int main() {
 	ios_base::sync_with_stdio(false);
 	cin.tie(NULL), cout.tie(NULL);
-	int T, num;
-	for (cin >> T; T-- > 0;) {
-		int tmp = 0;;
-		for (cin >> num; num-- > 0;) {
-			char a, b;
-			cin >> a >> b;
-			if (a == 'R') {
-				if (b == 'S')
-					tmp++;
-				else if (b == 'P')
-					tmp--;
-			}
-			else if (a == 'S') {
-				if (b == 'P')
-					tmp++;
-				else if (b == 'R')
-					tmp--;
-			}
-			else {
-				if (b == 'R')
-					tmp++;
-				else if (b == 'S')
-					tmp--;
-			}
+	string str;
+	cin >> str;
+	arr[0] = true;
+
+	for (int i = 0; i < str.size(); i++) {
+		if (str[i] == 'C') {
+			if (!arr[0] && !arr[2])
+				continue;
+			if (arr[0])
+				arr[0] = false, arr[2] = true;
+			else
+				arr[2] = false, arr[0] = true;
 		}
-		if (tmp > 0)
-			cout << "Player 1\n";
-		else if (tmp < 0)
-			cout << "Player 2\n";
-		else
-			cout << "TIE\n";
+		else if (str[i] == 'B') {
+			if (!arr[1] && !arr[2])
+				continue;
+			if (arr[1])
+				arr[1] = false, arr[2] = true;
+			else
+				arr[2] = false, arr[1] = true;
+		}
+		else {
+			if (!arr[0] && !arr[1])
+				continue;
+			if (arr[1])
+				arr[1] = false, arr[0] = true;
+			else
+				arr[0] = false, arr[1] = true;
+		}
 	}
+	for (int i = 0; i < 3; i++)
+		if (arr[i])
+			cout << i + 1;
 	return 0;
 }
