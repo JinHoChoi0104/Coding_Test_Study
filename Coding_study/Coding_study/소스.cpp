@@ -4,17 +4,25 @@ int main() {
 	ios_base::sync_with_stdio(false);
 	cin.tie(NULL), cout.tie(NULL);
 
-	int a, b, c, d, p;
-	cin >> a >> b >> c >> d >> p;
-	int ans1 = a * p;
-	int ans2 = b;
-	if (c < p) {
-		int tmp = p - c;
-		ans2 += tmp * d;
+	double a, b, c, d, max_num, tmp;
+	cin >> a >> b >> c >> d;
+	int ans = 0;
+	max_num = a / c + b / d;
+	tmp = c / d + a / b;
+	if (tmp > max_num) {
+		max_num = tmp;
+		ans = 1;
 	}
-	if (ans1 > ans2)
-		cout << ans2;
-	else
-		cout << ans1;
+	tmp = d / b + c / a;
+	if (tmp > max_num) {
+		max_num = tmp;
+		ans = 2;
+	}
+	tmp = b / a + d / c;
+	if (tmp > max_num) {
+		max_num = tmp;
+		ans = 3;
+	}
+	cout << ans;
 	return 0;
 }
