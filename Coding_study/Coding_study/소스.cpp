@@ -4,18 +4,16 @@ int main() {
 	ios_base::sync_with_stdio(false);
 	cin.tie(NULL), cout.tie(NULL);
 
-	int index=0, ans=0, num;
-	for (int i = 0; i < 5; i++) {
-		int tmp = 0;
-		for (int j = 0; j < 4; j++) {
-			cin >> num;
-			tmp += num;
-		}
-		if (tmp > ans) {
-			ans = tmp;
-			index = i + 1;
-		}
+	int num, tmp;
+	cin >> num;
+	while (1) {
+		cin >> tmp;
+		if (tmp == 0)
+			break;
+		if (tmp % num == 0)
+			cout << tmp << " is a multiple of " << num << ".\n";
+		else
+			cout << tmp << " is NOT a multiple of " << num << ".\n";
 	}
-	cout << index << " " << ans;
 	return 0;
 }
