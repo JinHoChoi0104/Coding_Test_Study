@@ -1,19 +1,17 @@
 #include <iostream>
-#include <string>
+#include <algorithm>
 using namespace std;
 
-int main() {
-	ios_base::sync_with_stdio(false);
-	cin.tie(NULL), cout.tie(NULL);
-	int num;
-	char s[100];
-	cin >> num;
-	cin.ignore();
-	for (int i = 0; i < num; i++) {
-		cin.getline(s, 100, '\n');
-		if(s[0]>='a' && s[0] <='z')	
-			s[0] -= 32;
-		cout << s <<"\n";
-	}	
+int main(int argc, char* argv[])
+{
+	double x, y, z;
+	double num1, num2;
+
+	cin >> x >> y >> z;
+
+	num1 = x * y / z;
+	num2 = x / y * z;
+
+	cout << (int)max(num1, num2) << endl;
 	return 0;
-}
+} 
