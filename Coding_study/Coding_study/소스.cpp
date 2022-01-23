@@ -1,17 +1,18 @@
 #include <iostream>
-#include <algorithm>
 using namespace std;
 
 int main(int argc, char* argv[])
 {
-	double x, y, z;
-	double num1, num2;
-
-	cin >> x >> y >> z;
-
-	num1 = x * y / z;
-	num2 = x / y * z;
-
-	cout << (int)max(num1, num2) << endl;
+	int t, index;
+	string str;
+	for (cin >> t; t-- > 0;) {
+		cin >> index >> str;
+		for (int i = 0; i < str.size(); i++) {
+			if (i == index-1)
+				continue;
+			cout << str[i];
+		}
+		cout << "\n";
+	}
 	return 0;
 } 
