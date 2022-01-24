@@ -1,18 +1,38 @@
 #include <iostream>
 using namespace std;
 
-int main(int argc, char* argv[])
-{
-	int t, index;
-	string str;
-	for (cin >> t; t-- > 0;) {
-		cin >> index >> str;
-		for (int i = 0; i < str.size(); i++) {
-			if (i == index-1)
+char map[50][50];
+bool visited[50][50];
+int main(){
+	int n, m, cnt = 0;
+	cin >> n >> m;
+	for (int i = 0; i < n; i++) 
+		for (int j = 0; j < m; j++) 
+			cin >> map[i][j];
+	
+	for (int i = 0; i < n; i++) {
+		for (int j = 0; j < m; j++) {
+			if (visited[i][j])
 				continue;
-			cout << str[i];
+			cnt++;
+			if (map[i][j] == '-') {
+				while (map[i][j] == '-') {
+					visited[i][j++] = true;
+					if (j == m)
+						break;
+				}
+				j--;
+			}
+			else {
+				int tmp = i;
+				while (map[tmp][j] == '|') {
+					visited[tmp++][j] = true;
+					if (tmp == n)
+						break;
+				}
+			}
 		}
-		cout << "\n";
 	}
+	cout << cnt;
 	return 0;
 } 
