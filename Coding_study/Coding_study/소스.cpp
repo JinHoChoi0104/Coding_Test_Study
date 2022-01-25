@@ -1,38 +1,18 @@
 #include <iostream>
+#include <algorithm>
 using namespace std;
-
-char map[50][50];
-bool visited[50][50];
 int main(){
-	int n, m, cnt = 0;
-	cin >> n >> m;
-	for (int i = 0; i < n; i++) 
-		for (int j = 0; j < m; j++) 
-			cin >> map[i][j];
-	
-	for (int i = 0; i < n; i++) {
-		for (int j = 0; j < m; j++) {
-			if (visited[i][j])
+	int t, num;
+	for (cin >> t; t-- > 0;) {
+		int sum = 0, ans = 100;
+		for (int i = 0; i < 7; i++) {
+			cin >> num;
+			if (num % 2 != 0)
 				continue;
-			cnt++;
-			if (map[i][j] == '-') {
-				while (map[i][j] == '-') {
-					visited[i][j++] = true;
-					if (j == m)
-						break;
-				}
-				j--;
-			}
-			else {
-				int tmp = i;
-				while (map[tmp][j] == '|') {
-					visited[tmp++][j] = true;
-					if (tmp == n)
-						break;
-				}
-			}
+			ans = min(ans, num);
+			sum += num;
 		}
+		cout << sum << " " << ans << "\n";
 	}
-	cout << cnt;
 	return 0;
 } 
