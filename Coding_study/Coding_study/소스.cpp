@@ -1,13 +1,12 @@
 #include <iostream>
 using namespace std;
 int main(){
-	int num, tmp, ans = 0;
+	//a1=5   an = 3n+1
+	long long ans = 5, num;
 	cin >> num;
-	for (int i = 0; i < 5; i++) {
-		cin >> tmp;
-		if (num == tmp)
-			ans++;
+	for (long long i = 2; i <= num; i++) {
+		ans += 3 * i + 1;
 	}
-	cout << ans;
+	cout << ans % 45678;
 	return 0;
 } 
