@@ -1,12 +1,27 @@
 #include <iostream>
 using namespace std;
 int main(){
-	//a1=5   an = 3n+1
-	long long ans = 5, num;
-	cin >> num;
-	for (long long i = 2; i <= num; i++) {
-		ans += 3 * i + 1;
+	int a, b, c, num;
+	cin >> a >> b >> c >> num;
+	int tmp = num % 60;
+	c += tmp;
+	if (c >= 60) {
+		c -= 60;
+		b++;
 	}
-	cout << ans % 45678;
+	num -= tmp;
+	num /= 60;
+	tmp = num % 60;
+	b += tmp;
+	if (b >= 60) {
+		b -= 60;
+		a++;
+	}
+	num -= tmp;
+	num /= 60;
+	a += num;
+	a %= 24;
+	
+	cout << a << " " << b << " " << c;
 	return 0;
 } 
