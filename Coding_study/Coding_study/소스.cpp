@@ -1,27 +1,20 @@
 #include <iostream>
 using namespace std;
 int main(){
-	int a, b, c, num;
-	cin >> a >> b >> c >> num;
-	int tmp = num % 60;
-	c += tmp;
-	if (c >= 60) {
-		c -= 60;
-		b++;
+	int num;
+	cin >> num;
+	for (int i = 0; i < num * 4; i++) {
+		for (int j = 0; j < num; j++) {
+			cout << "@";
+		}
+		cout << "\n";
 	}
-	num -= tmp;
-	num /= 60;
-	tmp = num % 60;
-	b += tmp;
-	if (b >= 60) {
-		b -= 60;
-		a++;
+	for (int i = 0; i < num; i++) {
+		for (int j = 0; j < num*5; j++) {
+			cout << "@";
+		}
+		cout << "\n";
 	}
-	num -= tmp;
-	num /= 60;
-	a += num;
-	a %= 24;
-	
-	cout << a << " " << b << " " << c;
+
 	return 0;
 } 
